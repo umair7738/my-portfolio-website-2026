@@ -1,6 +1,8 @@
 # Umair Shaikh — Portfolio
 
-A production-oriented, multi-page personal portfolio built as a premium software-company-style experience. Content is grounded in Umair Shaikh's February 2024 resume; undocumented metrics, testimonials, repositories, certificates, and work history are not fabricated.
+A production-oriented, multi-page personal portfolio built as a premium software-company-style experience. Current experience and skills are grounded in Umair Shaikh's June 2026 resume; the named project archive is supported by the earlier February 2024 resume. Undocumented metrics, testimonials, certificates, and work history are not fabricated.
+
+Private production deployment: `https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site`
 
 ## Stack
 
@@ -44,9 +46,9 @@ php -S localhost:8080
 
 ## Before public launch
 
-1. Review the public resume PDF. The original source includes personal details; replace it with a recruiter-safe version if desired.
+1. Review the public June 2026 resume PDF whenever experience or profile links change.
 2. Update the canonical, Open Graph, JSON-LD, sitemap, and robots domain when the final domain changes.
-3. Add verified GitHub and CodePen URLs in `assets/js/utilities.js`. Empty profiles stay hidden automatically.
+3. Keep the verified GitHub, CodePen, LinkedIn, and portfolio URLs in `assets/js/utilities.js` current.
 4. Connect the contact form to a secure serverless or backend endpoint if submissions should be stored. The current form opens the visitor's email application.
 5. Re-run accessibility, responsive, and performance checks after any third-party analytics or form integration is added.
 

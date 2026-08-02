@@ -44,7 +44,7 @@ for (const component of fs.readdirSync(path.join(root, "components")).filter((fi
   }
 }
 
-const required = ["robots.txt", "sitemap.xml", "README.md", "assets/css/portfolio.min.css", "assets/js/portfolio.min.js", "assets/images/og-portfolio.webp", "assets/icons/favicon.png", "assets/Umair-Shaikh-Resume.pdf"];
+const required = ["robots.txt", "sitemap.xml", "README.md", "assets/css/portfolio.min.css", "assets/js/portfolio.min.js", "assets/images/og-portfolio.webp", "assets/icons/favicon.png", "assets/umair_resume_june_2026.pdf"];
 required.forEach((target) => { if (!fs.existsSync(path.join(root, target))) errors.push(`missing required file ${target}`); });
 
 if (warnings.length) console.log("Warnings:\n- " + warnings.join("\n- "));

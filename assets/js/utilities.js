@@ -8,9 +8,9 @@
     phone: "+917738635355",
     whatsapp: "917738635355",
     linkedin: "https://www.linkedin.com/in/umair-shaikh-9b2054254",
-    previousPortfolio: "https://umairportfolio-1.netlify.app/",
-    github: "",
-    codepen: ""
+    previousPortfolio: "https://umair7738portfolio.free.nf",
+    github: "https://github.com/umair7738",
+    codepen: "https://codepen.io/umair7738"
   };
 
   Portfolio.utils = {
