@@ -46,13 +46,16 @@ const js = collapseOutsideStrings(jsFiles.map((file) => fs.readFileSync(file, "u
 fs.writeFileSync(path.join("assets", "js", "portfolio.min.js"), js + "\n");
 
 const htmlFiles = fs.readdirSync(process.cwd()).filter((file) => file.endsWith(".html"));
+const assetVersion = "motion-v3";
 const cssPattern = /<link rel="stylesheet" href="assets\/css\/style\.css">\s*<link rel="stylesheet" href="assets\/css\/animations\.css">\s*<link rel="stylesheet" href="assets\/css\/responsive\.css">/g;
 const jsPattern = /<script defer src="assets\/js\/utilities\.js"><\/script>\s*<script defer src="assets\/js\/navigation\.js"><\/script>\s*<script defer src="assets\/js\/loader\.js"><\/script>\s*<script defer src="assets\/js\/projects\.js"><\/script>\s*<script defer src="assets\/js\/contact\.js"><\/script>\s*<script defer src="assets\/js\/gsap\.js"><\/script>\s*<script defer src="assets\/js\/app\.js"><\/script>/g;
 htmlFiles.forEach((file) => {
   const source = fs.readFileSync(file, "utf8");
   const production = source
-    .replace(cssPattern, '<link rel="stylesheet" href="assets/css/portfolio.min.css">')
-    .replace(jsPattern, '<script defer src="assets/js/portfolio.min.js"></script>');
+    .replace(cssPattern, '<link rel="stylesheet" href="assets/css/portfolio.min.css?v=' + assetVersion + '">')
+    .replace(jsPattern, '<script defer src="assets/js/portfolio.min.js?v=' + assetVersion + '"></script>')
+    .replace(/assets\/css\/portfolio\.min\.css(?:\?v=[^"']*)?/g, "assets/css/portfolio.min.css?v=" + assetVersion)
+    .replace(/assets\/js\/portfolio\.min\.js(?:\?v=[^"']*)?/g, "assets/js/portfolio.min.js?v=" + assetVersion);
   if (production !== source) fs.writeFileSync(file, production);
 });
 
