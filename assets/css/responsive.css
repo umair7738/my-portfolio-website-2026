@@ -82,6 +82,11 @@
   .footer-bottom { align-items: flex-start; flex-direction: column; }
   .floating-contact span { display: none; }
   .floating-contact { width: 46px; padding: 0; justify-content: center; }
+  .loader-stage { width: calc(100% - 2.4rem); }
+  .loader-title { font-size: clamp(4.25rem, 24vw, 8rem); line-height: .82; }
+  .loader-coordinate { display: none; }
+  .loader-meta { gap: 1rem; line-height: 1.5; }
+  .loader-meta span:last-child { text-align: right; }
 }
 
 @media (max-width: 479.98px) {

@@ -172,21 +172,29 @@ h1, h2, h3, h4 {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  display: grid;
-  place-items: center;
-  background: #080b12;
+  overflow: hidden;
+  background: transparent;
   color: #fff;
 }
-.loader-orbit { position: absolute; width: min(70vw, 520px); aspect-ratio: 1; border: 1px solid rgba(255,255,255,.08); border-radius: 50%; }
-.loader-orbit::before { content: ""; position: absolute; inset: 14%; border: 1px solid rgba(255,255,255,.07); border-radius: inherit; }
-.loader-orbit span { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 22px var(--accent); }
-.loader-orbit span:first-child { top: 9%; left: 25%; }
-.loader-orbit span:last-child { right: 7%; bottom: 30%; background: #9f8cff; }
-.loader-copy { position: relative; width: min(76vw, 360px); }
-.loader-name { display: block; margin-bottom: 1rem; font: 600 clamp(1.7rem, 4vw, 2.75rem)/1 var(--font-display); letter-spacing: -.05em; }
-.loader-progress { overflow: hidden; height: 2px; background: rgba(255,255,255,.12); }
-.loader-progress span { display: block; width: 0; height: 100%; background: var(--gradient); }
-.loader-meta { display: flex; justify-content: space-between; margin-top: 0.7rem; color: rgba(255,255,255,.55); font-size: 0.68rem; letter-spacing: .14em; text-transform: uppercase; }
+.loader-panel { position: absolute; left: 0; width: 100%; height: 50.5%; background: #070a11; }
+.loader-panel-top { top: 0; }
+.loader-panel-bottom { bottom: 0; }
+.loader-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: clamp(46px, 5vw, 78px) clamp(46px, 5vw, 78px); mask-image: radial-gradient(circle at 50% 50%, #000 0, transparent 72%); opacity: .72; }
+.loader-scan { position: absolute; inset: 0 auto 0 -65%; width: 45%; background: linear-gradient(90deg, transparent, rgba(86,151,255,.1), transparent); transform: skewX(-12deg); }
+.loader-stage { position: relative; z-index: 2; display: flex; width: min(90vw, 1440px); height: 100%; margin: auto; flex-direction: column; justify-content:center; padding: clamp(1.4rem, 4vw, 4rem) 0; }
+.loader-topline { position: absolute; top: clamp(1.4rem, 4vw, 3.5rem); left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; color: rgba(255,255,255,.5); font-size: clamp(.58rem, .8vw, .72rem); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.loader-monogram { display: inline-flex; align-items: center; gap: .7rem; color: #fff; font: 700 .8rem/1 var(--font-display); letter-spacing: -.02em; }
+.loader-monogram span { display: block; width: 36px; height: 1px; background: linear-gradient(90deg, var(--primary), var(--accent)); }
+.loader-title { display: flex; align-items: center; justify-content: space-between; margin: 0 -.025em .1em; font: 500 clamp(5rem, 18vw, 18rem)/.76 var(--font-display); letter-spacing: -.095em; }
+.loader-letter-wrap { display: block; overflow: hidden; padding: .12em .025em .08em; }
+.loader-letter { display: block; background: linear-gradient(145deg, #fff 28%, #80899f 100%); -webkit-background-clip: text; background-clip: text; color: transparent; transform-origin: bottom left; }
+.loader-console { display: flex; align-items: center; justify-content: space-between; margin-top: clamp(1.3rem, 2.5vw, 2rem); }
+.loader-status { display: flex; align-items: center; gap: .65rem; color: rgba(255,255,255,.67); font-size: clamp(.62rem, .8vw, .76rem); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.loader-status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 5px rgba(82,224,164,.08), 0 0 18px rgba(82,224,164,.8); animation: loader-pulse 1.2s ease-in-out infinite; }
+.loader-count { min-width: 3ch; font: 500 clamp(1.5rem, 2.6vw, 2.4rem)/1 var(--font-display); letter-spacing: -.06em; text-align: right; }
+.loader-progress { overflow: hidden; height: 2px; margin-top: .85rem; background: rgba(255,255,255,.11); }
+.loader-progress span { display: block; width: 100%; height: 100%; background: var(--gradient); transform: scaleX(0); transform-origin: left; }
+.loader-meta { display: flex; justify-content: space-between; margin-top: .85rem; color: rgba(255,255,255,.34); font-size: clamp(.54rem, .75vw, .66rem); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 
 /* Header and navigation */
 .site-header { position: fixed; top: 0; left: 0; z-index: 1030; width: 100%; border-bottom: 1px solid transparent; transition: transform .35s ease, background-color .35s ease, border-color .35s ease, box-shadow .35s ease; }

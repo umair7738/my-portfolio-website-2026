@@ -181,15 +181,19 @@
 
       const apply = function () {
         let visible = 0;
+        const visibleCards = [];
         grid.querySelectorAll(".project-card").forEach(function (card) {
           const categoryMatch = activeCategory === "all" || card.dataset.category === activeCategory;
           const searchMatch = !query || card.dataset.search.includes(query);
           const show = categoryMatch && searchMatch;
           card.hidden = !show;
-          if (show) visible += 1;
+          if (show) { visible += 1; visibleCards.push(card); }
         });
         const empty = document.querySelector("[data-project-empty]");
         if (empty) empty.style.display = visible ? "none" : "block";
+        if (window.gsap && !Portfolio.utils.prefersReducedMotion()) {
+          window.gsap.fromTo(visibleCards, { y: 18, scale: .975, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .5, stagger: .045, ease: "power3.out", overwrite: true });
+        }
         if (window.ScrollTrigger) window.ScrollTrigger.refresh();
       };
 
@@ -198,6 +202,7 @@
           document.querySelectorAll("[data-project-filter]").forEach(function (item) { item.classList.remove("active"); item.setAttribute("aria-pressed", "false"); });
           button.classList.add("active");
           button.setAttribute("aria-pressed", "true");
+          if (window.gsap && !Portfolio.utils.prefersReducedMotion()) window.gsap.fromTo(button, { scale: .92 }, { scale: 1, duration: .42, ease: "back.out(2)" });
           activeCategory = button.dataset.projectFilter;
           apply();
         });
