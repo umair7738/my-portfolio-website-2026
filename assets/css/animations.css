@@ -1,0 +1,23 @@
+.reveal-up, .reveal-left, .reveal-right, .reveal-scale { will-change: transform, opacity; }
+.char { display: inline-block; }
+.word { display: inline-block; overflow: hidden; vertical-align: bottom; }
+.word-inner { display: inline-block; }
+.image-reveal { position: relative; overflow: hidden; }
+.image-reveal::after { content: ""; position: absolute; inset: 0; z-index: 2; background: var(--surface-strong); transform-origin: right center; }
+.image-reveal.is-revealed::after { transform: scaleX(0); transition: transform 1s cubic-bezier(.7,0,.2,1); }
+.parallax-media { will-change: transform; }
+.floating-shape { will-change: transform; }
+.magnetic { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .reveal-up, .reveal-left, .reveal-right, .reveal-scale { opacity: 1 !important; transform: none !important; }
+  .page-loader { display: none !important; }
+  .cursor-dot, .cursor-ring { display: none !important; }
+}

@@ -1,0 +1,59 @@
+# Umair Shaikh — Portfolio
+
+A production-oriented, multi-page personal portfolio built as a premium software-company-style experience. Content is grounded in Umair Shaikh's February 2024 resume; undocumented metrics, testimonials, repositories, certificates, and work history are not fabricated.
+
+## Stack
+
+- HTML5 and CSS3
+- Bootstrap 5.3
+- jQuery 3.7
+- GSAP 3.13 with ScrollTrigger
+- Lenis smooth scrolling
+- Lucide icons
+
+No React, Vue, Angular, Tailwind, TypeScript, or framework build step is used.
+
+## Local preview
+
+The shared components are loaded with jQuery, so the site must be viewed through an HTTP server rather than by opening `index.html` directly.
+
+```bash
+npx serve .
+```
+
+PHP is also suitable:
+
+```bash
+php -S localhost:8080
+```
+
+## Content and structure
+
+- `index.html` — home and overview
+- `about.html` — story, philosophy, strengths, and career snapshot
+- `projects.html` — searchable and filterable resume-listed project archive
+- `case-studies.html` — transparent case-study notes with evidence boundaries
+- `services.html` — service catalogue and engagement models
+- `skills.html` — resume-verified technology groups
+- `experience.html` — professional timeline and education
+- `contact.html` — validated enquiry form, email, phone, WhatsApp, and LinkedIn
+- `privacy.html`, `404.html`, `robots.txt`, and `sitemap.xml` — production support pages
+- `components/` — jQuery-loaded reusable fragments and card templates
+- `assets/js/` — modular site, animation, project, navigation, loader, and form logic
+- `assets/css/` — design system, animation helpers, and responsive rules
+
+## Before public launch
+
+1. Review the public resume PDF. The original source includes personal details; replace it with a recruiter-safe version if desired.
+2. Update the canonical, Open Graph, JSON-LD, sitemap, and robots domain when the final domain changes.
+3. Add verified GitHub and CodePen URLs in `assets/js/utilities.js`. Empty profiles stay hidden automatically.
+4. Connect the contact form to a secure serverless or backend endpoint if submissions should be stored. The current form opens the visitor's email application.
+5. Re-run accessibility, responsive, and performance checks after any third-party analytics or form integration is added.
+
+## Accessibility and motion
+
+The site includes semantic landmarks, skip links, keyboard-visible focus states, ARIA labels, accessible form validation, contrast-aware light/dark themes, and a complete `prefers-reduced-motion` path. Decorative motion and custom cursor behavior are disabled for reduced-motion and coarse-pointer users.
+
+## SEO
+
+Every indexable page includes a unique title, description, canonical link, social metadata, heading hierarchy, internal navigation, and page-appropriate JSON-LD. The project archive uses `CreativeWork`/`ItemList`; the case studies use `Article`; the contact page uses `ContactPage`; breadcrumbs are included throughout.
