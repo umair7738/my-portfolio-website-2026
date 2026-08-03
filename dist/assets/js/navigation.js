@@ -19,28 +19,8 @@
 
     initMotionPreference() {
       const root = document.documentElement;
-      const stored = localStorage.getItem("portfolio-motion");
-      const systemReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const initial = stored || (systemReduced ? "reduced" : "full");
-      root.dataset.motion = initial;
-
-      document.querySelectorAll("[data-motion-toggle]").forEach(function (button) {
-        const sync = function () {
-          const reduced = root.dataset.motion === "reduced";
-          button.setAttribute("aria-pressed", String(!reduced));
-          button.setAttribute("aria-label", reduced ? "Enable full motion" : "Reduce motion");
-          button.title = reduced ? "Motion is reduced — click to enable" : "Full motion is enabled — click to reduce";
-        };
-        sync();
-        button.addEventListener("click", function () {
-          const next = root.dataset.motion === "reduced" ? "full" : "reduced";
-          root.dataset.motion = next;
-          localStorage.setItem("portfolio-motion", next);
-          sync();
-          if (window.gsap && next === "full") window.gsap.fromTo(button, { scale: .78, rotate: -18 }, { scale: 1, rotate: 0, duration: .5, ease: "back.out(2)" });
-          window.setTimeout(function () { window.location.reload(); }, next === "full" ? 180 : 0);
-        });
-      });
+      // Motion is part of the portfolio's default experience and starts automatically.
+      root.dataset.motion = "full";
     },
 
     setActiveLink() {

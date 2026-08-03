@@ -17,8 +17,8 @@
         return Promise.resolve();
       }
 
-      const isHome = document.body.dataset.page === "home";
-      const duration = isHome ? 1.65 : .85;
+      // Keep a deliberate but short entrance even when this static site is cached.
+      const duration = 1.25;
       const count = { value: 0 };
       const percent = loader.querySelector("[data-loader-percent]");
       const status = loader.querySelector("[data-loader-status]");
@@ -49,15 +49,15 @@
         window.gsap.set(".loader-topline, .loader-console, .loader-meta", { opacity: 0, y: 12 });
 
         timeline
-          .to(".loader-topline", { opacity: 1, y: 0, duration: .45 })
-          .to(".loader-letter", { yPercent: 0, rotate: 0, duration: .9, stagger: .065, ease: "power4.out" }, "-=.22")
-          .to(".loader-console, .loader-meta", { opacity: 1, y: 0, duration: .5, stagger: .08 }, "-=.58")
-          .to(count, { value: 100, duration: duration, ease: "power2.inOut", onUpdate: updateProgress }, "-=.38")
+          .to(".loader-topline", { opacity: 1, y: 0, duration: .35 })
+          .to(".loader-letter", { yPercent: 0, rotate: 0, duration: .7, stagger: .055, ease: "power4.out" }, "-=.18")
+          .to(".loader-console, .loader-meta", { opacity: 1, y: 0, duration: .35, stagger: .06 }, "-=.44")
+          .to(count, { value: 100, duration: duration, ease: "power2.inOut", onUpdate: updateProgress }, "-=.25")
           .to(".loader-progress span", { scaleX: 1, duration: duration, ease: "power2.inOut" }, "<")
           .to(".loader-scan", { xPercent: 180, duration: duration * .85, ease: "power1.inOut" }, "<")
-          .to(".loader-stage", { y: -28, opacity: 0, duration: .42, ease: "power2.in" }, "+=.08")
-          .to(".loader-panel-top", { yPercent: -101, duration: .78, ease: "power4.inOut" }, "-=.05")
-          .to(".loader-panel-bottom", { yPercent: 101, duration: .78, ease: "power4.inOut" }, "<")
+          .to(".loader-stage", { y: -28, opacity: 0, duration: .35, ease: "power2.in" }, "+=.06")
+          .to(".loader-panel-top", { yPercent: -101, duration: .62, ease: "power4.inOut" }, "-=.04")
+          .to(".loader-panel-bottom", { yPercent: 101, duration: .62, ease: "power4.inOut" }, "<")
           .to(loader, { autoAlpha: 0, duration: .12 });
       });
     }

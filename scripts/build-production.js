@@ -6,13 +6,41 @@ function collapseOutsideStrings(source) {
   let quote = "";
   let escaped = false;
   let whitespace = false;
+  let lineComment = false;
+  let blockComment = false;
   for (let index = 0; index < source.length; index += 1) {
     const character = source[index];
+    const nextCharacter = source[index + 1];
+    if (lineComment) {
+      if (character === "\n" || character === "\r") {
+        lineComment = false;
+        whitespace = true;
+      }
+      continue;
+    }
+    if (blockComment) {
+      if (character === "*" && nextCharacter === "/") {
+        blockComment = false;
+        whitespace = true;
+        index += 1;
+      }
+      continue;
+    }
     if (quote) {
       output += character;
       if (escaped) escaped = false;
       else if (character === "\\") escaped = true;
       else if (character === quote) quote = "";
+      continue;
+    }
+    if (character === "/" && nextCharacter === "/") {
+      lineComment = true;
+      index += 1;
+      continue;
+    }
+    if (character === "/" && nextCharacter === "*") {
+      blockComment = true;
+      index += 1;
       continue;
     }
     if (character === "'" || character === '"' || character === "`") {
@@ -42,11 +70,13 @@ const css = cssFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n")
 fs.writeFileSync(path.join("assets", "css", "portfolio.min.css"), css + "\n");
 
 const jsFiles = ["utilities.js", "navigation.js", "loader.js", "projects.js", "contact.js", "gsap.js", "app.js"].map((file) => path.join("assets", "js", file));
-const js = collapseOutsideStrings(jsFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n"));
+// Keep source formatting here: the previous whitespace-only minifier could mistake
+// regular expressions for strings and produce invalid JavaScript.
+const js = jsFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n").trimEnd();
 fs.writeFileSync(path.join("assets", "js", "portfolio.min.js"), js + "\n");
 
 const htmlFiles = fs.readdirSync(process.cwd()).filter((file) => file.endsWith(".html"));
-const assetVersion = "motion-v4";
+const assetVersion = "motion-v5";
 const cssPattern = /<link rel="stylesheet" href="assets\/css\/style\.css">\s*<link rel="stylesheet" href="assets\/css\/animations\.css">\s*<link rel="stylesheet" href="assets\/css\/responsive\.css">/g;
 const jsPattern = /<script defer src="assets\/js\/utilities\.js"><\/script>\s*<script defer src="assets\/js\/navigation\.js"><\/script>\s*<script defer src="assets\/js\/loader\.js"><\/script>\s*<script defer src="assets\/js\/projects\.js"><\/script>\s*<script defer src="assets\/js\/contact\.js"><\/script>\s*<script defer src="assets\/js\/gsap\.js"><\/script>\s*<script defer src="assets\/js\/app\.js"><\/script>/g;
 htmlFiles.forEach((file) => {

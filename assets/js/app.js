@@ -20,6 +20,7 @@
       })
       .catch(function () {
         document.body.classList.remove("loading");
+        document.documentElement.classList.add("motion-ready");
         const loader = document.querySelector(".page-loader");
         if (loader) loader.remove();
       });

@@ -11,6 +11,7 @@
         document.querySelectorAll(".skill-item").forEach(function (element) { element.classList.add("is-visible"); });
         document.querySelectorAll(".timeline").forEach(function (element) { element.style.setProperty("--timeline-progress", "1"); });
         document.querySelectorAll(".process-steps").forEach(function (element) { element.style.setProperty("--process-progress", "1"); });
+        document.documentElement.classList.add("motion-ready");
         return;
       }
 
@@ -18,6 +19,7 @@
       this.initLenis();
       this.prepareText();
       this.horizontalScroll();
+      this.headerReveal();
       this.heroReveal();
       this.sectionReveals();
       this.sectionChoreography();
@@ -29,6 +31,7 @@
       this.heroPointer();
       this.footerReveal();
       window.ScrollTrigger.refresh();
+      document.documentElement.classList.add("motion-ready");
     },
 
     initLenis() {
@@ -43,6 +46,15 @@
     prepareText() {
       Portfolio.utils.splitCharacters("[data-split='chars']");
       Portfolio.utils.splitWords("[data-split='words']");
+    },
+
+    headerReveal() {
+      const header = document.querySelector("[data-site-header]");
+      if (!header) return;
+      window.gsap.fromTo(header,
+        { yPercent: -115, autoAlpha: 0 },
+        { yPercent: 0, autoAlpha: 1, duration: .82, delay: .06, ease: "power4.out", clearProps: "transform,opacity,visibility" }
+      );
     },
 
     heroReveal() {

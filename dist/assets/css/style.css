@@ -66,6 +66,19 @@ body {
 }
 
 body.loading { overflow: hidden; }
+/* Covers the first paint while the component-based loader is being inserted. */
+body.loading::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #070a11;
+}
+
+/* Avoid a single-frame static hero before GSAP applies its opening state. */
+.js:not(.motion-ready) .home-hero .hero-content,
+.js:not(.motion-ready) .home-hero .developer-badge,
+.js:not(.motion-ready) .home-hero .scroll-cue { visibility: hidden; }
 
 ::selection { background: var(--primary); color: #fff; }
 
@@ -253,9 +266,9 @@ h1, h2, h3, h4 {
 .hero-meta > div + div { border-left: 1px solid var(--line); }
 .hero-meta strong { display: block; margin-bottom: .25rem; font: 600 1.5rem var(--font-display); }
 .hero-meta span { color: var(--muted); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
-.developer-badge { position: absolute; top: 21%; right: 6%; z-index: 1; display: grid; width: 155px; height: 155px; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); backdrop-filter: blur(14px); }
+.developer-badge { position: absolute; top: 21%; right: 6%; z-index: 1; display: grid; width: 172px; height: 172px; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); backdrop-filter: blur(14px); }
 .developer-badge svg { position: absolute; width: 100%; height: 100%; animation: rotate 16s linear infinite; }
-.developer-badge text { fill: var(--text-soft); font: 700 8px var(--font-body); letter-spacing: 2.7px; text-transform: uppercase; }
+.developer-badge text { fill: var(--text-soft); font: 700 9px var(--font-body); letter-spacing: 2.2px; text-transform: uppercase; }
 .developer-badge i, .developer-badge > svg:last-child { width: 32px; height: 32px; }
 .scroll-cue { position: absolute; right: var(--container-gutter); bottom: 2.2rem; z-index: 2; display: flex; align-items: center; gap: .65rem; color: var(--muted); font-size: .65rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; transform: rotate(90deg); transform-origin: right center; }
 .scroll-cue span { display: block; width: 45px; height: 1px; overflow: hidden; background: var(--line); }
@@ -531,9 +544,10 @@ h1, h2, h3, h4 {
 .back-to-top:hover { border-color: rgba(88,214,255,.55); }
 .scroll-water { position: absolute; inset: 3px; overflow: hidden; border-radius: 50%; pointer-events: none; }
 .scroll-water-fill { position: absolute; inset: 0; background: linear-gradient(155deg, rgba(111,92,255,.95), rgba(38,140,255,.92) 58%, rgba(88,214,255,.95)); transform: translateY(var(--water-y)); will-change: transform; }
-.water-wave { position: absolute; top: -8px; left: -8px; width: 62px; height: 17px; border-radius: 42% 58% 48% 52%; background: #101522; transform-origin: 50% 50%; }
-.water-wave-one { opacity: .92; animation: water-wave-spin 3.4s linear infinite; }
-.water-wave-two { top: -6px; left: -5px; background: rgba(13,17,28,.7); animation: water-wave-spin 4.8s linear infinite reverse; }
+.water-waves { position: absolute; top: -19px; left: -50%; width: 200%; height: 36px; overflow: visible; pointer-events: none; filter: drop-shadow(0 -1px 3px rgba(88,214,255,.3)); }
+.water-wave { transform-box: fill-box; will-change: transform; }
+.water-wave-one { fill: #268cff; opacity: .84; animation: water-wave-left 7s linear infinite; }
+.water-wave-two { fill: #0e35c7; opacity: .72; animation: water-wave-right 11s linear infinite; }
 .back-to-top > i, .back-to-top > svg:last-child { position: relative; z-index: 2; width: 17px; height: 17px; transform: none; filter: drop-shadow(0 1px 4px rgba(0,0,0,.45)); }
 .back-to-top.is-returning > i, .back-to-top.is-returning > svg:last-child { animation: return-arrow 1s ease-in-out infinite; }
 
@@ -550,7 +564,8 @@ h1, h2, h3, h4 {
 @keyframes rotate { to { transform: rotate(360deg); } }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @keyframes scroll-line { 0% { transform: translateX(-100%); } 50%, 100% { transform: translateX(100%); } }
-@keyframes water-wave-spin { to { transform: rotate(360deg); } }
+@keyframes water-wave-left { to { transform: translateX(-160px); } }
+@keyframes water-wave-right { to { transform: translateX(160px); } }
 @keyframes return-arrow { 0%,100% { transform: translateY(1px); } 50% { transform: translateY(-4px); } }
 
 @supports not (background: color-mix(in srgb, black, white)) {
