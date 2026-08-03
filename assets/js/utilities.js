@@ -10,7 +10,12 @@
     linkedin: "https://www.linkedin.com/in/umair-shaikh-9b2054254",
     previousPortfolio: "https://umair7738portfolio.free.nf",
     github: "https://github.com/umair7738",
-    codepen: "https://codepen.io/umair7738"
+    codepen: "https://codepen.io/umair7738",
+    emailjs: {
+      publicKey: "jhbX9HU7sR6VIPo21",
+      serviceId: "service_wvh291n",
+      templateId: "template_1kcltr2"
+    }
   };
 
   Portfolio.utils = {

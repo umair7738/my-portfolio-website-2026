@@ -22,7 +22,7 @@
         });
       });
 
-      Portfolio.Lifecycle.page.listen(form, "submit", function (event) {
+      Portfolio.Lifecycle.page.listen(form, "submit", async function (event) {
         event.preventDefault();
         const fields = Array.from(form.querySelectorAll("input[required], textarea[required], select[required]"));
         const valid = fields.map(Portfolio.Contact.validateField).every(Boolean);
@@ -38,21 +38,31 @@
           return;
         }
 
-        const data = new FormData(form);
-        const subject = encodeURIComponent("Portfolio enquiry: " + data.get("projectType"));
-        const body = encodeURIComponent([
-          "Name: " + data.get("name"),
-          "Email: " + data.get("email"),
-          "Company: " + (data.get("company") || "Not provided"),
-          "Service: " + data.get("projectType"),
-          "",
-          data.get("message")
-        ].join("\n"));
-
-        status.className = "form-status success";
-        status.textContent = "Thanks — your email app is opening with the enquiry ready to send.";
+        const config = Portfolio.config.emailjs || {};
+        const configured = window.emailjs && config.publicKey && config.serviceId && config.templateId &&
+          !/^YOUR_EMAILJS_/.test(config.publicKey) && !/^YOUR_EMAILJS_/.test(config.serviceId) && !/^YOUR_EMAILJS_/.test(config.templateId);
+        if (!configured) {
+          status.className = "form-status error";
+          status.textContent = "Email delivery is not configured yet. Please contact me directly by email.";
+          return;
+        }
+        const submit = form.querySelector("button[type='submit']");
+        if (submit) submit.disabled = true;
+        status.className = "form-status";
+        status.textContent = "Sending your enquiry…";
+        try {
+          window.emailjs.init({ publicKey: config.publicKey });
+          await window.emailjs.sendForm(config.serviceId, config.templateId, form);
+          status.className = "form-status success";
+          status.textContent = "Thanks — your enquiry has been sent. I’ll get back to you soon.";
+          form.reset();
+        } catch (_error) {
+          status.className = "form-status error";
+          status.textContent = "The enquiry could not be sent. Please email me directly instead.";
+        } finally {
+          if (submit) submit.disabled = false;
+        }
         if (window.gsap && !Portfolio.utils.prefersReducedMotion()) window.gsap.fromTo(status, { y: -8, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power2.out" });
-        window.location.href = "mailto:" + Portfolio.config.email + "?subject=" + subject + "&body=" + body;
       });
     },
 

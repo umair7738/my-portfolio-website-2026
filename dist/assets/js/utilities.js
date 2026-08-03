@@ -10,7 +10,12 @@
     linkedin: "https://www.linkedin.com/in/umair-shaikh-9b2054254",
     previousPortfolio: "https://umair7738portfolio.free.nf",
     github: "https://github.com/umair7738",
-    codepen: "https://codepen.io/umair7738"
+    codepen: "https://codepen.io/umair7738",
+    emailjs: {
+      publicKey: "YOUR_EMAILJS_PUBLIC_KEY",
+      serviceId: "YOUR_EMAILJS_SERVICE_ID",
+      templateId: "YOUR_EMAILJS_TEMPLATE_ID"
+    }
   };
 
   Portfolio.utils = {
