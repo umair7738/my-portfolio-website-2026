@@ -31,14 +31,14 @@
       return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     },
 
-    refreshIcons() {
+    refreshIcons(root) {
       if (window.lucide) {
-        window.lucide.createIcons({ attrs: { "stroke-width": 1.7 } });
+        window.lucide.createIcons({ root: root || document, attrs: { "stroke-width": 1.7 } });
       }
     },
 
-    splitCharacters(selector) {
-      document.querySelectorAll(selector).forEach(function (element) {
+    splitCharacters(selector, root) {
+      (root || document).querySelectorAll(selector).forEach(function (element) {
         if (element.dataset.splitReady) return;
         const label = element.textContent.trim();
         element.setAttribute("aria-label", label);
@@ -50,8 +50,8 @@
       });
     },
 
-    splitWords(selector) {
-      document.querySelectorAll(selector).forEach(function (element) {
+    splitWords(selector, root) {
+      (root || document).querySelectorAll(selector).forEach(function (element) {
         if (element.dataset.splitReady) return;
         const label = element.textContent.trim();
         element.setAttribute("aria-label", label);
@@ -67,8 +67,9 @@
     }
   };
 
-  Portfolio.loadComponents = function () {
-    const elements = Array.from(document.querySelectorAll("[data-component]"));
+  Portfolio.loadComponents = function (root) {
+    const scope = root || document;
+    const elements = Array.from(scope.querySelectorAll("[data-component]"));
     return Promise.all(elements.map(function (element) {
       const component = element.dataset.component;
       return new Promise(function (resolve) {
@@ -82,13 +83,14 @@
     }));
   };
 
-  Portfolio.hydrateGlobalContent = function () {
-    document.querySelectorAll("[data-current-year]").forEach(function (node) {
+  Portfolio.hydrateGlobalContent = function (root) {
+    const scope = root || document;
+    scope.querySelectorAll("[data-current-year]").forEach(function (node) {
       node.textContent = new Date().getFullYear();
     });
 
     const service = Portfolio.utils.getQuery("service");
-    const projectType = document.querySelector("#projectType");
+    const projectType = scope.querySelector("#projectType") || document.querySelector("#projectType");
     if (service && projectType) {
       const readable = service.replace(/-/g, " ");
       Array.from(projectType.options).some(function (option) {
@@ -100,7 +102,7 @@
       });
     }
 
-    document.querySelectorAll("[data-profile]").forEach(function (node) {
+    scope.querySelectorAll("[data-profile]").forEach(function (node) {
       const url = Portfolio.config[node.dataset.profile];
       if (!url) {
         node.hidden = true;

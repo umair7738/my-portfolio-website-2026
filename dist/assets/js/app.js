@@ -7,16 +7,8 @@
     Portfolio.loadComponents()
       .then(function () {
         Portfolio.hydrateGlobalContent();
-        Portfolio.Projects.init();
-        Portfolio.utils.refreshIcons();
-        Portfolio.Navigation.init();
-        Portfolio.Contact.init();
-        return Portfolio.Loader.play();
-      })
-      .then(function () {
-        Portfolio.Animations.init();
-        Portfolio.utils.refreshIcons();
-        window.dispatchEvent(new CustomEvent("portfolio:ready"));
+        Portfolio.Navigation.initGlobal();
+        Portfolio.Router.init();
       })
       .catch(function () {
         document.body.classList.remove("loading");

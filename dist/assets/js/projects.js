@@ -126,9 +126,10 @@
   ];
 
   Portfolio.Projects = {
-    renderProjects() {
-      const container = document.querySelector("[data-projects-grid]");
-      const template = document.querySelector("#project-card-template");
+    renderProjects(root) {
+      const scope = root || document;
+      const container = scope.querySelector("[data-projects-grid]");
+      const template = scope.querySelector("#project-card-template");
       if (!container || !template) return;
       const limit = Number(container.dataset.projectLimit || Portfolio.projectData.length);
       container.innerHTML = Portfolio.projectData.slice(0, limit).map(function (project, index) {
@@ -154,9 +155,10 @@
       }).join("");
     },
 
-    renderServices() {
-      const container = document.querySelector("[data-services-grid]");
-      const template = document.querySelector("#service-card-template");
+    renderServices(root) {
+      const scope = root || document;
+      const container = scope.querySelector("[data-services-grid]");
+      const template = scope.querySelector("#service-card-template");
       if (!container || !template) return;
       const limit = Number(container.dataset.serviceLimit || Portfolio.serviceData.length);
       container.innerHTML = Portfolio.serviceData.slice(0, limit).map(function (service, index) {
@@ -173,9 +175,10 @@
       }).join("");
     },
 
-    initFilters() {
-      const grid = document.querySelector("[data-projects-grid]");
-      if (!grid || !document.querySelector("[data-project-filter]")) return;
+    initFilters(root) {
+      const scope = root || document;
+      const grid = scope.querySelector("[data-projects-grid]");
+      if (!grid || !scope.querySelector("[data-project-filter]")) return;
       let activeCategory = "all";
       let query = "";
 
@@ -189,7 +192,7 @@
           card.hidden = !show;
           if (show) { visible += 1; visibleCards.push(card); }
         });
-        const empty = document.querySelector("[data-project-empty]");
+        const empty = scope.querySelector("[data-project-empty]");
         if (empty) empty.style.display = visible ? "none" : "block";
         if (window.gsap && !Portfolio.utils.prefersReducedMotion()) {
           window.gsap.fromTo(visibleCards, { y: 18, scale: .975, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .5, stagger: .045, ease: "power3.out", overwrite: true });
@@ -197,9 +200,9 @@
         if (window.ScrollTrigger) window.ScrollTrigger.refresh();
       };
 
-      document.querySelectorAll("[data-project-filter]").forEach(function (button) {
-        button.addEventListener("click", function () {
-          document.querySelectorAll("[data-project-filter]").forEach(function (item) { item.classList.remove("active"); item.setAttribute("aria-pressed", "false"); });
+      scope.querySelectorAll("[data-project-filter]").forEach(function (button) {
+        Portfolio.Lifecycle.page.listen(button, "click", function () {
+          scope.querySelectorAll("[data-project-filter]").forEach(function (item) { item.classList.remove("active"); item.setAttribute("aria-pressed", "false"); });
           button.classList.add("active");
           button.setAttribute("aria-pressed", "true");
           if (window.gsap && !Portfolio.utils.prefersReducedMotion()) window.gsap.fromTo(button, { scale: .92 }, { scale: 1, duration: .42, ease: "back.out(2)" });
@@ -208,14 +211,15 @@
         });
       });
 
-      const search = document.querySelector("[data-project-search]");
-      if (search) search.addEventListener("input", function () { query = search.value.trim().toLowerCase(); apply(); });
+      const search = scope.querySelector("[data-project-search]");
+      if (search) Portfolio.Lifecycle.page.listen(search, "input", function () { query = search.value.trim().toLowerCase(); apply(); });
     },
 
-    init() {
-      this.renderProjects();
-      this.renderServices();
-      this.initFilters();
+    init(root) {
+      const scope = root || document;
+      this.renderProjects(scope);
+      this.renderServices(scope);
+      this.initFilters(scope);
     }
   };
 })(window);

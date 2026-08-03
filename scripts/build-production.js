@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 function collapseOutsideStrings(source) {
   let output = "";
@@ -69,23 +70,25 @@ const css = cssFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n")
   .trim();
 fs.writeFileSync(path.join("assets", "css", "portfolio.min.css"), css + "\n");
 
-const jsFiles = ["utilities.js", "navigation.js", "loader.js", "projects.js", "contact.js", "gsap.js", "app.js"].map((file) => path.join("assets", "js", file));
+const jsFiles = ["utilities.js", "lifecycle.js", "navigation.js", "loader.js", "projects.js", "contact.js", "gsap.js", "router.js", "app.js"].map((file) => path.join("assets", "js", file));
 // Keep source formatting here: the previous whitespace-only minifier could mistake
 // regular expressions for strings and produce invalid JavaScript.
 const js = jsFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n").trimEnd();
 fs.writeFileSync(path.join("assets", "js", "portfolio.min.js"), js + "\n");
 
 const htmlFiles = fs.readdirSync(process.cwd()).filter((file) => file.endsWith(".html"));
-const assetVersion = "motion-v5";
+const hash = (value) => crypto.createHash("sha256").update(value).digest("hex").slice(0, 12);
+const cssVersion = hash(css);
+const jsVersion = hash(js);
 const cssPattern = /<link rel="stylesheet" href="assets\/css\/style\.css">\s*<link rel="stylesheet" href="assets\/css\/animations\.css">\s*<link rel="stylesheet" href="assets\/css\/responsive\.css">/g;
-const jsPattern = /<script defer src="assets\/js\/utilities\.js"><\/script>\s*<script defer src="assets\/js\/navigation\.js"><\/script>\s*<script defer src="assets\/js\/loader\.js"><\/script>\s*<script defer src="assets\/js\/projects\.js"><\/script>\s*<script defer src="assets\/js\/contact\.js"><\/script>\s*<script defer src="assets\/js\/gsap\.js"><\/script>\s*<script defer src="assets\/js\/app\.js"><\/script>/g;
+const jsPattern = /<script defer src="assets\/js\/utilities\.js"><\/script>\s*<script defer src="assets\/js\/lifecycle\.js"><\/script>\s*<script defer src="assets\/js\/navigation\.js"><\/script>\s*<script defer src="assets\/js\/loader\.js"><\/script>\s*<script defer src="assets\/js\/projects\.js"><\/script>\s*<script defer src="assets\/js\/contact\.js"><\/script>\s*<script defer src="assets\/js\/gsap\.js"><\/script>\s*<script defer src="assets\/js\/router\.js"><\/script>\s*<script defer src="assets\/js\/app\.js"><\/script>/g;
 htmlFiles.forEach((file) => {
   const source = fs.readFileSync(file, "utf8");
   const production = source
-    .replace(cssPattern, '<link rel="stylesheet" href="assets/css/portfolio.min.css?v=' + assetVersion + '">')
-    .replace(jsPattern, '<script defer src="assets/js/portfolio.min.js?v=' + assetVersion + '"></script>')
-    .replace(/assets\/css\/portfolio\.min\.css(?:\?v=[^"']*)?/g, "assets/css/portfolio.min.css?v=" + assetVersion)
-    .replace(/assets\/js\/portfolio\.min\.js(?:\?v=[^"']*)?/g, "assets/js/portfolio.min.js?v=" + assetVersion)
+    .replace(cssPattern, '<link rel="stylesheet" href="assets/css/portfolio.min.css?v=' + cssVersion + '">')
+    .replace(jsPattern, '<script defer src="assets/js/portfolio.min.js?v=' + jsVersion + '"></script>')
+    .replace(/assets\/css\/portfolio\.min\.css(?:\?v=[^"']*)?/g, "assets/css/portfolio.min.css?v=" + cssVersion)
+    .replace(/assets\/js\/portfolio\.min\.js(?:\?v=[^"']*)?/g, "assets/js/portfolio.min.js?v=" + jsVersion)
     .replace(/https:\/\/code\.jquery\.com\/jquery-3\.7\.1\.min\.js/g, "assets/vendor/jquery-3.7.1.min.js")
     .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/bootstrap@5\.3\.8\/dist\/css\/bootstrap\.min\.css/g, "assets/vendor/bootstrap-5.3.8.min.css")
     .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/bootstrap@5\.3\.8\/dist\/js\/bootstrap\.bundle\.min\.js/g, "assets/vendor/bootstrap-5.3.8.bundle.min.js")

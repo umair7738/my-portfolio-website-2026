@@ -4,24 +4,25 @@
   const Portfolio = window.Portfolio = window.Portfolio || {};
 
   Portfolio.Contact = {
-    init() {
-      const form = document.querySelector("#contactForm");
+    init(root) {
+      const scope = root || document;
+      const form = scope.querySelector("#contactForm");
       if (!form) return;
 
       form.querySelectorAll("input, textarea, select").forEach(function (field) {
-        field.addEventListener("blur", function () { Portfolio.Contact.validateField(field); });
-        field.addEventListener("input", function () { if (field.classList.contains("is-invalid")) Portfolio.Contact.validateField(field); });
-        field.addEventListener("focus", function () {
+        Portfolio.Lifecycle.page.listen(field, "blur", function () { Portfolio.Contact.validateField(field); });
+        Portfolio.Lifecycle.page.listen(field, "input", function () { if (field.classList.contains("is-invalid")) Portfolio.Contact.validateField(field); });
+        Portfolio.Lifecycle.page.listen(field, "focus", function () {
           const group = field.closest("[class*='col-']");
           if (group) group.classList.add("field-active");
         });
-        field.addEventListener("blur", function () {
+        Portfolio.Lifecycle.page.listen(field, "blur", function () {
           const group = field.closest("[class*='col-']");
           if (group) group.classList.remove("field-active");
         });
       });
 
-      form.addEventListener("submit", function (event) {
+      Portfolio.Lifecycle.page.listen(form, "submit", function (event) {
         event.preventDefault();
         const fields = Array.from(form.querySelectorAll("input[required], textarea[required], select[required]"));
         const valid = fields.map(Portfolio.Contact.validateField).every(Boolean);

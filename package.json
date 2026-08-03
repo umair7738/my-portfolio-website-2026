@@ -4,6 +4,10 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "build": "node scripts/build-production.js && node scripts/validate-site.js && node scripts/build-sites.js"
+    "build-production": "node scripts/build-production.js",
+    "build-sites": "node scripts/build-sites.js",
+    "validate-site": "node scripts/validate-site.js",
+    "validate-dist": "node scripts/validate-dist.js",
+    "build": "npm run build-production && npm run build-sites && npm run validate-site && npm run validate-dist"
   }
 }
