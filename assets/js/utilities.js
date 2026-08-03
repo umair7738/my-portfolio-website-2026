@@ -25,6 +25,9 @@
     },
 
     prefersReducedMotion() {
+      const preference = document.documentElement.dataset.motion;
+      if (preference === "full") return false;
+      if (preference === "reduced") return true;
       return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     },
 

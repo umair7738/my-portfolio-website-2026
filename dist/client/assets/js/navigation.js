@@ -6,6 +6,7 @@
   Portfolio.Navigation = {
     init() {
       this.setActiveLink();
+      this.initMotionPreference();
       this.initTheme();
       this.initHeader();
       this.initScrollActions();
@@ -14,6 +15,32 @@
       this.initCursor();
       this.initMagnetic();
       this.initMicroInteractions();
+    },
+
+    initMotionPreference() {
+      const root = document.documentElement;
+      const stored = localStorage.getItem("portfolio-motion");
+      const systemReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const initial = stored || (systemReduced ? "reduced" : "full");
+      root.dataset.motion = initial;
+
+      document.querySelectorAll("[data-motion-toggle]").forEach(function (button) {
+        const sync = function () {
+          const reduced = root.dataset.motion === "reduced";
+          button.setAttribute("aria-pressed", String(!reduced));
+          button.setAttribute("aria-label", reduced ? "Enable full motion" : "Reduce motion");
+          button.title = reduced ? "Motion is reduced — click to enable" : "Full motion is enabled — click to reduce";
+        };
+        sync();
+        button.addEventListener("click", function () {
+          const next = root.dataset.motion === "reduced" ? "full" : "reduced";
+          root.dataset.motion = next;
+          localStorage.setItem("portfolio-motion", next);
+          sync();
+          if (window.gsap && next === "full") window.gsap.fromTo(button, { scale: .78, rotate: -18 }, { scale: 1, rotate: 0, duration: .5, ease: "back.out(2)" });
+          window.setTimeout(function () { window.location.reload(); }, next === "full" ? 180 : 0);
+        });
+      });
     },
 
     setActiveLink() {
@@ -61,13 +88,31 @@
     initScrollActions() {
       const buttons = document.querySelectorAll("[data-back-to-top], [data-back-top-inline]");
       const floating = document.querySelector("[data-back-to-top]");
-      const progress = floating ? floating.querySelector("circle.progress") : null;
-      const circumference = 125.66;
 
       buttons.forEach(function (button) {
         button.addEventListener("click", function () {
-          if (window.portfolioLenis) window.portfolioLenis.scrollTo(0, { duration: 1.2 });
-          else window.scrollTo({ top: 0, behavior: "smooth" });
+          const start = window.scrollY;
+          const duration = Math.min(2.8, Math.max(1.25, start / 2200));
+          if (floating) floating.classList.add("is-returning");
+          if (window.portfolioLenis) {
+            window.portfolioLenis.scrollTo(0, {
+              duration: duration,
+              easing: function (value) { return 1 - Math.pow(1 - value, 4); },
+              onComplete: function () { if (floating) floating.classList.remove("is-returning"); }
+            });
+          } else if (window.gsap) {
+            const state = { value: start };
+            window.gsap.to(state, {
+              value: 0,
+              duration: duration,
+              ease: "power4.inOut",
+              onUpdate: function () { window.scrollTo(0, state.value); },
+              onComplete: function () { if (floating) floating.classList.remove("is-returning"); }
+            });
+          } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.setTimeout(function () { if (floating) floating.classList.remove("is-returning"); }, duration * 1000);
+          }
         });
       });
 
@@ -75,7 +120,10 @@
         const total = document.documentElement.scrollHeight - window.innerHeight;
         const ratio = total > 0 ? window.scrollY / total : 0;
         if (floating) floating.classList.toggle("visible", window.scrollY > 500);
-        if (progress) progress.style.strokeDashoffset = String(circumference - ratio * circumference);
+        if (floating) {
+          floating.style.setProperty("--water-y", (100 - ratio * 100).toFixed(2) + "%");
+          floating.setAttribute("aria-label", "Back to top — " + Math.round(ratio * 100) + "% page progress");
+        }
       };
       window.addEventListener("scroll", update, { passive: true });
       update();

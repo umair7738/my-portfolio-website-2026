@@ -46,7 +46,7 @@ const js = collapseOutsideStrings(jsFiles.map((file) => fs.readFileSync(file, "u
 fs.writeFileSync(path.join("assets", "js", "portfolio.min.js"), js + "\n");
 
 const htmlFiles = fs.readdirSync(process.cwd()).filter((file) => file.endsWith(".html"));
-const assetVersion = "motion-v3";
+const assetVersion = "motion-v4";
 const cssPattern = /<link rel="stylesheet" href="assets\/css\/style\.css">\s*<link rel="stylesheet" href="assets\/css\/animations\.css">\s*<link rel="stylesheet" href="assets\/css\/responsive\.css">/g;
 const jsPattern = /<script defer src="assets\/js\/utilities\.js"><\/script>\s*<script defer src="assets\/js\/navigation\.js"><\/script>\s*<script defer src="assets\/js\/loader\.js"><\/script>\s*<script defer src="assets\/js\/projects\.js"><\/script>\s*<script defer src="assets\/js\/contact\.js"><\/script>\s*<script defer src="assets\/js\/gsap\.js"><\/script>\s*<script defer src="assets\/js\/app\.js"><\/script>/g;
 htmlFiles.forEach((file) => {
@@ -55,7 +55,14 @@ htmlFiles.forEach((file) => {
     .replace(cssPattern, '<link rel="stylesheet" href="assets/css/portfolio.min.css?v=' + assetVersion + '">')
     .replace(jsPattern, '<script defer src="assets/js/portfolio.min.js?v=' + assetVersion + '"></script>')
     .replace(/assets\/css\/portfolio\.min\.css(?:\?v=[^"']*)?/g, "assets/css/portfolio.min.css?v=" + assetVersion)
-    .replace(/assets\/js\/portfolio\.min\.js(?:\?v=[^"']*)?/g, "assets/js/portfolio.min.js?v=" + assetVersion);
+    .replace(/assets\/js\/portfolio\.min\.js(?:\?v=[^"']*)?/g, "assets/js/portfolio.min.js?v=" + assetVersion)
+    .replace(/https:\/\/code\.jquery\.com\/jquery-3\.7\.1\.min\.js/g, "assets/vendor/jquery-3.7.1.min.js")
+    .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/bootstrap@5\.3\.8\/dist\/css\/bootstrap\.min\.css/g, "assets/vendor/bootstrap-5.3.8.min.css")
+    .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/bootstrap@5\.3\.8\/dist\/js\/bootstrap\.bundle\.min\.js/g, "assets/vendor/bootstrap-5.3.8.bundle.min.js")
+    .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/gsap@3\.13\.0\/dist\/gsap\.min\.js/g, "assets/vendor/gsap-3.13.0.min.js")
+    .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/gsap@3\.13\.0\/dist\/ScrollTrigger\.min\.js/g, "assets/vendor/ScrollTrigger-3.13.0.min.js")
+    .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/lenis@1\.3\.11\/dist\/lenis\.min\.js/g, "assets/vendor/lenis-1.3.11.min.js")
+    .replace(/https:\/\/unpkg\.com\/lucide@0\.468\.0\/dist\/umd\/lucide\.min\.js/g, "assets/vendor/lucide-0.468.0.min.js");
   if (production !== source) fs.writeFileSync(file, production);
 });
 

@@ -7,12 +7,17 @@
     init() {
       if (!window.gsap || !window.ScrollTrigger || Portfolio.utils.prefersReducedMotion()) {
         document.querySelectorAll(".reveal-up, .reveal-left, .reveal-right, .reveal-scale").forEach(function (element) { element.style.opacity = 1; });
+        document.querySelectorAll("[data-counter]").forEach(function (element) { element.textContent = (element.dataset.counter || "0") + (element.dataset.suffix || ""); });
+        document.querySelectorAll(".skill-item").forEach(function (element) { element.classList.add("is-visible"); });
+        document.querySelectorAll(".timeline").forEach(function (element) { element.style.setProperty("--timeline-progress", "1"); });
+        document.querySelectorAll(".process-steps").forEach(function (element) { element.style.setProperty("--process-progress", "1"); });
         return;
       }
 
       window.gsap.registerPlugin(window.ScrollTrigger);
       this.initLenis();
       this.prepareText();
+      this.horizontalScroll();
       this.heroReveal();
       this.sectionReveals();
       this.sectionChoreography();
@@ -20,7 +25,6 @@
       this.counters();
       this.skillBars();
       this.timeline();
-      this.horizontalScroll();
       this.floatingShapes();
       this.heroPointer();
       this.footerReveal();
@@ -136,7 +140,27 @@
         progress.className = "process-motion-line";
         progress.setAttribute("aria-hidden", "true");
         process.prepend(progress);
-        window.gsap.to(progress, { scaleX: 1, ease: "none", scrollTrigger: { trigger: process, start: "top 78%", end: "bottom 62%", scrub: .7 } });
+        const percentage = document.createElement("span");
+        percentage.className = "process-percent";
+        percentage.setAttribute("aria-hidden", "true");
+        percentage.textContent = "00%";
+        process.append(percentage);
+        const steps = Array.from(process.querySelectorAll(".process-step"));
+        window.ScrollTrigger.create({
+          trigger: process,
+          start: "top 78%",
+          end: "bottom 48%",
+          scrub: .65,
+          onUpdate: function (self) {
+            const value = self.progress;
+            process.style.setProperty("--process-progress", value.toFixed(4));
+            percentage.textContent = String(Math.round(value * 100)).padStart(2, "0") + "%";
+            steps.forEach(function (step, index) {
+              const checkpoint = steps.length === 1 ? 0 : index / (steps.length - 1);
+              step.classList.toggle("is-process-active", value + .04 >= checkpoint);
+            });
+          }
+        });
       }
 
       const trust = document.querySelector(".trust-strip");
@@ -170,7 +194,12 @@
         const target = Number(element.dataset.counter || 0);
         const suffix = element.dataset.suffix || "";
         const state = { value: 0 };
-        window.gsap.to(state, { value: target, duration: 1.75, ease: "power2.out", scrollTrigger: { trigger: element, start: "top 89%", once: true }, onUpdate: function () { element.textContent = Math.round(state.value) + suffix; } });
+        window.gsap.to(state, {
+          value: target,
+          ease: "none",
+          scrollTrigger: { trigger: element.closest(".stats-grid") || element, start: "top 92%", end: "top 64%", scrub: .7 },
+          onUpdate: function () { element.textContent = Math.round(state.value) + suffix; }
+        });
       });
     },
 
@@ -181,12 +210,35 @@
     },
 
     timeline() {
-      const timeline = document.querySelector(".timeline");
-      const progress = document.querySelector(".timeline-progress");
-      if (!timeline || !progress) return;
-      window.gsap.to(progress, { height: "100%", ease: "none", scrollTrigger: { trigger: timeline, start: "top 68%", end: "bottom 72%", scrub: true } });
-      document.querySelectorAll(".timeline-content").forEach(function (content) {
-        window.gsap.from(content, { x: 34, opacity: 0, duration: .8, ease: "power3.out", scrollTrigger: { trigger: content, start: "top 86%", once: true } });
+      document.querySelectorAll(".timeline").forEach(function (timeline) {
+        const progress = timeline.querySelector(".timeline-progress");
+        if (!progress) return;
+        const percentage = document.createElement("span");
+        percentage.className = "timeline-percent";
+        percentage.setAttribute("aria-hidden", "true");
+        percentage.textContent = "00%";
+        timeline.append(percentage);
+        const items = Array.from(timeline.querySelectorAll(".timeline-item"));
+
+        window.ScrollTrigger.create({
+          trigger: timeline,
+          start: "top 70%",
+          end: "bottom 68%",
+          scrub: .7,
+          onUpdate: function (self) {
+            const value = self.progress;
+            timeline.style.setProperty("--timeline-progress", value.toFixed(4));
+            percentage.textContent = String(Math.round(value * 100)).padStart(2, "0") + "%";
+            items.forEach(function (item, index) {
+              const checkpoint = items.length === 1 ? 0 : index / (items.length - 1);
+              item.classList.toggle("is-timeline-active", value + .06 >= checkpoint);
+            });
+          }
+        });
+
+        timeline.querySelectorAll(".timeline-content").forEach(function (content) {
+          window.gsap.from(content, { x: 34, opacity: 0, duration: .8, ease: "power3.out", scrollTrigger: { trigger: content, start: "top 86%", once: true } });
+        });
       });
     },
 
