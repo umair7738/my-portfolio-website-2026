@@ -92,22 +92,24 @@
       buttons.forEach(function (button) {
         button.addEventListener("click", function () {
           const start = window.scrollY;
-          const duration = Math.min(2.8, Math.max(1.25, start / 2200));
+          const duration = Math.min(3.2, Math.max(1.4, start / 2100));
           if (floating) floating.classList.add("is-returning");
-          if (window.portfolioLenis) {
-            window.portfolioLenis.scrollTo(0, {
-              duration: duration,
-              easing: function (value) { return 1 - Math.pow(1 - value, 4); },
-              onComplete: function () { if (floating) floating.classList.remove("is-returning"); }
-            });
-          } else if (window.gsap) {
+          if (window.gsap) {
             const state = { value: start };
+            const lenis = window.portfolioLenis;
+            if (lenis) lenis.stop();
             window.gsap.to(state, {
               value: 0,
               duration: duration,
-              ease: "power4.inOut",
-              onUpdate: function () { window.scrollTo(0, state.value); },
-              onComplete: function () { if (floating) floating.classList.remove("is-returning"); }
+              ease: "power3.inOut",
+              onUpdate: function () {
+                if (lenis) lenis.scrollTo(state.value, { immediate: true, force: true });
+                else window.scrollTo(0, state.value);
+              },
+              onComplete: function () {
+                if (lenis) lenis.start();
+                if (floating) floating.classList.remove("is-returning");
+              }
             });
           } else {
             window.scrollTo({ top: 0, behavior: "smooth" });
