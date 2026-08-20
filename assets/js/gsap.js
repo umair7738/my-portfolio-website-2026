@@ -235,15 +235,10 @@
 
     counters(root) {
       root.querySelectorAll("[data-counter]").forEach(function (element) {
-        const target = Number(element.dataset.counter || 0);
-        const suffix = element.dataset.suffix || "";
-        const state = { value: 0 };
-        window.gsap.to(state, {
-          value: target,
-          ease: "none",
-          scrollTrigger: { trigger: element.closest(".stats-grid") || element, start: "top 92%", end: "top 64%", scrub: .7 },
-          onUpdate: function () { element.textContent = Math.round(state.value) + suffix; }
-        });
+        window.gsap.fromTo(element,
+          { y: 18, opacity: .35 },
+          { y: 0, opacity: 1, duration: .7, ease: "power3.out", scrollTrigger: { trigger: element.closest(".stats-grid") || element, start: "top 88%", once: true } }
+        );
       });
     },
 

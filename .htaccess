@@ -1,0 +1,28 @@
+RewriteEngine On
+
+# Consolidate the two production hostnames and HTTP variants on the canonical origin.
+RewriteCond %{HTTP_HOST} ^(?:www\.)?umair-builds\.in$ [NC]
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.umair-builds\.in$ [NC]
+RewriteRule ^ https://umair-builds.in%{REQUEST_URI} [R=301,L,NE]
+
+# Keep the homepage canonical at / instead of exposing a duplicate /index.html URL.
+RewriteCond %{THE_REQUEST} \s/+index\.html(?:[\s?]|$) [NC]
+RewriteRule ^index\.html$ https://umair-builds.in/ [R=301,L,NE]
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>

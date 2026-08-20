@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/sitemap.xml
+Sitemap: https://umair-builds.in/sitemap.xml

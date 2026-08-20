@@ -94,9 +94,17 @@
         current.setAttribute(attribute, incoming.getAttribute(attribute) || "");
       };
       copyHeadValue("meta[name='description']", "content");
+      copyHeadValue("meta[name='robots']", "content");
       copyHeadValue("link[rel='canonical']", "href");
       Array.from(nextDocument.head.querySelectorAll("meta[property^='og:']")).forEach(function (incoming) {
         copyHeadValue("meta[property='" + incoming.getAttribute("property") + "']", "content");
+      });
+      Array.from(nextDocument.head.querySelectorAll("meta[name^='twitter:']")).forEach(function (incoming) {
+        copyHeadValue("meta[name='" + incoming.getAttribute("name") + "']", "content");
+      });
+      document.head.querySelectorAll("script[type='application/ld+json']").forEach(function (node) { node.remove(); });
+      nextDocument.head.querySelectorAll("script[type='application/ld+json']").forEach(function (node) {
+        document.head.append(node.cloneNode(true));
       });
 
       const nextPage = namespace || (nextDocument.body && nextDocument.body.dataset.page) || "home";
@@ -135,6 +143,7 @@
 
       const container = document.querySelector("[data-barba='container']") || document.querySelector("main");
       if (!window.barba) {
+        resetScrollBeforeMount();
         Portfolio.Page.mount(container, { initial: true });
         return;
       }
@@ -148,6 +157,7 @@
 
           once: function (data) {
             if (!data.next.container) return Promise.reject(new Error("Barba initial container is missing."));
+            resetScrollBeforeMount();
             return Portfolio.Page.mount(data.next.container, { initial: true });
           },
 

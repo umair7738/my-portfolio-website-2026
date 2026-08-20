@@ -65,9 +65,11 @@ body {
   transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-body.loading { overflow: hidden; }
+/* The loader is an enhancement: page content and scrolling remain available if JS fails. */
+.page-loader { display: none; }
+.js .page-loader { display: block; animation: loader-failsafe 0s 6s forwards; }
 /* Covers the first paint while the component-based loader is being inserted. */
-body.loading::before {
+.js body.loading::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -75,13 +77,14 @@ body.loading::before {
   background: #070a11;
   opacity: 1;
   transition: opacity .2s ease;
+  animation: loader-failsafe 0s 6s forwards;
 }
-body.loading.is-revealing::before { opacity: 0; }
+.js body.loading.is-revealing::before { opacity: 0; }
 
 /* Avoid a single-frame static hero before GSAP applies its opening state. */
 .js:not(.motion-ready) .home-hero .hero-content,
 .js:not(.motion-ready) .home-hero .developer-badge,
-.js:not(.motion-ready) .home-hero .scroll-cue { visibility: hidden; }
+.js:not(.motion-ready) .home-hero .scroll-cue { visibility: hidden; animation: motion-failsafe 0s 6s forwards; }
 
 ::selection { background: var(--primary); color: #fff; }
 
@@ -226,6 +229,7 @@ h1, h2, h3, h4 {
 .desktop-nav a { position: relative; padding: .52rem .83rem; border-radius: 999px; color: var(--text-soft); font-size: .75rem; font-weight: 700; transition: color .25s, background .25s; }
 .desktop-nav a:hover, .desktop-nav a.active { background: var(--surface-strong); color: var(--text); }
 .navbar-actions { display: flex; align-items: center; gap: .65rem; }
+html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
 .theme-toggle .theme-icon-dark { display: none; }
 [data-theme="light"] .theme-toggle .theme-icon-light { display: none; }
 [data-theme="light"] .theme-toggle .theme-icon-dark { display: block; }
@@ -355,7 +359,7 @@ h1, h2, h3, h4 {
 .project-card-body { padding: 1.55rem .15rem 1.2rem; }
 .project-card-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: var(--muted); font-size: .67rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .project-category { color: var(--accent); }
-.project-card h2 { margin: .65rem 0 .65rem; font-size: clamp(1.55rem, 3vw, 2.5rem); line-height: 1.1; }
+.project-card h2, .project-card h3 { margin: .65rem 0 .65rem; font-size: clamp(1.55rem, 3vw, 2.5rem); line-height: 1.1; }
 .project-card p { max-width: 590px; margin: 0; color: var(--text-soft); }
 .tag-list { display: flex; flex-wrap: wrap; gap: .45rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
 .tag-list li { padding: .38rem .65rem; border: 1px solid var(--line); border-radius: 999px; color: var(--text-soft); font-size: .65rem; font-weight: 700; }

@@ -90,7 +90,6 @@ htmlFiles.forEach((file) => {
     .replace(/assets\/css\/portfolio\.min\.css(?:\?v=[^"']*)?/g, "assets/css/portfolio.min.css?v=" + cssVersion)
     .replace(/assets\/js\/portfolio\.min\.js(?:\?v=[^"']*)?/g, "assets/js/portfolio.min.js?v=" + jsVersion)
     .replace(/(?:<script(?: async| defer)? src="https:\/\/cdn\.jsdelivr\.net\/npm\/@emailjs\/browser@4\/dist\/email\.min\.js"><\/script>)+/g, "")
-    .replace(/<script defer src="assets\/js\/portfolio\.min\.js\?v=[^"]+"><\/script>/g, '<script async src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"><\/script><script defer src="assets/js/portfolio.min.js?v=' + jsVersion + '"><\/script>')
     .replace(/https:\/\/code\.jquery\.com\/jquery-3\.7\.1\.min\.js/g, "assets/vendor/jquery-3.7.1.min.js")
     .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/bootstrap@5\.3\.8\/dist\/css\/bootstrap\.min\.css/g, "assets/vendor/bootstrap-5.3.8.min.css")
     .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/bootstrap@5\.3\.8\/dist\/js\/bootstrap\.bundle\.min\.js/g, "assets/vendor/bootstrap-5.3.8.bundle.min.js")

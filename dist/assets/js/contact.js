@@ -2,6 +2,21 @@
   "use strict";
 
   const Portfolio = window.Portfolio = window.Portfolio || {};
+  let emailJsPromise;
+
+  function loadEmailJs() {
+    if (window.emailjs) return Promise.resolve(window.emailjs);
+    if (emailJsPromise) return emailJsPromise;
+    emailJsPromise = new Promise(function (resolve, reject) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+      script.async = true;
+      script.onload = function () { resolve(window.emailjs); };
+      script.onerror = function () { reject(new Error("EmailJS could not be loaded.")); };
+      document.head.append(script);
+    });
+    return emailJsPromise;
+  }
 
   Portfolio.Contact = {
     init(root) {
@@ -39,7 +54,7 @@
         }
 
         const config = Portfolio.config.emailjs || {};
-        const configured = window.emailjs && config.publicKey && config.serviceId && config.templateId &&
+        const configured = config.publicKey && config.serviceId && config.templateId &&
           !/^YOUR_EMAILJS_/.test(config.publicKey) && !/^YOUR_EMAILJS_/.test(config.serviceId) && !/^YOUR_EMAILJS_/.test(config.templateId);
         if (!configured) {
           status.className = "form-status error";
@@ -51,8 +66,9 @@
         status.className = "form-status";
         status.textContent = "Sending your enquiry…";
         try {
-          window.emailjs.init({ publicKey: config.publicKey });
-          await window.emailjs.sendForm(config.serviceId, config.templateId, form);
+          const emailjs = await loadEmailJs();
+          emailjs.init({ publicKey: config.publicKey });
+          await emailjs.sendForm(config.serviceId, config.templateId, form);
           status.className = "form-status success";
           status.textContent = "Thanks — your enquiry has been sent. I’ll get back to you soon.";
           form.reset();

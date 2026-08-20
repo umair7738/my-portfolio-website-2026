@@ -8,13 +8,12 @@
     phone: "+917738635355",
     whatsapp: "917738635355",
     linkedin: "https://www.linkedin.com/in/umair-shaikh-9b2054254",
-    previousPortfolio: "https://umair7738portfolio.free.nf",
     github: "https://github.com/umair7738",
     codepen: "https://codepen.io/umair7738",
     emailjs: {
-      publicKey: "YOUR_EMAILJS_PUBLIC_KEY",
-      serviceId: "YOUR_EMAILJS_SERVICE_ID",
-      templateId: "YOUR_EMAILJS_TEMPLATE_ID"
+      publicKey: "jhbX9HU7sR6VIPo21",
+      serviceId: "service_wvh291n",
+      templateId: "template_1kcltr2"
     }
   };
 
@@ -74,7 +73,9 @@
 
   Portfolio.loadComponents = function (root) {
     const scope = root || document;
-    const elements = Array.from(scope.querySelectorAll("[data-component]"));
+    const elements = Array.from(scope.querySelectorAll("[data-component]")).filter(function (element) {
+      return !element.children.length && !element.textContent.trim();
+    });
     return Promise.all(elements.map(function (element) {
       const component = element.dataset.component;
       return new Promise(function (resolve) {

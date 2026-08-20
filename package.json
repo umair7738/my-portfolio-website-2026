@@ -4,10 +4,11 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
+    "update-domain": "node scripts/update-production-domain.js",
     "build-production": "node scripts/build-production.js",
     "build-sites": "node scripts/build-sites.js",
     "validate-site": "node scripts/validate-site.js",
     "validate-dist": "node scripts/validate-dist.js",
-    "build": "npm run build-production && npm run build-sites && npm run validate-site && npm run validate-dist"
+    "build": "npm run update-domain && npm run build-production && npm run build-sites && npm run validate-site && npm run validate-dist"
   }
 }

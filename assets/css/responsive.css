@@ -10,6 +10,11 @@
   :root { --header-height: 72px; }
   .navbar-shell { gap: .75rem; }
   .desktop-nav { display: none; }
+  html:not(.js) .site-header { position: relative; }
+  html:not(.js) .navbar-shell { height: auto; flex-wrap: wrap; padding-block: .8rem; }
+  html:not(.js) .desktop-nav { display: flex; order: 3; width: 100%; overflow-x: auto; scrollbar-width: none; }
+  html:not(.js) .home-hero { padding-top: 2.5rem; }
+  html:not(.js) .page-hero { padding-top: 4rem; }
   .mobile-menu { width: min(100vw, 480px) !important; }
   .mobile-menu .offcanvas-body { min-height: 0; padding: calc(var(--header-height) + 1.65rem) var(--container-gutter) max(1.5rem, env(safe-area-inset-bottom)); overscroll-behavior: contain; }
   .mobile-nav { margin: 1.25rem 0 2rem; }

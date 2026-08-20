@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/about.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/projects.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/case-studies.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/services.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/skills.html</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/experience.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/contact.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site/privacy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://umair-builds.in/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://umair-builds.in/about.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://umair-builds.in/projects.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://umair-builds.in/case-studies.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://umair-builds.in/services.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://umair-builds.in/skills.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://umair-builds.in/experience.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://umair-builds.in/contact.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
 </urlset>

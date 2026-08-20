@@ -94,9 +94,17 @@
         current.setAttribute(attribute, incoming.getAttribute(attribute) || "");
       };
       copyHeadValue("meta[name='description']", "content");
+      copyHeadValue("meta[name='robots']", "content");
       copyHeadValue("link[rel='canonical']", "href");
       Array.from(nextDocument.head.querySelectorAll("meta[property^='og:']")).forEach(function (incoming) {
         copyHeadValue("meta[property='" + incoming.getAttribute("property") + "']", "content");
+      });
+      Array.from(nextDocument.head.querySelectorAll("meta[name^='twitter:']")).forEach(function (incoming) {
+        copyHeadValue("meta[name='" + incoming.getAttribute("name") + "']", "content");
+      });
+      document.head.querySelectorAll("script[type='application/ld+json']").forEach(function (node) { node.remove(); });
+      nextDocument.head.querySelectorAll("script[type='application/ld+json']").forEach(function (node) {
+        document.head.append(node.cloneNode(true));
       });
 
       const nextPage = namespace || (nextDocument.body && nextDocument.body.dataset.page) || "home";

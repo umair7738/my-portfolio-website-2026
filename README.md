@@ -2,7 +2,7 @@
 
 A production-oriented, multi-page personal portfolio built as a premium software-company-style experience. Current experience and skills are grounded in Umair Shaikh's June 2026 resume; the named project archive is supported by the earlier February 2024 resume. Undocumented metrics, testimonials, certificates, and work history are not fabricated.
 
-Private production deployment: `https://umair-shaikh-portfolio.webdeveloper15235.chatgpt.site`
+Production website: `https://umair-builds.in/`
 
 ## Stack
 
@@ -12,12 +12,13 @@ Private production deployment: `https://umair-shaikh-portfolio.webdeveloper15235
 - GSAP 3.13 with ScrollTrigger
 - Lenis smooth scrolling
 - Lucide icons
+- EmailJS browser SDK (loaded only when a contact form is submitted)
 
 No React, Vue, Angular, Tailwind, TypeScript, or framework build step is used.
 
 ## Local preview
 
-The shared components are loaded with jQuery, so the site must be viewed through an HTTP server rather than by opening `index.html` directly.
+Use an HTTP server so local links, component fallbacks, and browser navigation behave like production.
 
 ```bash
 npx serve .
@@ -40,16 +41,23 @@ php -S localhost:8080
 - `experience.html` — professional timeline and education
 - `contact.html` — validated enquiry form, email, phone, WhatsApp, and LinkedIn
 - `privacy.html`, `404.html`, `robots.txt`, and `sitemap.xml` — production support pages
-- `components/` — jQuery-loaded reusable fragments and card templates
+- `components/` — reusable fragments and card templates compiled into deployment HTML
 - `assets/js/` — modular site, animation, project, navigation, loader, and form logic
 - `assets/css/` — design system, animation helpers, and responsive rules
+- `scripts/site-config.js` — production domain and page metadata source of truth
+- `dist/` — fully composed Hostinger-ready output with crawlable navigation, content, and footer
+- `.htaccess` — Hostinger/Apache redirects, custom 404 handling, security headers, and asset caching
+
+## Production build
+
+Run `npm run build`. It normalizes production metadata, builds the CSS and JavaScript bundles, composes reusable fragments and project/service data into complete HTML pages, copies the Hostinger configuration, and validates both source and `dist/`.
 
 ## Before public launch
 
 1. Review the public June 2026 resume PDF whenever experience or profile links change.
-2. Update the canonical, Open Graph, JSON-LD, sitemap, and robots domain when the final domain changes.
-3. Keep the verified GitHub, CodePen, LinkedIn, and portfolio URLs in `assets/js/utilities.js` current.
-4. Connect the contact form to a secure serverless or backend endpoint if submissions should be stored. The current form opens the visitor's email application.
+2. Change `scripts/site-config.js` if the production domain or per-page metadata changes.
+3. Keep the verified GitHub, CodePen, and LinkedIn URLs in `assets/js/utilities.js` current.
+4. Review the EmailJS service and template configuration if the enquiry workflow changes. The site itself does not store submissions in a database.
 5. Re-run accessibility, responsive, and performance checks after any third-party analytics or form integration is added.
 
 ## Accessibility and motion

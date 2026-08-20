@@ -65,6 +65,8 @@
 .tool-cloud span:hover, .tag-list li:hover { transform: translateY(-3px); border-color: var(--line-strong); color: var(--text); }
 
 @keyframes loader-pulse { 0%,100% { opacity: .45; transform: scale(.82); } 50% { opacity: 1; transform: scale(1); } }
+@keyframes loader-failsafe { to { visibility: hidden; opacity: 0; pointer-events: none; } }
+@keyframes motion-failsafe { to { visibility: visible; } }
 @keyframes availability-pulse { 0%,100% { box-shadow: 0 0 0 5px rgba(82,224,164,.1),0 0 18px rgba(82,224,164,.5); } 50% { box-shadow: 0 0 0 9px rgba(82,224,164,0),0 0 24px rgba(82,224,164,.9); } }
 
 @media (hover: hover) and (pointer: fine) {

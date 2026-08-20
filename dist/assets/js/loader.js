@@ -36,12 +36,19 @@
       };
 
       return new Promise(function (resolve) {
+        let pageRevealStarted = false;
+        const revealPage = function () {
+          if (pageRevealStarted) return;
+          pageRevealStarted = true;
+          document.body.classList.add("is-revealing");
+          resolve();
+        };
         const timeline = window.gsap.timeline({
           defaults: { ease: "power3.out" },
           onComplete: function () {
+            revealPage();
             loader.remove();
-            document.body.classList.remove("loading");
-            resolve();
+            document.body.classList.remove("loading", "is-revealing");
           }
         });
 
@@ -55,9 +62,11 @@
           .to(count, { value: 100, duration: duration, ease: "power2.inOut", onUpdate: updateProgress }, "-=.25")
           .to(".loader-progress span", { scaleX: 1, duration: duration, ease: "power2.inOut" }, "<")
           .to(".loader-scan", { xPercent: 180, duration: duration * .85, ease: "power1.inOut" }, "<")
-          .to(".loader-stage", { y: -28, opacity: 0, duration: .35, ease: "power2.in" }, "+=.06")
-          .to(".loader-panel-top", { yPercent: -101, duration: .62, ease: "power4.inOut" }, "-=.04")
+          .call(revealPage, null, "+=.06")
+          .to(".loader-panel-top", { yPercent: -101, duration: .62, ease: "power4.inOut" }, "<")
           .to(".loader-panel-bottom", { yPercent: 101, duration: .62, ease: "power4.inOut" }, "<")
+          .to(".loader-stage", { y: -28, opacity: 0, duration: .28, ease: "power2.in" }, "<")
+          .to(".loader-grid, .loader-scan", { opacity: 0, duration: .35, ease: "power2.out" }, "<")
           .to(loader, { autoAlpha: 0, duration: .12 });
       });
     }
