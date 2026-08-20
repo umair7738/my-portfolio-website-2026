@@ -42,6 +42,7 @@
   .story-sticky { position: static; }
   .service-groups { grid-template-columns: 1fr; gap: 2rem; }
   .service-sidebar { position: static; }
+  .case-study-nav { position: static; }
   .case-study-shell { grid-template-columns: 1fr; }
   .case-study-aside { position: static; }
   .case-study-meta { grid-template-columns: repeat(4, 1fr); }

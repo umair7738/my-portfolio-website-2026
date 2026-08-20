@@ -219,6 +219,7 @@ h1, h2, h3, h4 {
 .site-header { position: fixed; top: 0; left: 0; z-index: 1030; width: 100%; border-bottom: 1px solid transparent; transition: transform .35s ease, background-color .35s ease, border-color .35s ease, box-shadow .35s ease; }
 .site-header.is-scrolled { border-color: var(--line); background: color-mix(in srgb, var(--bg) 78%, transparent); box-shadow: 0 8px 30px rgba(0,0,0,.08); backdrop-filter: blur(18px); }
 .site-header.is-hidden { transform: translateY(-110%); }
+@media (min-width: 992px) { body[data-page="case-studies"] .site-header.is-hidden { transform: none; } }
 .navbar-shell { display: flex; height: var(--header-height); align-items: center; justify-content: space-between; gap: 1.5rem; }
 .brand { display: inline-flex; align-items: center; gap: .7rem; }
 .brand-mark { display: grid; width: 39px; height: 39px; place-items: center; border: 1px solid rgba(255,255,255,.22); border-radius: 12px; background: var(--gradient); color: #fff; font: 700 .78rem/1 var(--font-display); letter-spacing: -.03em; box-shadow: inset 0 1px 1px rgba(255,255,255,.3); }
@@ -473,7 +474,7 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
 .tool-cloud svg { width: 15px; color: var(--accent); }
 
 /* Case studies */
-.case-study-nav { position: sticky; top: calc(var(--header-height) + 1rem); z-index: 20; margin-top: -1px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 87%, transparent); backdrop-filter: blur(18px); }
+.case-study-nav { position: sticky; top: var(--header-height); z-index: 20; margin-top: -1px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(18px); }
 .case-study-nav .container-xxl { display: flex; overflow-x: auto; gap: .35rem; padding-top: .7rem; padding-bottom: .7rem; scrollbar-width: none; }
 .case-study-nav a { flex: 0 0 auto; padding: .5rem .75rem; border-radius: 999px; color: var(--text-soft); font-size: .7rem; font-weight: 800; }
 .case-study-nav a:hover { background: var(--surface); color: var(--text); }
