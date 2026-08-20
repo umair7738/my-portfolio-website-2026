@@ -586,6 +586,7 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
 .water-wave { position: absolute; top: -16px; left: -50%; width: 200%; height: 30px; background-repeat: repeat-x; background-position: 0 0; filter: drop-shadow(0 -1px 3px rgba(88,214,255,.3)); will-change: background-position; }
 .water-wave-one { z-index: 2; opacity: .82; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 92 30' preserveAspectRatio='none'%3E%3Cpath d='M0 17C11 5 23 5 34 17s23 12 34 0S81 5 92 17v13H0Z' fill='%23268cff'/%3E%3C/svg%3E"); background-size: 92px 30px; animation: water-wave-left 4.7s linear infinite; }
 .water-wave-two { top: -11px; z-index: 1; opacity: .72; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 118 30' preserveAspectRatio='none'%3E%3Cpath d='M0 16C15 7 29 7 44 16s29 9 44 0 15-9 30 0v14H0Z' fill='%230e35c7'/%3E%3C/svg%3E"); background-size: 118px 30px; animation: water-wave-right 7.2s linear infinite; }
+.water-wave-two::after { content: ""; position: absolute; top: 29px; right: 0; left: 0; height: 28px; background: linear-gradient(to bottom, #0e35c7 0%, rgba(14,53,199,.58) 42%, transparent 100%); }
 .back-to-top > i, .back-to-top > svg:last-child { position: relative; z-index: 2; width: 17px; height: 17px; transform: none; filter: drop-shadow(0 1px 4px rgba(0,0,0,.45)); }
 .back-to-top.is-returning > i, .back-to-top.is-returning > svg:last-child { animation: return-arrow 1s ease-in-out infinite; }
 
