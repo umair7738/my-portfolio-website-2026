@@ -19,6 +19,7 @@
       window.gsap.registerPlugin(window.ScrollTrigger);
       const context = window.gsap.context(() => {
         this.initLenis();
+        this.responsiveRefresh(scope);
         this.prepareText(scope);
         this.horizontalScroll(scope);
         this.heroReveal(scope);
@@ -35,8 +36,35 @@
       document.documentElement.classList.add("motion-ready");
     },
 
+    responsiveRefresh(root) {
+      let timer = 0;
+      let frame = 0;
+      const refresh = function () {
+        window.clearTimeout(timer);
+        timer = window.setTimeout(function () {
+          window.cancelAnimationFrame(frame);
+          frame = window.requestAnimationFrame(function () {
+            if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+          });
+        }, 120);
+      };
+      Portfolio.Lifecycle.page.listen(window, "resize", refresh, { passive: true });
+      Portfolio.Lifecycle.page.listen(window, "orientationchange", refresh, { passive: true });
+      Portfolio.Lifecycle.page.register(function () {
+        window.clearTimeout(timer);
+        window.cancelAnimationFrame(frame);
+      });
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () {
+          if ((root || document).isConnected !== false) refresh();
+        });
+      }
+    },
+
     initLenis() {
-      if (!window.Lenis) return;
+      // Native touch scrolling is more reliable when browser chrome expands,
+      // orientation changes, or the off-canvas navigation is opened.
+      if (!window.Lenis || window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
       const lenis = new window.Lenis({ duration: 1.15, smoothWheel: true, wheelMultiplier: .88, touchMultiplier: 1.15 });
       window.portfolioLenis = lenis;
       lenis.on("scroll", window.ScrollTrigger.update);
@@ -64,8 +92,8 @@
       const lines = select(".hero-title .line > span");
       const pageTitle = hero.querySelector(".page-title");
       const ambient = select(".ambient-grid, .ambient-orb");
-      const intro = select(".availability-badge, .hero-kicker, .page-hero .eyebrow");
-      const details = select(".hero-bottom, .page-hero .lead-copy, .page-hero-note");
+      const intro = select(".availability-badge, .hero-kicker, .eyebrow");
+      const details = lines.length ? select(".hero-bottom") : select(".lead-copy, .page-hero-note");
       const meta = select(".hero-meta > div");
       const extras = select(".developer-badge, .scroll-cue");
 
@@ -81,6 +109,7 @@
       if (details.length) timeline.from(details, { y: 30, opacity: 0, duration: .82, stagger: .1 }, "-=.58");
       if (meta.length) timeline.from(meta, { y: 18, opacity: 0, duration: .55, stagger: .08 }, "-=.62");
       if (extras.length) timeline.from(extras, { scale: .72, opacity: 0, duration: .82, stagger: .1 }, "-=.65");
+      timeline.set(hero.querySelectorAll(".hero-title .line > span, .page-title, .hero-bottom, .lead-copy, .page-hero-note"), { clearProps: "transform,opacity,visibility,clipPath" });
     },
 
     sectionReveals(root) {
@@ -261,10 +290,25 @@
       const section = root.querySelector(".horizontal-section");
       const heading = root.querySelector(".horizontal-heading");
       const track = root.querySelector(".horizontal-track");
-      if (!section || !track || window.innerWidth < 992) return;
-      const distance = function () { return Math.max(0, track.scrollWidth - window.innerWidth + (heading ? heading.offsetWidth : 0) + 80); };
-      window.gsap.from(Array.from(track.querySelectorAll(".horizontal-panel")), { y: 55, opacity: .25, duration: 1, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: section, start: "top 82%", once: true } });
-      window.gsap.to(track, { x: function () { return -distance(); }, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: function () { return "+=" + distance(); }, scrub: .75, pin: true, invalidateOnRefresh: true, anticipatePin: 1 } });
+      if (!section || !track) return;
+      const media = window.gsap.matchMedia();
+      media.add("(min-width: 992px)", function () {
+        const distance = function () { return Math.max(0, track.scrollWidth - window.innerWidth + (heading ? heading.offsetWidth : 0) + 80); };
+        window.gsap.from(Array.from(track.querySelectorAll(".horizontal-panel")), { y: 55, opacity: .25, duration: 1, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: section, start: "top 82%", once: true } });
+        window.gsap.to(track, { x: function () { return -distance(); }, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: function () { return "+=" + distance(); }, scrub: .75, pin: true, invalidateOnRefresh: true, anticipatePin: 1 } });
+      });
+      media.add("(max-width: 991px)", function () {
+        const panels = Array.from(track.querySelectorAll(".horizontal-panel"));
+        window.gsap.set(panels, { y: 36, autoAlpha: 0 });
+        window.ScrollTrigger.batch(panels, {
+          start: "top 92%",
+          once: true,
+          onEnter: function (batch) {
+            window.gsap.to(batch, { y: 0, autoAlpha: 1, duration: .62, stagger: .055, ease: "power3.out", overwrite: true });
+          }
+        });
+      });
+      Portfolio.Lifecycle.page.track({ destroy: function () { media.revert(); } });
     },
 
     floatingShapes(root) {

@@ -29,8 +29,9 @@
 
     initMotionPreference() {
       const root = document.documentElement;
-      // Motion is part of the portfolio's default experience and starts automatically.
-      root.dataset.motion = "full";
+      // Keep portfolio motion consistent across desktop, tablet, and mobile.
+      // A saved explicit choice can still opt out without tying motion to width.
+      root.dataset.motion = localStorage.getItem("portfolio-motion") === "reduced" ? "reduced" : "full";
     },
 
     setActiveLink() {
@@ -73,10 +74,52 @@
       const update = function () {
         const current = window.scrollY;
         header.classList.toggle("is-scrolled", current > 18);
+        if (header.classList.contains("is-menu-open")) {
+          header.classList.remove("is-hidden");
+          previous = Math.max(0, current);
+          return;
+        }
         header.classList.toggle("is-hidden", current > previous && current > 180);
         previous = Math.max(0, current);
       };
       Portfolio.Lifecycle.global.listen(window, "scroll", update, { passive: true });
+      const mobileMenu = document.querySelector("#mobileMenu");
+      const menuToggle = document.querySelector(".menu-toggle");
+      if (mobileMenu) {
+        Portfolio.Lifecycle.global.listen(mobileMenu, "show.bs.offcanvas", function () {
+          header.classList.remove("is-hidden");
+          header.classList.add("is-menu-open");
+          if (menuToggle) {
+            menuToggle.setAttribute("aria-expanded", "true");
+            menuToggle.setAttribute("aria-label", "Close navigation");
+          }
+          if (window.gsap && !Portfolio.utils.prefersReducedMotion()) {
+            const items = mobileMenu.querySelectorAll(".eyebrow, .mobile-nav a, .mobile-menu-contact");
+            window.gsap.killTweensOf(items);
+            window.gsap.fromTo(items,
+              { x: 18, autoAlpha: 0 },
+              { x: 0, autoAlpha: 1, duration: .3, stagger: .032, delay: .1, ease: "power2.out", overwrite: true }
+            );
+          }
+        });
+        Portfolio.Lifecycle.global.listen(mobileMenu, "hide.bs.offcanvas", function () {
+          if (menuToggle) {
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Open navigation");
+          }
+        });
+        Portfolio.Lifecycle.global.listen(mobileMenu, "hidden.bs.offcanvas", function () {
+          header.classList.remove("is-menu-open");
+          previous = window.scrollY;
+          update();
+        });
+        mobileMenu.querySelectorAll(".mobile-nav a").forEach(function (link) {
+          Portfolio.Lifecycle.global.listen(link, "click", function () {
+            const instance = window.bootstrap && window.bootstrap.Offcanvas.getInstance(mobileMenu);
+            if (instance) instance.hide();
+          });
+        });
+      }
       update();
     },
 
@@ -277,13 +320,6 @@
           });
         });
       }
-
-      scope.querySelectorAll(".mobile-menu").forEach(function (menu) {
-        Portfolio.Lifecycle.page.listen(menu, "shown.bs.offcanvas", function () {
-          if (!window.gsap || reduced) return;
-          window.gsap.fromTo(menu.querySelectorAll(".mobile-nav a"), { x: 35, opacity: 0 }, { x: 0, opacity: 1, duration: .55, stagger: .055, ease: "power3.out" });
-        });
-      });
 
       scope.querySelectorAll(".premium-accordion").forEach(function (accordion) {
         Portfolio.Lifecycle.page.listen(accordion, "shown.bs.collapse", function (event) {

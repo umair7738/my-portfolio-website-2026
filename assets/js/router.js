@@ -135,6 +135,7 @@
 
       const container = document.querySelector("[data-barba='container']") || document.querySelector("main");
       if (!window.barba) {
+        resetScrollBeforeMount();
         Portfolio.Page.mount(container, { initial: true });
         return;
       }
@@ -148,6 +149,7 @@
 
           once: function (data) {
             if (!data.next.container) return Promise.reject(new Error("Barba initial container is missing."));
+            resetScrollBeforeMount();
             return Portfolio.Page.mount(data.next.container, { initial: true });
           },
 
