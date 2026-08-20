@@ -21,7 +21,16 @@ function slugify(value) {
 }
 
 function loadContentData() {
-  const context = { window: {} };
+  const projectData = require(path.join(root, "data", "projects.js"));
+  const context = {
+    URL,
+    window: {
+      Portfolio: {
+        projectData,
+        utils: { escapeHtml, slugify }
+      }
+    }
+  };
   vm.runInNewContext(fs.readFileSync(path.join(root, "assets/js/projects.js"), "utf8"), context);
   return context.window.Portfolio;
 }
@@ -30,22 +39,43 @@ function fillTemplate(template, values) {
   return Object.entries(values).reduce((html, [token, value]) => html.split(token).join(value), template);
 }
 
-function renderProjects(template, projects) {
-  return projects.map((project, index) => fillTemplate(template, {
-    "{{category}}": escapeHtml(project.category),
-    "{{search}}": escapeHtml([project.title, project.description, project.tags.join(" "), project.categoryLabel].join(" ").toLowerCase()),
-    "{{caseStudyUrl}}": escapeHtml(project.caseStudyUrl),
-    "{{title}}": escapeHtml(project.title),
-    "{{image}}": escapeHtml(project.image),
-    "{{imageAlt}}": escapeHtml(project.imageAlt),
-    "{{index}}": String(index + 1).padStart(2, "0"),
-    "{{host}}": escapeHtml(project.host),
-    "{{categoryLabel}}": escapeHtml(project.categoryLabel),
-    "{{year}}": escapeHtml(project.year),
-    "{{description}}": escapeHtml(project.description),
-    "{{tags}}": project.tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join(""),
-    "{{links}}": `<a href="${escapeHtml(project.liveUrl)}" target="_blank" rel="noopener">Live site <i data-lucide="external-link" aria-hidden="true"></i></a><a href="${escapeHtml(project.caseStudyUrl)}">Case study <i data-lucide="arrow-right" aria-hidden="true"></i></a>`
+function renderProjects(template, projects, renderer, options = {}) {
+  return projects.map((project, index) => renderer(template, project, index, {
+    priority: Boolean(options.archive && index === 0)
   })).join("\n");
+}
+
+function renderProjectSchema(projects) {
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://umair-builds.in/" },
+          { "@type": "ListItem", position: 2, name: "Projects", item: "https://umair-builds.in/projects.html" }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        name: "Umair Shaikh Portfolio Projects",
+        numberOfItems: projects.length,
+        itemListElement: projects.map((project, index) => {
+          const item = {
+            "@type": "CreativeWork",
+            position: index + 1,
+            name: project.title,
+            description: project.description
+          };
+          if (project.status.value === "LIVE") item.url = project.url;
+          if (project.media && project.media.desktop && project.media.desktop.webp960) {
+            item.image = `https://umair-builds.in/${project.media.desktop.webp960}`;
+          }
+          return item;
+        })
+      }
+    ]
+  });
 }
 
 function renderServices(template, services) {
@@ -61,9 +91,14 @@ function renderServices(template, services) {
 
 function composeHtml(source, data, components) {
   let html = source;
-  const projectLimit = Number((html.match(/data-project-limit="(\d+)"/) || [])[1] || data.projectData.length);
   if (html.includes("data-projects-grid")) {
-    const cards = renderProjects(components["project-card"], data.projectData.slice(0, projectLimit));
+    const projectLimit = Number((html.match(/data-project-limit="(\d+)"/) || [])[1] || data.projectData.length);
+    const featuredOnly = /data-projects-featured/.test(html);
+    const selected = data.projectData.slice()
+      .sort((a, b) => (Number(a.featuredRank) || Number.MAX_SAFE_INTEGER) - (Number(b.featuredRank) || Number.MAX_SAFE_INTEGER))
+      .filter((project) => !featuredOnly || Number(project.featuredRank) > 0)
+      .slice(0, projectLimit);
+    const cards = renderProjects(components["project-card"], selected, data.Projects.renderProjectCard, { archive: !featuredOnly });
     html = html.replace(/<div data-component="project-card"><\/div>/g, "");
     html = html.replace(/(<div class="projects-grid"[^>]*>)[\s\S]*?(<\/div>)/, `$1${cards}$2`);
   }
@@ -76,6 +111,9 @@ function composeHtml(source, data, components) {
   html = html.replace(/<i(\s+data-lucide="[^"]+")(?![^>]*\saria-hidden=)([^>]*)>/g, '<i$1 aria-hidden="true"$2>');
   html = html.replace(/<img\b(?![^>]*\sdecoding=)([^>]*)>/g, '<img decoding="async"$1>');
   html = html.replace(/<span data-current-year><\/span>/g, `<span data-current-year>${new Date().getFullYear()}</span>`);
+  if (/data-project-schema/.test(html)) {
+    html = html.replace(/(<script type="application\/ld\+json" data-project-schema>)[\s\S]*?(<\/script>)/, `$1${renderProjectSchema(data.projectData)}$2`);
+  }
   return html;
 }
 

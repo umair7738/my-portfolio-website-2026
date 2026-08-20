@@ -13,7 +13,7 @@ const pages = {
   },
   "projects.html": {
     title: "Web Development Projects | Umair Shaikh",
-    description: "Explore seven resume-documented WordPress, responsive frontend, landing page, and campaign projects built by Umair Shaikh for real organizations.",
+    description: "Explore 17 real-world web projects by Umair Shaikh across education, commerce, creative, corporate, industrial, and campaign work.",
     ogType: "website"
   },
   "case-studies.html": {

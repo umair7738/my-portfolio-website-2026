@@ -1,0 +1,1053 @@
+{
+  "version": 1,
+  "auditedOn": "2026-08-20",
+  "policy": {
+    "publicTechnologyRule": "Only delivery technologies supported by resumes, source repositories, or project records are public.",
+    "publicAuditRule": "Reviewed public-site technology signals may be published as a dated audit that remains separate from delivery metadata.",
+    "runtimeFingerprinting": false,
+    "captureRunsDuringBuild": false
+  },
+  "evidence": {
+    "owner-project-record-2026-08-20": {
+      "kind": "project-owner-record",
+      "supports": [
+        "role",
+        "deliveryTechnologies"
+      ],
+      "source": "Project stack and ownership details supplied directly by Umair Shaikh on 2026-08-20"
+    },
+    "public-infinity-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://infinitylearningacademy.io/",
+      "observedOn": "2026-08-20"
+    },
+    "public-creative-engross-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://creativeengross.com/",
+      "observedOn": "2026-08-20"
+    },
+    "public-motiwala-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://www.motiwalajewels.in/",
+      "observedOn": "2026-08-20"
+    },
+    "public-primepips-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://www.primepipsacademy.in/",
+      "observedOn": "2026-08-20"
+    },
+    "public-azeem-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://azeemdayani.com/",
+      "observedOn": "2026-08-20"
+    },
+    "public-poonam-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://www.poonamshahart.com/",
+      "observedOn": "2026-08-20"
+    },
+    "public-adonia-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://adoniaoffshore.com/",
+      "observedOn": "2026-08-20"
+    },
+    "public-treasure-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://treasure.motiwalajewels.in/",
+      "observedOn": "2026-08-20"
+    },
+    "public-lijjat-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://www.lijjat.com/",
+      "observedOn": "2026-08-20"
+    },
+    "public-sagar-2026-08-20": {
+      "kind": "public-site",
+      "supports": [
+        "description"
+      ],
+      "source": "https://sagarspecialitychemicals.com/",
+      "observedOn": "2026-08-20"
+    },
+    "resume-2024-atyaf": {
+      "kind": "resume",
+      "supports": [
+        "description",
+        "role",
+        "deliveryTechnologies"
+      ],
+      "source": "February 2024 project-detailed resume"
+    },
+    "resume-2024-octa-pages": {
+      "kind": "resume",
+      "supports": [
+        "description",
+        "role",
+        "year"
+      ],
+      "source": "February 2024 project-detailed resume"
+    },
+    "resume-2024-bride": {
+      "kind": "resume",
+      "supports": [
+        "description",
+        "role",
+        "deliveryTechnologies"
+      ],
+      "source": "February 2024 project-detailed resume"
+    },
+    "resume-2024-equity": {
+      "kind": "resume",
+      "supports": [
+        "description",
+        "role"
+      ],
+      "source": "February 2024 project-detailed resume"
+    },
+    "resume-2024-utc": {
+      "kind": "resume",
+      "supports": [
+        "description",
+        "role",
+        "deliveryTechnologies"
+      ],
+      "source": "February 2024 project-detailed resume"
+    }
+  },
+  "projects": {
+    "infinity-learning-academy": {
+      "auditRef": "audit-infinity-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Versioned Bootstrap CSS and JavaScript asset URLs."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://infinitylearningacademy.io/",
+        "finalUrl": "https://infinitylearningacademy.io/",
+        "pageTitle": "Infinity Learning Academy",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/infinity-learning-academy/infinity-learning-academy-desktop-960.avif",
+            "bytes": 25765,
+            "sha256": "09df5fb6e15326b63cd28ab9da92d8c9ea9d11212b190100f89c2144afb09144"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/infinity-learning-academy/infinity-learning-academy-desktop-1440.avif",
+            "bytes": 30583,
+            "sha256": "ff0c742e583d62905a1403f00d3da7ae4e108e2e279ddebccfee3ffdd2d87334"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/infinity-learning-academy/infinity-learning-academy-desktop-960.webp",
+            "bytes": 34696,
+            "sha256": "89f7b07f74d5684d3c2aac9557b1f15288f424b30501544db55d7c2d0e3f820e"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/infinity-learning-academy/infinity-learning-academy-desktop-1440.webp",
+            "bytes": 61304,
+            "sha256": "cc15582120ea29dbf0011f323af5b3ac1d1ffe93dc0309ddd3084c0c55b5e72e"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/infinity-learning-academy/infinity-learning-academy-mobile-780.avif",
+            "bytes": 25015,
+            "sha256": "519129ef959c4b955d9b538d93dbbb2e430f43b38905860c47c25741c2b76273"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/infinity-learning-academy/infinity-learning-academy-mobile-780.webp",
+            "bytes": 46338,
+            "sha256": "a63faa6c1bae1545f4c2261ab388e2120ab82e90fbf2fb6735e67db72e363352"
+          }
+        }
+      }
+    },
+    "primepips-academy": {
+      "auditRef": "audit-primepips-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Versioned Bootstrap asset URLs."
+        },
+        {
+          "name": "jQuery",
+          "confidence": "HIGH",
+          "evidence": "Versioned jQuery asset URL."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://www.primepipsacademy.in/",
+        "finalUrl": "https://www.primepipsacademy.in/",
+        "pageTitle": "PrimePips Academy",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/primepips-academy/primepips-academy-desktop-960.avif",
+            "bytes": 21594,
+            "sha256": "9a0bc2b9038f88467dcd8bd27f4bc89e6f152d0051ed613b3ae71505a368725d"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/primepips-academy/primepips-academy-desktop-1440.avif",
+            "bytes": 22843,
+            "sha256": "cad8f6718d9874968085ad0ee522284b1126180b83965b123c4e0f83981faaf0"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/primepips-academy/primepips-academy-desktop-960.webp",
+            "bytes": 31338,
+            "sha256": "ec9ae1bb5434962a93cf6739ae4683652d57d3a077c835fd4c71bcf7a80f1eac"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/primepips-academy/primepips-academy-desktop-1440.webp",
+            "bytes": 53206,
+            "sha256": "31111f8a42fc8d47b15d99b05cbf9c6cae2819bff239b7c24379f397c6990381"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/primepips-academy/primepips-academy-mobile-780.avif",
+            "bytes": 18507,
+            "sha256": "7b7a0a8dd1fc79c0a7f1085abb63cdf7bf9404be6b34dae7ae515b8adfc16c46"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/primepips-academy/primepips-academy-mobile-780.webp",
+            "bytes": 42920,
+            "sha256": "981ed353cf86f97980e0cbb6fe59e01baa37241d901a6bde1de39ab792798c2a"
+          }
+        }
+      }
+    },
+    "creative-engross": {
+      "auditRef": "audit-creative-engross-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Versioned Bootstrap asset URLs."
+        },
+        {
+          "name": "GSAP",
+          "confidence": "HIGH",
+          "evidence": "Versioned GSAP and ScrollTrigger asset URLs."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://creativeengross.com/",
+        "finalUrl": "https://creativeengross.com/",
+        "pageTitle": "Creative Engross Turning People into Brands",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/creative-engross/creative-engross-desktop-960.avif",
+            "bytes": 14470,
+            "sha256": "53e679c5ac7fda81a4c4bff444ec2c2e71ce18e153971f35742be28889da8dfd"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/creative-engross/creative-engross-desktop-1440.avif",
+            "bytes": 8000,
+            "sha256": "1b742d16733603f423e1fff0287e53022328d68df194443bdd4f23bb60de8cbc"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/creative-engross/creative-engross-desktop-960.webp",
+            "bytes": 18196,
+            "sha256": "e522ebde153fed798919c9020d4127cb6b023738daf9f33f4ddc37b801ac71a6"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/creative-engross/creative-engross-desktop-1440.webp",
+            "bytes": 27476,
+            "sha256": "ca1ee1040c09972ebffcf88373f6d647900c14b55ef9dc1175e0a046579afa16"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/creative-engross/creative-engross-mobile-780.avif",
+            "bytes": 7165,
+            "sha256": "bc89f093c892de068c786d724c81599f4848dcb79214cca6338ae3e56c03e44e"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/creative-engross/creative-engross-mobile-780.webp",
+            "bytes": 22736,
+            "sha256": "496f83baaa44506b4fe2927e108dd9552a82749f229ed4b9f2c052bb53e421a8"
+          }
+        }
+      }
+    },
+    "azeem-dayani": {
+      "auditRef": "audit-azeem-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "captureConfig": {
+        "waitAfterLoadMs": 7000
+      },
+      "observedTechnologies": [
+        {
+          "name": "Laravel",
+          "confidence": "HIGH",
+          "evidence": "XSRF-TOKEN and named application session cookies."
+        },
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Bootstrap assets."
+        },
+        {
+          "name": "jQuery",
+          "confidence": "HIGH",
+          "evidence": "jQuery assets."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://azeemdayani.com/",
+        "finalUrl": "https://azeemdayani.com/",
+        "pageTitle": "Azeem Dayani | Home",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/azeem-dayani/azeem-dayani-desktop-960.avif",
+            "bytes": 27987,
+            "sha256": "80b10f51f13408eda8a5160848191c4db69a3e6be56b332252284330c47e9442"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/azeem-dayani/azeem-dayani-desktop-1440.avif",
+            "bytes": 44318,
+            "sha256": "2ab82824a9ddbd2373af7e3ba833f157131e1c09ecc57c9543223da5f1acb1c0"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/azeem-dayani/azeem-dayani-desktop-960.webp",
+            "bytes": 32246,
+            "sha256": "0129d68d47b4bfb946c588e336562c3faafbb843bfa2fa479e7ed476b905e35d"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/azeem-dayani/azeem-dayani-desktop-1440.webp",
+            "bytes": 52732,
+            "sha256": "7b55e941a0138d33bb5d41aa97f4856924d6b59732af40b4a7a623477e52705c"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/azeem-dayani/azeem-dayani-mobile-780.avif",
+            "bytes": 31979,
+            "sha256": "81be5762f86ed05b1ffbdaaffd7a9c20619abc0f3856d1c5ddd3d14f31e5afc0"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/azeem-dayani/azeem-dayani-mobile-780.webp",
+            "bytes": 38504,
+            "sha256": "e35ac3c2982da6226eb38dead70e97c4871df68eaa9662a399b425f82ef09245"
+          }
+        }
+      }
+    },
+    "poonam-shah-art": {
+      "auditRef": "audit-poonam-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Laravel",
+          "confidence": "HIGH",
+          "evidence": "XSRF-TOKEN and named application session cookies."
+        },
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Bootstrap assets."
+        },
+        {
+          "name": "jQuery",
+          "confidence": "HIGH",
+          "evidence": "jQuery assets."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://www.poonamshahart.com/",
+        "finalUrl": "https://www.poonamshahart.com/",
+        "pageTitle": "Poonam Shah",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/poonam-shah-art/poonam-shah-art-desktop-960.avif",
+            "bytes": 37175,
+            "sha256": "1161cf8379bc11107fa6be7c2714a48e5a4f5bd59b7704c61e41067775ea52cd"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/poonam-shah-art/poonam-shah-art-desktop-1440.avif",
+            "bytes": 63736,
+            "sha256": "a7b88444b024451cb189efa9a17eacbe6faffa380b26618750dc3be4a3e52dae"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/poonam-shah-art/poonam-shah-art-desktop-960.webp",
+            "bytes": 44662,
+            "sha256": "a4cba579d7a8ad25469572591051c8341975c9f1049aaf9879eb6201a4883279"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/poonam-shah-art/poonam-shah-art-desktop-1440.webp",
+            "bytes": 83218,
+            "sha256": "8a510d188d7d40a368a42ac037763f8ae44dc9fef74ce02f56b9549391d1269a"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/poonam-shah-art/poonam-shah-art-mobile-780.avif",
+            "bytes": 29698,
+            "sha256": "19807c9e06d14e8d81c0e4aa914a7e418e0032cb7c896220150f0c52e5e6df4f"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/poonam-shah-art/poonam-shah-art-mobile-780.webp",
+            "bytes": 36134,
+            "sha256": "9ac4dbc01f1bf5b74498df6fd9ae94d95c4ddc54f917d077212c9960c88781f1"
+          }
+        }
+      }
+    },
+    "adonia-offshore": {
+      "auditRef": "audit-adonia-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "captureConfig": {
+        "waitAfterLoadMs": 7000
+      },
+      "observedTechnologies": [
+        {
+          "name": "Laravel",
+          "confidence": "HIGH",
+          "evidence": "XSRF-TOKEN and named application session cookies."
+        },
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Bootstrap assets."
+        },
+        {
+          "name": "GSAP",
+          "confidence": "HIGH",
+          "evidence": "Versioned GSAP assets."
+        },
+        {
+          "name": "WordPress media",
+          "confidence": "MEDIUM",
+          "evidence": "Legacy wp-content upload URLs; not sufficient to identify the delivered application stack."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://adoniaoffshore.com/",
+        "finalUrl": "https://adoniaoffshore.com/",
+        "pageTitle": "Adonia offshore",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/adonia-offshore/adonia-offshore-desktop-960.avif",
+            "bytes": 10369,
+            "sha256": "4560df2daceb2527be886a3cdd46e3c06b035fe590ca3f154d9d9830a199a62b"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/adonia-offshore/adonia-offshore-desktop-1440.avif",
+            "bytes": 16001,
+            "sha256": "acc8ff0887d723b55a3a174d62e61b861006bb7d7579075cdb828e8b05f31c69"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/adonia-offshore/adonia-offshore-desktop-960.webp",
+            "bytes": 15328,
+            "sha256": "781e13b5a8b6e74c7dc03023cbc9c38561d57b857f8d3dff5949d77701912b78"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/adonia-offshore/adonia-offshore-desktop-1440.webp",
+            "bytes": 25054,
+            "sha256": "fae13101bebc9c2dcfd6a864509f8eb343dafbd44d91478a0d601e74051f6296"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/adonia-offshore/adonia-offshore-mobile-780.avif",
+            "bytes": 16368,
+            "sha256": "6a5479eaeb493cd2fbd550b222c4ee9609a2e34951fe27c248434f062cab082b"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/adonia-offshore/adonia-offshore-mobile-780.webp",
+            "bytes": 24202,
+            "sha256": "2d9b46e186fe3095f7f053842a4b658f83470696dddaae8075cff6a597e0747f"
+          }
+        }
+      }
+    },
+    "treasure-motiwala-jewels": {
+      "auditRef": "audit-treasure-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Laravel",
+          "confidence": "HIGH",
+          "evidence": "XSRF-TOKEN and named application session cookies."
+        },
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Bootstrap assets."
+        },
+        {
+          "name": "jQuery",
+          "confidence": "HIGH",
+          "evidence": "jQuery assets."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://treasure.motiwalajewels.in/",
+        "finalUrl": "https://treasure.motiwalajewels.in/",
+        "pageTitle": "Motiwala Jewels | Shop luxury jewellery | Get Pure Gold at Best Price",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/treasure-motiwala-jewels/treasure-motiwala-jewels-desktop-960.avif",
+            "bytes": 34262,
+            "sha256": "8ff377c9896bf3e89c2910e2a07514d070caa96fba90aebb4a05961aa451af7e"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/treasure-motiwala-jewels/treasure-motiwala-jewels-desktop-1440.avif",
+            "bytes": 48144,
+            "sha256": "328ddf73a38c3724196f2352c4f07da9486671e2a4caa861446432d8ec44bb03"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/treasure-motiwala-jewels/treasure-motiwala-jewels-desktop-960.webp",
+            "bytes": 45504,
+            "sha256": "cc429720e7d6beb8841854cc6f2bf0c83e91ca40adf358279c8b493407f9a964"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/treasure-motiwala-jewels/treasure-motiwala-jewels-desktop-1440.webp",
+            "bytes": 76890,
+            "sha256": "5a7a58fef2d644d12eaf865255f24fe96a3af8cbd332fcbf7cc254d11285bd12"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/treasure-motiwala-jewels/treasure-motiwala-jewels-mobile-780.avif",
+            "bytes": 31531,
+            "sha256": "37cdc18b3ee1c5f9bb034106afd44d824e272e3a681d6f8efb3117964d511370"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/treasure-motiwala-jewels/treasure-motiwala-jewels-mobile-780.webp",
+            "bytes": 46848,
+            "sha256": "372a1e190f1c40e66adfdee8992a739448ca037f1355fd363123fc35b53d87c3"
+          }
+        }
+      }
+    },
+    "lijjat": {
+      "auditRef": "audit-lijjat-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "jQuery",
+          "confidence": "HIGH",
+          "evidence": "Versioned jQuery assets."
+        },
+        {
+          "name": "Laravel-like application",
+          "confidence": "MEDIUM",
+          "evidence": "XSRF-TOKEN and application session cookie without source repository confirmation."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://www.lijjat.com/",
+        "finalUrl": "https://www.lijjat.com/",
+        "pageTitle": "Lijjat papad | Lijjat papad",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/lijjat/lijjat-desktop-960.avif",
+            "bytes": 38843,
+            "sha256": "da6519057ef4b1c99c180babecce80d34fe219429d396291c979e324131fb719"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/lijjat/lijjat-desktop-1440.avif",
+            "bytes": 51680,
+            "sha256": "46ef89843f1bbf9b9a818a9d1de90f86c1a53e6c39c9c33c535c13669ae017d3"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/lijjat/lijjat-desktop-960.webp",
+            "bytes": 52362,
+            "sha256": "7aa834287602b071e9038e2ff57e5292877f2674d281f7808be3b8f969520ca8"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/lijjat/lijjat-desktop-1440.webp",
+            "bytes": 89970,
+            "sha256": "62416714cccfc712e88c8e5d69c2018713fc47be15e3c2d73262a3a3b579fdc7"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/lijjat/lijjat-mobile-780.avif",
+            "bytes": 34354,
+            "sha256": "ba98ecb9f1632d04af51bb1224ad97c8ca35da7a9d085fcbcd943ffdb7a73817"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/lijjat/lijjat-mobile-780.webp",
+            "bytes": 63590,
+            "sha256": "d95aa4d77b4241c1ce409c95de3383548ac971b8bba84a85b703ea8fa20fca95"
+          }
+        }
+      }
+    },
+    "motiwala-jewels": {
+      "auditRef": "audit-motiwala-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Laravel",
+          "confidence": "HIGH",
+          "evidence": "XSRF-TOKEN and named application session cookies."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://www.motiwalajewels.in/",
+        "finalUrl": "https://www.motiwalajewels.in/",
+        "pageTitle": "Motiwala Jewels | Shop luxury jewelry | Get Pure Gold at Best Price",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/motiwala-jewels/motiwala-jewels-desktop-960.avif",
+            "bytes": 33591,
+            "sha256": "18ad0226e56f4a7ba94d895f3bd5f738dd172712fa60e9d052b4ee1e7648bb65"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/motiwala-jewels/motiwala-jewels-desktop-1440.avif",
+            "bytes": 62262,
+            "sha256": "5c500a5a0cd84008d1b2f42197c4cc961c0bdafbb62eee3c42f6202446e277d5"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/motiwala-jewels/motiwala-jewels-desktop-960.webp",
+            "bytes": 46310,
+            "sha256": "c4e6e10798fa728b485283921a05fb37ffbfa5a43ab7d818db3d4dc89a9aec73"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/motiwala-jewels/motiwala-jewels-desktop-1440.webp",
+            "bytes": 89070,
+            "sha256": "aaa2ce2002c6c44ddf9146bee231a587d4bfaa4cad3626b93b9074aaaca07b44"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/motiwala-jewels/motiwala-jewels-mobile-780.avif",
+            "bytes": 28411,
+            "sha256": "a49e3d9c28724bd8c03317dc51906330ed848cebf842a15037e8d3d6ce1d1cb1"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/motiwala-jewels/motiwala-jewels-mobile-780.webp",
+            "bytes": 38018,
+            "sha256": "e602eae8c49dd99adab4293cc2e0bdf8e86c27d3f24882cfe501bedc15098240"
+          }
+        }
+      }
+    },
+    "sagar-speciality-chemicals": {
+      "auditRef": "audit-sagar-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 403,
+      "captureMode": "manual-required",
+      "observedTechnologies": [],
+      "note": "Public content is browser-accessible, but automated HTTP access is blocked.",
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://sagarspecialitychemicals.com/",
+        "finalUrl": "https://sagarspecialitychemicals.com/",
+        "pageTitle": "Sagar Specialty | Home",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/sagar-speciality-chemicals/sagar-speciality-chemicals-desktop-960.avif",
+            "bytes": 43664,
+            "sha256": "391e282db5ada1dd9bee0f58be7e8e11484f9b092dc7780205c6922d4926ddb5"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/sagar-speciality-chemicals/sagar-speciality-chemicals-desktop-1440.avif",
+            "bytes": 68648,
+            "sha256": "71b901ed60165252a7544239f0011a02e4d33efed01c8271b0a4b42bbc24d081"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/sagar-speciality-chemicals/sagar-speciality-chemicals-desktop-960.webp",
+            "bytes": 52066,
+            "sha256": "c0c4ddeb865c5438f310ec15b20aeaee81a527d018d444ea57270c84bb8f4316"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/sagar-speciality-chemicals/sagar-speciality-chemicals-desktop-1440.webp",
+            "bytes": 83672,
+            "sha256": "1c45e238a086645a8cc52302e12c4d9d9717abcab236bdd58bff4f7052a833b9"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/sagar-speciality-chemicals/sagar-speciality-chemicals-mobile-780.avif",
+            "bytes": 45057,
+            "sha256": "c85ba123d302100ebf200c2155abaf622d3fa31cf06419ac0cbd9575bb333c06"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/sagar-speciality-chemicals/sagar-speciality-chemicals-mobile-780.webp",
+            "bytes": 75482,
+            "sha256": "f9537bc7bdf8d65184c1f2577a5a75a44814bb7be059fcf8fac74cd0956cfd52"
+          }
+        }
+      }
+    },
+    "atyaf-al-majd": {
+      "auditRef": "audit-atyaf-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Bootstrap assets."
+        },
+        {
+          "name": "jQuery",
+          "confidence": "HIGH",
+          "evidence": "jQuery assets."
+        },
+        {
+          "name": "WordPress",
+          "confidence": "MEDIUM",
+          "evidence": "Current-domain and third-party wp-content assets; likely a later deployment and not delivery evidence."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://www.atyafalmajd.com/",
+        "finalUrl": "https://www.atyafalmajd.com/",
+        "pageTitle": "ATYAF AL-MAJD AL ARABI : Home Page",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/atyaf-al-majd/atyaf-al-majd-desktop-960.avif",
+            "bytes": 32216,
+            "sha256": "b94e7c769c3ba9849c1a98596d4e2209113a9dced3d9808480e7d15bba287dfe"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/atyaf-al-majd/atyaf-al-majd-desktop-1440.avif",
+            "bytes": 39945,
+            "sha256": "8676d90d4d489e53ca07e5358fa5a72e6765cce9c1e19ee01278f590947aff34"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/atyaf-al-majd/atyaf-al-majd-desktop-960.webp",
+            "bytes": 43978,
+            "sha256": "16f68f4b66eec8f4e0226aa0ccc57462bff7500297d931a08c8a9bf37e77f879"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/atyaf-al-majd/atyaf-al-majd-desktop-1440.webp",
+            "bytes": 70864,
+            "sha256": "52309e14f89cdb46c4c0b769f5884dd4bafa869b57cdb06d933fd017c5f48f41"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/atyaf-al-majd/atyaf-al-majd-mobile-780.avif",
+            "bytes": 25828,
+            "sha256": "c9aab5662c0e954d832624b6eef0227d728ff792a40978e4f4c0c2d931cca91f"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/atyaf-al-majd/atyaf-al-majd-mobile-780.webp",
+            "bytes": 61256,
+            "sha256": "c28a8dd0b39bc2d5174bb89254a6889521d90f916b12a04fab94a89a808e5aad"
+          }
+        }
+      }
+    },
+    "ccie-security-training": {
+      "auditRef": "audit-octa-ccie-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Bootstrap assets."
+        },
+        {
+          "name": "jQuery",
+          "confidence": "HIGH",
+          "evidence": "jQuery assets."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://octanetworks.com/ccie-security_v6.1_training",
+        "finalUrl": "https://octanetworks.com/ccie-security_v6.1_training",
+        "pageTitle": "CCIE Security v6.1 Training",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/ccie-security-training/ccie-security-training-desktop-960.avif",
+            "bytes": 39153,
+            "sha256": "adcf78fbd7179c7c3441863a1639671f6805841e28027be0516f8a019d164a17"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/ccie-security-training/ccie-security-training-desktop-1440.avif",
+            "bytes": 35762,
+            "sha256": "5cc1266ea87307b5696d2c9853ca7773b4db36a655f04ae8ed7b39a679490ab0"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/ccie-security-training/ccie-security-training-desktop-960.webp",
+            "bytes": 50934,
+            "sha256": "09090bb71f47126c23c0d3e72933c0f961e0103274d1ea81df8cfbfd8f7e2505"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/ccie-security-training/ccie-security-training-desktop-1440.webp",
+            "bytes": 84326,
+            "sha256": "0c8b1db2a506abc6f938878916c4aafed7698c953cb2c82afc0784d25fdf66f1"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/ccie-security-training/ccie-security-training-mobile-780.avif",
+            "bytes": 23300,
+            "sha256": "fa438d0e170583f014fc68189232ac0f046f4cfbfd655b72d8e246168583676a"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/ccie-security-training/ccie-security-training-mobile-780.webp",
+            "bytes": 59504,
+            "sha256": "141fe995744d7bbd1f06617474896591daffd9ce98919da280e28c65199430ba"
+          }
+        }
+      }
+    },
+    "octa-diwali-sale-2023": {
+      "auditRef": "audit-octa-diwali-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Bootstrap assets."
+        },
+        {
+          "name": "jQuery",
+          "confidence": "HIGH",
+          "evidence": "jQuery assets."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://octanetworks.com/diwali-sale-2023",
+        "finalUrl": "https://octanetworks.com/diwali-sale-2023",
+        "pageTitle": "Diwali Sale 2023",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/octa-diwali-sale-2023/octa-diwali-sale-2023-desktop-960.avif",
+            "bytes": 34512,
+            "sha256": "ecdf8e68acae56fd0e0ec2afdb26e50b95d035e09b9a44bc03d42e5786395e40"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/octa-diwali-sale-2023/octa-diwali-sale-2023-desktop-1440.avif",
+            "bytes": 49194,
+            "sha256": "ea1d6eb3830a16828f7d338b6915053dc79a9515f9224a4fdffc434b786262e2"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/octa-diwali-sale-2023/octa-diwali-sale-2023-desktop-960.webp",
+            "bytes": 35652,
+            "sha256": "d9702955e960b424ca6417c74e51c0462e29ed71429b60a72c1afc2593d7d9b1"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/octa-diwali-sale-2023/octa-diwali-sale-2023-desktop-1440.webp",
+            "bytes": 62170,
+            "sha256": "176ca60bf1c77fea21ff5f0866b95d80c76e6c2402603937c194fa47f8d8ad23"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/octa-diwali-sale-2023/octa-diwali-sale-2023-mobile-780.avif",
+            "bytes": 27952,
+            "sha256": "0ac815e2f17fa0b58d6687686bbeef29d66d9af89b638892369343351e24c52a"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/octa-diwali-sale-2023/octa-diwali-sale-2023-mobile-780.webp",
+            "bytes": 37764,
+            "sha256": "41058f56c6689fd612ad2b58f178e93a0144c0dccbae608b9b8aec0243bf7114"
+          }
+        }
+      }
+    },
+    "octa-christmas-page": {
+      "auditRef": "audit-octa-christmas-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "Bootstrap",
+          "confidence": "HIGH",
+          "evidence": "Bootstrap assets."
+        },
+        {
+          "name": "jQuery",
+          "confidence": "HIGH",
+          "evidence": "jQuery assets."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://octanetworks.com/christmas-page",
+        "finalUrl": "https://octanetworks.com/christmas-page",
+        "pageTitle": "Christmas Page",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/octa-christmas-page/octa-christmas-page-desktop-960.avif",
+            "bytes": 26098,
+            "sha256": "3a0ff1ac4f4c9d853eee47160b3c08c2be0162e907f32d9376a9fe2a4472609a"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/octa-christmas-page/octa-christmas-page-desktop-1440.avif",
+            "bytes": 35877,
+            "sha256": "a230d92bf1baeeb5618fe0bd06d6fc467b532b2d26b72e58881c44012d21b1db"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/octa-christmas-page/octa-christmas-page-desktop-960.webp",
+            "bytes": 33474,
+            "sha256": "17feaa8835a58a248fe43b0a13609eb1610a5a17f5a62f0ab640cbad7633a946"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/octa-christmas-page/octa-christmas-page-desktop-1440.webp",
+            "bytes": 49828,
+            "sha256": "12aa59606681fb945fea687a1a061fea6b7233c297fd478fd23590d83049c1ee"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/octa-christmas-page/octa-christmas-page-mobile-780.avif",
+            "bytes": 32540,
+            "sha256": "729ef54ff8d79bf538ccb67cfc38739f983542ba7738ab658d32fbf41f3c537f"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/octa-christmas-page/octa-christmas-page-mobile-780.webp",
+            "bytes": 52078,
+            "sha256": "70a40ce548a05633ced9306c1a4d0ff4fe14301e08df2e316356174e41a679d1"
+          }
+        }
+      }
+    },
+    "bride-is-pride": {
+      "auditRef": "audit-bride-2026-08-20",
+      "availability": "ARCHIVED",
+      "httpStatus": null,
+      "captureMode": "archive-treatment",
+      "observedTechnologies": [],
+      "note": "Domain does not resolve; use the existing disclosed portfolio-made archive visual."
+    },
+    "equity-exchange-academy": {
+      "auditRef": "audit-equity-2026-08-20",
+      "availability": "ARCHIVED",
+      "httpStatus": null,
+      "captureMode": "archive-treatment",
+      "observedTechnologies": [],
+      "note": "Domain does not resolve; use the existing disclosed portfolio-made archive visual."
+    },
+    "utc-india": {
+      "auditRef": "audit-utc-2026-08-20",
+      "availability": "LIVE",
+      "httpStatus": 200,
+      "captureMode": "automatic",
+      "observedTechnologies": [
+        {
+          "name": "WordPress",
+          "confidence": "HIGH",
+          "evidence": "WordPress core and plugin paths."
+        },
+        {
+          "name": "WooCommerce",
+          "confidence": "HIGH",
+          "evidence": "Versioned WooCommerce plugin assets."
+        },
+        {
+          "name": "Elementor",
+          "confidence": "HIGH",
+          "evidence": "Versioned Elementor assets."
+        }
+      ],
+      "capture": {
+        "capturedOn": "2026-08-20",
+        "sourceUrl": "https://utcindia.co/",
+        "finalUrl": "https://utcindia.co/",
+        "pageTitle": "UTC India",
+        "desktopViewport": "1440x960@1",
+        "mobileViewport": "390x520@2",
+        "outputs": {
+          "desktopAvif960": {
+            "file": "assets/images/projects/utc-india/utc-india-desktop-960.avif",
+            "bytes": 23473,
+            "sha256": "c05cc6598e67bb07329a7bb118b6a572558ee42de493ac91f1a2ef3feef8192f"
+          },
+          "desktopAvif1440": {
+            "file": "assets/images/projects/utc-india/utc-india-desktop-1440.avif",
+            "bytes": 33123,
+            "sha256": "d74663049e4798564a10f2971dc9d8e12294b307f41cc0cff2c4e34de35dab27"
+          },
+          "desktopWebp960": {
+            "file": "assets/images/projects/utc-india/utc-india-desktop-960.webp",
+            "bytes": 32450,
+            "sha256": "845be37955803df31e08c0e1776cdcd311ac7251ad3b3b353b6532c18ca25aef"
+          },
+          "desktopWebp1440": {
+            "file": "assets/images/projects/utc-india/utc-india-desktop-1440.webp",
+            "bytes": 54320,
+            "sha256": "95dec8104ead8e92f99a6146e6f346f71a231170f67633c9f85681f70687e433"
+          },
+          "mobileAvif780": {
+            "file": "assets/images/projects/utc-india/utc-india-mobile-780.avif",
+            "bytes": 14461,
+            "sha256": "5831fc180e63afdd5cf983a57fcae127d615445e524225e846996edba38144f7"
+          },
+          "mobileWebp780": {
+            "file": "assets/images/projects/utc-india/utc-india-mobile-780.webp",
+            "bytes": 32628,
+            "sha256": "54169f7398d3808f61126c774c8a318aad8366e48e73635c3f3ba9e34523112d"
+          }
+        }
+      }
+    }
+  }
+}

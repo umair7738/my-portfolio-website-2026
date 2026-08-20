@@ -72,11 +72,30 @@ const projects = read("projects.html");
 const services = read("services.html");
 const contact = read("contact.html");
 if (count(home, /<article class="project-card/g) !== 4) errors.push("index.html: expected four static featured project cards");
-if (count(projects, /<article class="project-card/g) !== 7) errors.push("projects.html: expected seven static project cards");
+if (count(projects, /<article class="project-card/g) !== 17) errors.push("projects.html: expected seventeen static project cards");
 if (count(services, /<article class="service-card/g) !== 18) errors.push("services.html: expected eighteen static service cards");
 if (!/<form class="contact-form"/i.test(contact)) errors.push("contact.html: contact form is not static HTML");
 if (!contact.includes("mailto:umairshaikh7738@gmail.com") || !contact.includes("tel:+917738635355")) errors.push("contact.html: static contact details are incomplete");
-if (!home.includes('data-counter="7">7<') || !home.includes('data-counter="18">18<') || !home.includes('data-counter="2">2<') || !home.includes('data-counter="3">3<')) errors.push("index.html: counters do not expose truthful initial values");
+if (!home.includes('data-counter="17">17<') || !home.includes('data-counter="18">18<') || !home.includes('data-counter="2">2<') || !home.includes('data-counter="3">3<')) errors.push("index.html: counters do not expose truthful initial values");
+if (count(home, /<article class="project-card/g) !== 4 || count(home, /is-featured/g) < 4) errors.push("index.html: expected four data-selected featured project cards");
+for (const slug of ["bride-is-pride", "equity-exchange-academy"]) {
+  const match = projects.match(new RegExp(`<article(?=[^>]*id="project-${slug}")[^>]*>[\\s\\S]*?<\\/article>`));
+  if (!match) errors.push(`projects.html: missing archived card ${slug}`);
+  else if (/Live site/.test(match[0])) errors.push(`projects.html: archived card ${slug} exposes a live-site action`);
+}
+if (count(projects, /data-status="ARCHIVED"/g) !== 2) errors.push("projects.html: expected two archived project cards");
+if (count(projects, /<picture>/g) !== 15) errors.push("projects.html: expected responsive pictures for fifteen live projects");
+if (count(projects, /class="tag-list project-technologies"/g) !== 17) errors.push("projects.html: expected a technology list on every card");
+if (/Public-site technology audit|Verified delivery record|High signal|Medium signal/i.test(projects)) errors.push("projects.html: evidence labels and confidence phrases must not be rendered");
+const projectSchemaMatch = projects.match(/<script type="application\/ld\+json" data-project-schema>([\s\S]*?)<\/script>/);
+if (!projectSchemaMatch) errors.push("projects.html: generated project schema is missing");
+else {
+  try {
+    const schema = JSON.parse(projectSchemaMatch[1]);
+    const list = schema["@graph"].find((item) => item["@type"] === "ItemList");
+    if (!list || list.numberOfItems !== 17 || list.itemListElement.length !== 17) errors.push("projects.html: project schema must contain seventeen items");
+  } catch (error) { errors.push(`projects.html: project schema is invalid (${error.message})`); }
+}
 
 const notFound = read("404.html");
 if (!/<meta name="robots" content="noindex, follow">/i.test(notFound)) errors.push("404.html: must remain noindex, follow");

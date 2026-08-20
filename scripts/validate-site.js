@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const { baseUrl, pages, sitemapPages, pageUrl } = require("./site-config");
+const projectData = require(path.join(process.cwd(), "data", "projects.js"));
+const projectAudit = require(path.join(process.cwd(), "data", "project-audit.json"));
 
 const root = process.cwd();
 const legacyHost = ["umair-shaikh-portfolio", "webdeveloper15235", "chatgpt", "site"].join(".");
@@ -13,6 +15,49 @@ const barbaPages = {
   "case-studies.html": "case-studies", "services.html": "services", "skills.html": "skills",
   "experience.html": "experience", "contact.html": "contact", "privacy.html": "privacy"
 };
+
+const allowedProjectCategories = new Set(["education", "commerce", "creative", "corporate", "industrial", "campaign"]);
+const allowedProjectStatuses = new Set(["LIVE", "ARCHIVED", "UNAVAILABLE"]);
+
+if (projectData.length !== 17) errors.push(`project data: expected 17 projects, found ${projectData.length}`);
+const projectSlugs = projectData.map((project) => project.slug);
+if (new Set(projectSlugs).size !== projectSlugs.length) errors.push("project data: slugs must be unique");
+const featuredRanks = projectData.filter((project) => project.featuredRank).map((project) => project.featuredRank).sort();
+if (JSON.stringify(featuredRanks) !== JSON.stringify([1, 2, 3, 4])) errors.push("project data: featured ranks must be exactly 1, 2, 3, and 4");
+projectData.forEach((project) => {
+  if (!allowedProjectCategories.has(project.category)) errors.push(`${project.slug}: invalid project category ${project.category}`);
+  if (!project.status || !allowedProjectStatuses.has(project.status.value)) errors.push(`${project.slug}: invalid project status`);
+  if (!project.status.verifiedOn) errors.push(`${project.slug}: missing status verification date`);
+  if (!project.description || !project.descriptionEvidence || !project.descriptionEvidence.length) errors.push(`${project.slug}: description is missing evidence`);
+  (project.descriptionEvidence || []).forEach((reference) => {
+    if (!projectAudit.evidence[reference]) errors.push(`${project.slug}: unknown description evidence ${reference}`);
+  });
+  const auditRecord = projectAudit.projects[project.slug];
+  if (!auditRecord || auditRecord.auditRef !== project.auditRef) errors.push(`${project.slug}: missing or mismatched audit record`);
+  if (!project.publicSiteAudit || project.publicSiteAudit.auditedOn !== projectAudit.auditedOn) errors.push(`${project.slug}: missing or incorrectly dated public-site audit`);
+  const publishedAuditTechnologies = (project.publicSiteAudit && project.publicSiteAudit.technologies || []).map(({ name, confidence }) => ({ name, confidence }));
+  const recordedAuditTechnologies = (auditRecord && auditRecord.observedTechnologies || []).map(({ name, confidence }) => ({ name, confidence }));
+  if (JSON.stringify(publishedAuditTechnologies) !== JSON.stringify(recordedAuditTechnologies)) errors.push(`${project.slug}: published public-site audit does not match the reviewed audit record`);
+  publishedAuditTechnologies.forEach((technology) => {
+    if (!technology.name || !["HIGH", "MEDIUM"].includes(technology.confidence)) errors.push(`${project.slug}: invalid public-site audit technology`);
+  });
+  if (!publishedAuditTechnologies.length && (!project.publicSiteAudit || !project.publicSiteAudit.note)) errors.push(`${project.slug}: empty public-site audit requires an explanatory note`);
+  (project.deliveryTechnologies || []).forEach((technology) => {
+    if (technology.confidence !== "HIGH") errors.push(`${project.slug}: public delivery technology ${technology.name} is not HIGH confidence`);
+    if (!technology.evidenceRefs || !technology.evidenceRefs.length) errors.push(`${project.slug}: public delivery technology ${technology.name} is missing evidence`);
+    (technology.evidenceRefs || []).forEach((reference) => {
+      if (!projectAudit.evidence[reference]) errors.push(`${project.slug}: unknown technology evidence ${reference}`);
+    });
+  });
+  if (!project.media || !project.media.desktop || !project.media.desktop.webp960) errors.push(`${project.slug}: incomplete project media`);
+  else {
+    [project.media.desktop.webp960, project.media.desktop.webp1440, project.media.desktop.avif960, project.media.desktop.avif1440,
+      project.media.mobile && project.media.mobile.webp, project.media.mobile && project.media.mobile.avif]
+      .filter(Boolean).forEach((file) => { if (!fs.existsSync(path.join(root, file))) errors.push(`${project.slug}: missing project asset ${file}`); });
+  }
+});
+if (projectData.find((project) => project.slug === "bride-is-pride").status.value !== "ARCHIVED") errors.push("Bride Is Pride must remain ARCHIVED");
+if (projectData.find((project) => project.slug === "equity-exchange-academy").status.value !== "ARCHIVED") errors.push("Equity Exchange Academy must remain ARCHIVED");
 
 function localTargetExists(file, target) {
   if (!target || target === "/" || /^(?:https?:|mailto:|tel:|#|javascript:|data:)/i.test(target)) return true;
@@ -77,7 +122,7 @@ if (notFound.includes("data-barba") || notFound.includes("barba-2.10.3")) errors
 const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 if (/rel="preload"[^>]+project-/i.test(home)) errors.push("index.html: below-the-fold project image must not be preloaded");
 [
-  ['data-counter="7">7<', "project count"], ['data-counter="18">18<', "service count"],
+  ['data-counter="17">17<', "project count"], ['data-counter="18">18<', "service count"],
   ['data-counter="2">2<', "database count"], ['data-counter="3">3<', "payment count"]
 ].forEach(([needle, label]) => { if (!home.includes(needle)) errors.push(`index.html: inaccurate initial ${label}`); });
 
@@ -104,7 +149,7 @@ const required = [
   "assets/vendor/gsap-3.13.0.min.js", "assets/vendor/ScrollTrigger-3.13.0.min.js",
   "assets/vendor/lenis-1.3.11.min.js", "assets/vendor/lucide-0.468.0.min.js",
   "assets/vendor/barba-2.10.3.umd.js", "assets/images/og-portfolio.webp", "assets/icons/favicon.png",
-  "assets/umair_resume_june_2026.pdf"
+  "assets/umair_resume_june_2026.pdf", "data/projects.js", "data/project-audit.json"
 ];
 required.forEach((target) => { if (!fs.existsSync(path.join(root, target))) errors.push(`missing required file ${target}`); });
 

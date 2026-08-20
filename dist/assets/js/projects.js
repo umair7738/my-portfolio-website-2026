@@ -3,107 +3,6 @@
 
   const Portfolio = window.Portfolio = window.Portfolio || {};
 
-  Portfolio.projectData = [
-    {
-      title: "UTC India",
-      category: "wordpress",
-      categoryLabel: "WordPress",
-      year: "Resume project",
-      image: "assets/images/project-utc-india.webp",
-      imageAlt: "Stylized browser preview for the UTC India WordPress project",
-      description: "A product-led WordPress website for UTC India's insulated ware and kitchen product catalogue.",
-      tags: ["WordPress", "Frontend", "Product catalogue"],
-      role: "WordPress build",
-      host: "utcindia.co",
-      liveUrl: "https://utcindia.co/",
-      caseStudyUrl: "case-studies.html#utc-india"
-    },
-    {
-      title: "Atyaf Al Majd",
-      category: "frontend",
-      categoryLabel: "Custom frontend",
-      year: "Resume project",
-      image: "assets/images/project-atyaf.webp",
-      imageAlt: "Stylized browser preview for the Atyaf Al Majd website project",
-      description: "A custom business website developed from scratch with a responsive Bootstrap frontend.",
-      tags: ["HTML", "CSS", "JavaScript", "Bootstrap"],
-      role: "Frontend development",
-      host: "atyafalmajd.com",
-      liveUrl: "https://www.atyafalmajd.com/",
-      caseStudyUrl: "case-studies.html#atyaf-al-majd"
-    },
-    {
-      title: "CCIE Security Training",
-      category: "landing-page",
-      categoryLabel: "Landing page",
-      year: "Resume project",
-      image: "assets/images/project-ccie.webp",
-      imageAlt: "Stylized browser preview for the Octa Networks CCIE Security training landing page",
-      description: "A focused training landing page created for Octa Networks' CCIE Security offering.",
-      tags: ["Landing page", "Frontend", "Responsive UI"],
-      role: "Landing page development",
-      host: "octanetworks.com",
-      liveUrl: "https://octanetworks.com/ccie-security_v6.1_training",
-      caseStudyUrl: "case-studies.html#campaign-pages"
-    },
-    {
-      title: "Diwali Sale 2023",
-      category: "campaign",
-      categoryLabel: "Campaign design",
-      year: "2023",
-      image: "assets/images/project-diwali.webp",
-      imageAlt: "Stylized browser preview for the Octa Networks Diwali Sale 2023 campaign page",
-      description: "A seasonal campaign landing page designed and developed for Octa Networks.",
-      tags: ["UI design", "Frontend", "Campaign"],
-      role: "Design & development",
-      host: "octanetworks.com",
-      liveUrl: "https://octanetworks.com/diwali-sale-2023",
-      caseStudyUrl: "case-studies.html#campaign-pages"
-    },
-    {
-      title: "Christmas Campaign",
-      category: "campaign",
-      categoryLabel: "Campaign design",
-      year: "Resume project",
-      image: "assets/images/project-christmas.webp",
-      imageAlt: "Stylized browser preview for the Octa Networks Christmas campaign page",
-      description: "A festive landing-page experience designed and developed for a seasonal campaign.",
-      tags: ["UI design", "Landing page", "Frontend"],
-      role: "Design & development",
-      host: "octanetworks.com",
-      liveUrl: "https://octanetworks.com/christmas-page",
-      caseStudyUrl: "case-studies.html#campaign-pages"
-    },
-    {
-      title: "Equity Exchange Academy",
-      category: "frontend",
-      categoryLabel: "Website design",
-      year: "Resume project",
-      image: "assets/images/project-equity.webp",
-      imageAlt: "Stylized browser preview for the Equity Exchange Academy website project",
-      description: "A financial education website designed and developed to present the academy online.",
-      tags: ["Website design", "Frontend", "Responsive UI"],
-      role: "Design & development",
-      host: "equityexchangeacademy.in",
-      liveUrl: "https://equityexchangeacademy.in/",
-      caseStudyUrl: "case-studies.html#other-work"
-    },
-    {
-      title: "Bride is Pride",
-      category: "wordpress",
-      categoryLabel: "WordPress",
-      year: "Resume project",
-      image: "assets/images/project-bride.webp",
-      imageAlt: "Stylized browser preview for the Bride is Pride WordPress project",
-      description: "Internal WordPress pages designed and developed as part of the wider website experience.",
-      tags: ["WordPress", "Internal pages", "Frontend"],
-      role: "Internal page development",
-      host: "brideispride.com",
-      liveUrl: "https://brideispride.com/",
-      caseStudyUrl: "case-studies.html#other-work"
-    }
-  ];
-
   Portfolio.serviceData = [
     { title: "Business Websites", icon: "building-2", description: "Clean, responsive websites that communicate value clearly and establish trust quickly.", items: ["Responsive frontend", "Clear information architecture", "Conversion-ready content"], group: "web" },
     { title: "Landing Pages", icon: "panel-top", description: "Focused campaign and lead-generation pages built around one clear action.", items: ["Campaign UI", "Responsive build", "CTA hierarchy"], group: "web" },
@@ -125,36 +24,108 @@
     { title: "Website Redesign", icon: "refresh-cw", description: "Modernize an existing site around stronger hierarchy, usability, and performance.", items: ["UX review", "Visual refresh", "Responsive rebuild"], group: "web" }
   ];
 
+  function escape(value) {
+    return Portfolio.utils.escapeHtml(value == null ? "" : String(value));
+  }
+
+  function hostFor(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ""); }
+    catch (_error) { return "Archived project"; }
+  }
+
+  function sortedProjects(container) {
+    const projects = (Portfolio.projectData || []).slice();
+    if (container.hasAttribute("data-projects-featured")) {
+      return projects.filter(function (project) { return Number(project.featuredRank) > 0; })
+        .sort(function (a, b) { return a.featuredRank - b.featuredRank; });
+    }
+    return projects.sort(function (a, b) {
+      const aRank = Number(a.featuredRank) || Number.MAX_SAFE_INTEGER;
+      const bRank = Number(b.featuredRank) || Number.MAX_SAFE_INTEGER;
+      return aRank - bRank;
+    });
+  }
+
+  function projectSearch(project) {
+    return [project.title, project.description, project.categoryLabel, project.typeLabel, project.role,
+      (project.tags || []).join(" "),
+      (project.deliveryTechnologies || []).map(function (technology) { return technology.name; }).join(" ")]
+      .filter(Boolean).join(" ").toLowerCase();
+  }
+
+  function primaryLink(project) {
+    if (project.caseStudy) return { href: project.caseStudy.href, external: false, label: "Read " + project.title + " case study" };
+    if (project.status.value === "LIVE" && project.url) return { href: project.url, external: true, label: "View " + project.title + " website" };
+    return null;
+  }
+
+  function pictureMarkup(project, priority, featured) {
+    const media = project.media;
+    const desktop = media.desktop;
+    const mobile = media.mobile;
+    const loading = priority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
+    const sizes = featured ? "(min-width: 1320px) 1280px, (min-width: 768px) calc(100vw - 4.5rem), 100vw" : "(min-width: 1320px) 632px, (min-width: 768px) 50vw, 100vw";
+    if (!mobile || !desktop.avif960) {
+      return '<img src="' + escape(desktop.webp960) + '" alt="' + escape(media.alt) + '" width="' + escape(desktop.width) + '" height="' + escape(desktop.height) + '" ' + loading + ' decoding="async">';
+    }
+    return '<picture>' +
+      '<source media="(max-width: 767.98px)" type="image/avif" srcset="' + escape(mobile.avif) + '">' +
+      '<source media="(max-width: 767.98px)" type="image/webp" srcset="' + escape(mobile.webp) + '">' +
+      '<source type="image/avif" srcset="' + escape(desktop.avif960) + ' 960w, ' + escape(desktop.avif1440) + ' 1440w" sizes="' + sizes + '">' +
+      '<img src="' + escape(desktop.webp960) + '" srcset="' + escape(desktop.webp960) + ' 960w, ' + escape(desktop.webp1440) + ' 1440w" sizes="' + sizes + '" alt="' + escape(media.alt) + '" width="' + escape(desktop.width) + '" height="' + escape(desktop.height) + '" ' + loading + ' decoding="async">' +
+      '</picture>';
+  }
+
+  function renderProject(template, project, index, options) {
+    const featured = Number(project.featuredRank) > 0;
+    const primary = primaryLink(project);
+    const externalAttributes = primary && primary.external ? ' target="_blank" rel="noopener"' : "";
+    const visualOpen = primary
+      ? '<a class="project-visual" href="' + escape(primary.href) + '" aria-label="' + escape(primary.label) + '"' + externalAttributes + '>'
+      : '<div class="project-visual" aria-label="' + escape(project.title + " archived project visual") + '">';
+    const titleOpen = primary ? '<a href="' + escape(primary.href) + '"' + externalAttributes + '>' : "";
+    const statusLabel = project.status.value === "LIVE" ? "Live" : project.status.value === "ARCHIVED" ? "Archived" : "Unavailable";
+    const deliveryTechnologies = (project.deliveryTechnologies || []).map(function (technology) { return "<li>" + escape(technology.name) + "</li>"; }).join("");
+    const technologyList = deliveryTechnologies
+      ? '<ul class="tag-list project-technologies" aria-label="Project technologies">' + deliveryTechnologies + "</ul>"
+      : "";
+    const detailItems = [project.typeLabel, project.role, project.year].filter(Boolean);
+    const detailLine = detailItems.length ? '<p class="project-detail-line">' + detailItems.map(escape).join(" · ") + "</p>" : "";
+    const links = [];
+    if (project.status.value === "LIVE" && project.url) links.push('<a href="' + escape(project.url) + '" target="_blank" rel="noopener">Live site <i data-lucide="external-link" aria-hidden="true"></i></a>');
+    else if (project.status.value === "UNAVAILABLE") links.push('<span class="project-link-muted">Currently unavailable</span>');
+    if (project.caseStudy) links.push('<a href="' + escape(project.caseStudy.href) + '">Case study <i data-lucide="arrow-right" aria-hidden="true"></i></a>');
+    const disclosure = project.media.kind === "ARCHIVE_TREATMENT" ? "Archive visual · live snapshot unavailable" : "Current site snapshot · " + project.media.capturedOn;
+    const values = {
+      "{{slug}}": escape(project.slug), "{{category}}": escape(project.category), "{{status}}": escape(project.status.value),
+      "{{search}}": escape(projectSearch(project)), "{{featuredClass}}": featured ? " is-featured is-featured-" + escape(project.featuredRank) : "",
+      "{{featuredRank}}": featured ? escape(project.featuredRank) : "", "{{visualOpen}}": visualOpen, "{{visualClose}}": primary ? "</a>" : "</div>",
+      "{{titleOpen}}": titleOpen, "{{titleClose}}": primary ? "</a>" : "", "{{picture}}": pictureMarkup(project, options.priority, featured),
+      "{{index}}": String(index + 1).padStart(2, "0"), "{{host}}": escape(hostFor(project.url)), "{{mediaDisclosure}}": escape(disclosure),
+      "{{categoryLabel}}": escape(project.categoryLabel), "{{typeLabel}}": escape(project.typeLabel),
+      "{{featuredBadge}}": featured ? '<span class="project-featured-badge"><i data-lucide="sparkles" aria-hidden="true"></i> Featured</span>' : "",
+      "{{statusClass}}": project.status.value.toLowerCase(), "{{statusLabel}}": statusLabel, "{{title}}": escape(project.title),
+      "{{description}}": escape(project.description), "{{detailLine}}": detailLine, "{{technologyList}}": technologyList, "{{links}}": links.join("")
+    };
+    return Object.keys(values).reduce(function (html, token) { return html.split(token).join(values[token]); }, template).replace(/[ \t]+$/gm, "");
+  }
+
   Portfolio.Projects = {
+    renderProjectCard(template, project, index, options) { return renderProject(template, project, index, options || {}); },
+    selectProjects(container) {
+      const limit = Number(container.dataset.projectLimit || Portfolio.projectData.length);
+      return sortedProjects(container).slice(0, limit);
+    },
     renderProjects(root) {
       const scope = root || document;
       const container = scope.querySelector("[data-projects-grid]");
       const template = scope.querySelector("#project-card-template");
       if (!container || !template) return;
-      const limit = Number(container.dataset.projectLimit || Portfolio.projectData.length);
-      container.innerHTML = Portfolio.projectData.slice(0, limit).map(function (project, index) {
-        const tags = project.tags.map(function (tag) { return "<li>" + Portfolio.utils.escapeHtml(tag) + "</li>"; }).join("");
-        const links = '<a href="' + project.liveUrl + '" target="_blank" rel="noopener">Live site <i data-lucide="external-link" aria-hidden="true"></i></a>' +
-          '<a href="' + project.caseStudyUrl + '">Case study <i data-lucide="arrow-right" aria-hidden="true"></i></a>';
-        const values = {
-          "{{category}}": project.category,
-          "{{search}}": [project.title, project.description, project.tags.join(" "), project.categoryLabel].join(" ").toLowerCase(),
-          "{{caseStudyUrl}}": project.caseStudyUrl,
-          "{{title}}": project.title,
-          "{{image}}": project.image,
-          "{{imageAlt}}": project.imageAlt,
-          "{{index}}": String(index + 1).padStart(2, "0"),
-          "{{host}}": project.host,
-          "{{categoryLabel}}": project.categoryLabel,
-          "{{year}}": project.year,
-          "{{description}}": project.description,
-          "{{tags}}": tags,
-          "{{links}}": links
-        };
-        return Object.keys(values).reduce(function (html, token) { return html.split(token).join(values[token]); }, template.innerHTML);
+      const isArchive = !container.hasAttribute("data-projects-featured");
+      container.innerHTML = this.selectProjects(container).map(function (project, index) {
+        return renderProject(template.innerHTML, project, index, { priority: isArchive && index === 0 });
       }).join("");
     },
-
     renderServices(root) {
       const scope = root || document;
       const container = scope.querySelector("[data-services-grid]");
@@ -162,44 +133,37 @@
       if (!container || !template) return;
       const limit = Number(container.dataset.serviceLimit || Portfolio.serviceData.length);
       container.innerHTML = Portfolio.serviceData.slice(0, limit).map(function (service, index) {
-        const items = service.items.map(function (item) { return "<li>" + Portfolio.utils.escapeHtml(item) + "</li>"; }).join("");
-        const values = {
-          "{{icon}}": service.icon,
-          "{{number}}": String(index + 1).padStart(2, "0"),
-          "{{title}}": service.title,
-          "{{description}}": service.description,
-          "{{items}}": items,
-          "{{slug}}": Portfolio.utils.slugify(service.title)
-        };
+        const items = service.items.map(function (item) { return "<li>" + escape(item) + "</li>"; }).join("");
+        const values = { "{{icon}}": escape(service.icon), "{{number}}": String(index + 1).padStart(2, "0"), "{{title}}": escape(service.title), "{{description}}": escape(service.description), "{{items}}": items, "{{slug}}": Portfolio.utils.slugify(service.title) };
         return Object.keys(values).reduce(function (html, token) { return html.split(token).join(values[token]); }, template.innerHTML);
       }).join("");
     },
-
     initFilters(root) {
       const scope = root || document;
       const grid = scope.querySelector("[data-projects-grid]");
       if (!grid || !scope.querySelector("[data-project-filter]")) return;
       let activeCategory = "all";
+      let activeStatus = "all";
       let query = "";
-
+      const resultCount = scope.querySelector("[data-project-result-count]");
+      const empty = scope.querySelector("[data-project-empty]");
+      const search = scope.querySelector("[data-project-search]");
+      const clear = scope.querySelector("[data-project-search-clear]");
+      const status = scope.querySelector("[data-project-status]");
       const apply = function () {
-        let visible = 0;
         const visibleCards = [];
         grid.querySelectorAll(".project-card").forEach(function (card) {
-          const categoryMatch = activeCategory === "all" || card.dataset.category === activeCategory;
-          const searchMatch = !query || card.dataset.search.includes(query);
-          const show = categoryMatch && searchMatch;
+          const show = (activeCategory === "all" || card.dataset.category === activeCategory) &&
+            (activeStatus === "all" || card.dataset.status === activeStatus) && (!query || card.dataset.search.includes(query));
           card.hidden = !show;
-          if (show) { visible += 1; visibleCards.push(card); }
+          if (show) visibleCards.push(card);
         });
-        const empty = scope.querySelector("[data-project-empty]");
-        if (empty) empty.style.display = visible ? "none" : "block";
-        if (window.gsap && !Portfolio.utils.prefersReducedMotion()) {
-          window.gsap.fromTo(visibleCards, { y: 18, scale: .975, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .5, stagger: .045, ease: "power3.out", overwrite: true });
-        }
+        if (empty) empty.hidden = visibleCards.length > 0;
+        if (resultCount) resultCount.textContent = visibleCards.length + (visibleCards.length === 1 ? " project" : " projects");
+        if (clear) clear.hidden = !query;
+        if (window.gsap && !Portfolio.utils.prefersReducedMotion()) window.gsap.fromTo(visibleCards, { y: 18, scale: .975, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .5, stagger: .045, ease: "power3.out", overwrite: true });
         if (window.ScrollTrigger) window.ScrollTrigger.refresh();
       };
-
       scope.querySelectorAll("[data-project-filter]").forEach(function (button) {
         Portfolio.Lifecycle.page.listen(button, "click", function () {
           scope.querySelectorAll("[data-project-filter]").forEach(function (item) { item.classList.remove("active"); item.setAttribute("aria-pressed", "false"); });
@@ -210,11 +174,11 @@
           apply();
         });
       });
-
-      const search = scope.querySelector("[data-project-search]");
+      if (status) Portfolio.Lifecycle.page.listen(status, "change", function () { activeStatus = status.value; apply(); });
       if (search) Portfolio.Lifecycle.page.listen(search, "input", function () { query = search.value.trim().toLowerCase(); apply(); });
+      if (clear) Portfolio.Lifecycle.page.listen(clear, "click", function () { if (search) { search.value = ""; query = ""; search.focus(); apply(); } });
+      apply();
     },
-
     init(root) {
       const scope = root || document;
       this.renderProjects(scope);

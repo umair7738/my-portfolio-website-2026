@@ -9,6 +9,14 @@
     "build-sites": "node scripts/build-sites.js",
     "validate-site": "node scripts/validate-site.js",
     "validate-dist": "node scripts/validate-dist.js",
-    "build": "npm run update-domain && npm run build-production && npm run build-sites && npm run validate-site && npm run validate-dist"
+    "build": "npm run update-domain && npm run build-production && npm run build-sites && npm run validate-site && npm run validate-dist",
+    "audit:projects": "node scripts/audit-project-technologies.js",
+    "capture:projects": "node scripts/capture-project-snapshots.js",
+    "serve:dist": "node scripts/serve-dist.js",
+    "test:projects": "playwright test tests/projects-archive.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "sharp": "^0.35.3"
   }
 }

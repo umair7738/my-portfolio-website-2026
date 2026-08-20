@@ -70,7 +70,10 @@ const css = cssFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n")
   .trim();
 fs.writeFileSync(path.join("assets", "css", "portfolio.min.css"), css + "\n");
 
-const jsFiles = ["utilities.js", "lifecycle.js", "navigation.js", "loader.js", "projects.js", "contact.js", "gsap.js", "router.js", "app.js"].map((file) => path.join("assets", "js", file));
+const jsFiles = [
+  path.join("data", "projects.js"),
+  ...["utilities.js", "lifecycle.js", "navigation.js", "loader.js", "projects.js", "contact.js", "gsap.js", "router.js", "app.js"].map((file) => path.join("assets", "js", file))
+];
 // Keep source formatting here: the previous whitespace-only minifier could mistake
 // regular expressions for strings and produce invalid JavaScript.
 const js = jsFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n").trimEnd();
