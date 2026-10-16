@@ -75,6 +75,22 @@
       page_title: document.title
     });
   };
+  Portfolio.Analytics.trackEvent = function (eventName, parameters) {
+    if (typeof window.gtag !== "function") return;
+
+    window.gtag("event", eventName, Object.assign({
+      page_path: window.location.pathname
+    }, parameters || {}));
+  };
+  Portfolio.Analytics.initGlobal = function () {
+    if (this.started) return;
+    this.started = true;
+
+    document.addEventListener("click", function (event) {
+      const target = event.target instanceof Element ? event.target.closest("[data-analytics-event]") : null;
+      if (target) Portfolio.Analytics.trackEvent(target.dataset.analyticsEvent);
+    });
+  };
 
   Portfolio.Page = {
     syncHead(nextHtml, namespace) {
@@ -140,6 +156,7 @@
     init() {
       if (this.started) return;
       this.started = true;
+      Portfolio.Analytics.initGlobal();
 
       const container = document.querySelector("[data-barba='container']") || document.querySelector("main");
       if (!window.barba) {

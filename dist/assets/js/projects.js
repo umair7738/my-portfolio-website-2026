@@ -49,7 +49,10 @@
   function projectSearch(project) {
     return [project.title, project.description, project.categoryLabel, project.typeLabel, project.role,
       (project.tags || []).join(" "),
-      (project.deliveryTechnologies || []).map(function (technology) { return technology.name; }).join(" ")]
+      (project.deliveryTechnologies || []).map(function (technology) { return technology.name; }).join(" "),
+      (project.publicSiteAudit && project.publicSiteAudit.technologies || [])
+        .filter(function (technology) { return technology.confidence === "HIGH"; })
+        .map(function (technology) { return technology.name; }).join(" ")]
       .filter(Boolean).join(" ").toLowerCase();
   }
 

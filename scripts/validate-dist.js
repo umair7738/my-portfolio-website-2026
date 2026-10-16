@@ -34,7 +34,7 @@ function validateIdentitySchema(file, data) {
 
   profilePages.forEach((profile) => {
     const person = profile.mainEntity;
-    if (!person || person["@type"] !== "Person" || person["@id"] !== personId || person.name !== "Umair Shaikh") {
+    if (!person || person["@type"] !== "Person" || person["@id"] !== personId || person.name !== "Umair Shaikh" || person.url !== `${baseUrl}/`) {
       errors.push(`${file}: ProfilePage mainEntity must reference Umair Shaikh as a Person`);
     }
   });
@@ -52,6 +52,16 @@ function validateIdentitySchema(file, data) {
   }
 
   if (file === "about.html" && profilePages.length !== 1) errors.push("about.html: expected exactly one ProfilePage");
+  if (file === "services.html") {
+    const webpage = graph.find((item) => item["@type"] === "WebPage");
+    const service = graph.find((item) => item["@type"] === "Service");
+    if (!webpage || webpage["@id"] !== `${baseUrl}/services.html#webpage` || webpage.isPartOf?.["@id"] !== `${baseUrl}/#website` || webpage.mainEntity?.["@id"] !== `${baseUrl}/services.html#service`) {
+      errors.push("services.html: WebPage must reference the canonical WebSite and Service entities");
+    }
+    if (!service || service.provider?.["@id"] !== personId || !service.areaServed?.includes("United Arab Emirates") || !service.areaServed?.includes("India") || service.address) {
+      errors.push("services.html: Service must identify the canonical Person and remote service areas without a local business address");
+    }
+  }
   if (file === "contact.html") {
     const contactPage = graph.find((item) => item["@type"] === "ContactPage");
     if (contactPage?.about?.["@id"] !== personId) errors.push("contact.html: ContactPage must reference the canonical Person entity");

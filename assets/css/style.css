@@ -487,7 +487,7 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
 
 /* Skills */
 .skills-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-.skill-group { padding: clamp(1.4rem, 3vw, 2.4rem); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.skill-group { min-width: 0; padding: clamp(1.4rem, 3vw, 2.4rem); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 .skill-group-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.8rem; }
 .skill-group-head > div { display: flex; align-items: center; gap: .8rem; }
 .skill-group h2 { margin: 0; font-size: 1.35rem; }

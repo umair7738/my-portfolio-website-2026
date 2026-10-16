@@ -1,4 +1,5 @@
 const { defineConfig } = require("@playwright/test");
+const playwrightPort = Number(process.env.PLAYWRIGHT_PORT || 4173);
 
 module.exports = defineConfig({
   testDir: "./tests",
@@ -8,7 +9,7 @@ module.exports = defineConfig({
   workers: 2,
   globalSetup: require.resolve("./tests/global-setup.js"),
   use: {
-    baseURL: "http://127.0.0.1:4173",
+    baseURL: `http://127.0.0.1:${playwrightPort}`,
     channel: "chrome",
     trace: "retain-on-failure",
     screenshot: "only-on-failure"

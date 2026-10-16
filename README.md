@@ -102,3 +102,9 @@ The site includes semantic landmarks, skip links, keyboard-visible focus states,
 ## SEO
 
 Every indexable page includes a unique title, description, canonical link, social metadata, heading hierarchy, internal navigation, and page-appropriate JSON-LD. The project archive uses `CreativeWork`/`ItemList`; the case studies use `Article`; the contact page uses `ContactPage`; breadcrumbs are included throughout.
+
+The services page describes remote availability for UAE and international projects from Mumbai, India; it does not claim a Dubai office, UAE registration, or UAE client history.
+
+## Analytics
+
+GA4 is not activated in this build because no measurement ID or consent configuration has been provided. The router already records one page-view event per initial load and client-side route change when `gtag` is present. `data-analytics-event` hooks cover resume downloads, WhatsApp clicks, and quote requests; successful EmailJS submissions emit `contact_form_submit`. These hooks send no data unless a GA4 `gtag` is installed. Before activation, configure it once with `send_page_view: false` to prevent duplicate automatic and virtual page views, and update the privacy notice and any required consent flow.

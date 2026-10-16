@@ -22,8 +22,8 @@ const pages = {
     ogType: "article"
   },
   "services.html": {
-    title: "Web Development Services | Umair Shaikh",
-    description: "Explore web development services by Umair Shaikh, including responsive websites, WordPress, Laravel, APIs, payment integrations, performance, and maintenance.",
+    title: "Remote Freelance Web Developer for Dubai & UAE | Umair Shaikh",
+    description: "Based in Mumbai, Umair Shaikh offers remote freelance web development for Dubai, UAE and India: responsive sites, WordPress, PHP/Laravel, APIs, and performance.",
     ogType: "website"
   },
   "skills.html": {
