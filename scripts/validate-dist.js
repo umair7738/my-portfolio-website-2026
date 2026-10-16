@@ -27,6 +27,42 @@ function count(html, pattern) {
   return (html.match(pattern) || []).length;
 }
 
+function validateIdentitySchema(file, data) {
+  const graph = Array.isArray(data["@graph"]) ? data["@graph"] : [data];
+  const personId = `${baseUrl}/#person`;
+  const profilePages = graph.filter((item) => item["@type"] === "ProfilePage");
+
+  profilePages.forEach((profile) => {
+    const person = profile.mainEntity;
+    if (!person || person["@type"] !== "Person" || person["@id"] !== personId || person.name !== "Umair Shaikh") {
+      errors.push(`${file}: ProfilePage mainEntity must reference Umair Shaikh as a Person`);
+    }
+  });
+
+  if (file === "index.html") {
+    const person = graph.find((item) => item["@type"] === "Person");
+    const website = graph.find((item) => item["@type"] === "WebSite");
+    const webpage = graph.find((item) => item["@type"] === "WebPage");
+    if (profilePages.length) errors.push("index.html: homepage must not use ProfilePage");
+    if (!person || person["@id"] !== personId || person.name !== "Umair Shaikh") errors.push("index.html: canonical Person entity is missing or incorrect");
+    if (!website || website["@id"] !== `${baseUrl}/#website` || website.publisher?.["@id"] !== personId) errors.push("index.html: WebSite must reference the canonical Person entity");
+    if (!webpage || webpage["@id"] !== `${baseUrl}/#webpage` || webpage.isPartOf?.["@id"] !== `${baseUrl}/#website` || webpage.mainEntity?.["@id"] !== personId) {
+      errors.push("index.html: WebPage must reference the canonical WebSite and Person entities");
+    }
+  }
+
+  if (file === "about.html" && profilePages.length !== 1) errors.push("about.html: expected exactly one ProfilePage");
+  if (file === "contact.html") {
+    const contactPage = graph.find((item) => item["@type"] === "ContactPage");
+    if (contactPage?.about?.["@id"] !== personId) errors.push("contact.html: ContactPage must reference the canonical Person entity");
+  }
+  if (file === "case-studies.html") {
+    graph.filter((item) => item["@type"] === "Article").forEach((article) => {
+      if (article.author?.["@id"] !== personId) errors.push("case-studies.html: Article author must reference the canonical Person entity");
+    });
+  }
+}
+
 Object.entries(namespaces).forEach(([file, namespace]) => {
   const html = read(file);
   if (count(html, /data-barba="wrapper"/g) !== 1) errors.push(`${file}: expected one Barba wrapper`);
@@ -65,6 +101,7 @@ Object.entries(namespaces).forEach(([file, namespace]) => {
     try {
       const json = JSON.parse(match[1]);
       if (/"item":"(?:index|about|projects|case-studies|services|skills|experience|contact|privacy)\.html"/.test(JSON.stringify(json))) errors.push(`${file}: relative breadcrumb in JSON-LD`);
+      validateIdentitySchema(file, json);
     } catch (error) {
       errors.push(`${file}: invalid JSON-LD (${error.message})`);
     }

@@ -69,6 +69,42 @@ function hasTag(html, pattern, label, file) {
   if (!pattern.test(html)) errors.push(`${file}: missing or incorrect ${label}`);
 }
 
+function validateIdentitySchema(file, data) {
+  const graph = Array.isArray(data["@graph"]) ? data["@graph"] : [data];
+  const personId = `${baseUrl}/#person`;
+  const profilePages = graph.filter((item) => item["@type"] === "ProfilePage");
+
+  profilePages.forEach((profile) => {
+    const person = profile.mainEntity;
+    if (!person || person["@type"] !== "Person" || person["@id"] !== personId || person.name !== "Umair Shaikh") {
+      errors.push(`${file}: ProfilePage mainEntity must reference Umair Shaikh as a Person`);
+    }
+  });
+
+  if (file === "index.html") {
+    const person = graph.find((item) => item["@type"] === "Person");
+    const website = graph.find((item) => item["@type"] === "WebSite");
+    const webpage = graph.find((item) => item["@type"] === "WebPage");
+    if (profilePages.length) errors.push("index.html: homepage must not use ProfilePage");
+    if (!person || person["@id"] !== personId || person.name !== "Umair Shaikh") errors.push("index.html: canonical Person entity is missing or incorrect");
+    if (!website || website["@id"] !== `${baseUrl}/#website` || website.publisher?.["@id"] !== personId) errors.push("index.html: WebSite must reference the canonical Person entity");
+    if (!webpage || webpage["@id"] !== `${baseUrl}/#webpage` || webpage.isPartOf?.["@id"] !== `${baseUrl}/#website` || webpage.mainEntity?.["@id"] !== personId) {
+      errors.push("index.html: WebPage must reference the canonical WebSite and Person entities");
+    }
+  }
+
+  if (file === "about.html" && profilePages.length !== 1) errors.push("about.html: expected exactly one ProfilePage");
+  if (file === "contact.html") {
+    const contactPage = graph.find((item) => item["@type"] === "ContactPage");
+    if (contactPage?.about?.["@id"] !== personId) errors.push("contact.html: ContactPage must reference the canonical Person entity");
+  }
+  if (file === "case-studies.html") {
+    graph.filter((item) => item["@type"] === "Article").forEach((article) => {
+      if (article.author?.["@id"] !== personId) errors.push("case-studies.html: Article author must reference the canonical Person entity");
+    });
+  }
+}
+
 for (const file of htmlFiles) {
   const html = fs.readFileSync(path.join(root, file), "utf8");
   const h1Count = (html.match(/<h1\b/gi) || []).length;
@@ -87,6 +123,7 @@ for (const file of htmlFiles) {
     try {
       const json = JSON.parse(match[1]);
       if (JSON.stringify(json).includes('"item":"index.html"')) errors.push(`${file}: relative breadcrumb URL in JSON-LD`);
+      validateIdentitySchema(file, json);
     } catch (error) {
       errors.push(`${file}: invalid JSON-LD (${error.message})`);
     }
