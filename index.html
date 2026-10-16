@@ -14,7 +14,7 @@
   <link rel="preload" href="assets/fonts/space-grotesk-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" media="print" onload="this.media='all'">
   <noscript><link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></noscript>
-  <link rel="stylesheet" href="assets/css/portfolio.min.css?v=fb2ab5081ba6">
+  <link rel="stylesheet" href="assets/css/portfolio.min.css?v=8b299a78d949">
   <link rel="icon" href="assets/icons/favicon.png" type="image/png">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Umair Shaikh | Full Stack Web Developer in Mumbai">
@@ -32,14 +32,21 @@
   <meta name="twitter:image:alt" content="Umair Shaikh full stack web developer portfolio preview">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6J1PG2GSNQ"></script>
+  <!-- Optional analytics: only load after an explicit local opt-in. -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-6J1PG2GSNQ', { send_page_view: false });
+    (function (window, document) {
+      var granted = false;
+      try { granted = window.localStorage.getItem("portfolio-analytics-consent") === "granted"; } catch (_error) {}
+      if (!granted) return;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag("js", new Date());
+      window.gtag("config", "G-6J1PG2GSNQ", { send_page_view: false, anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false });
+      var script = document.createElement("script");
+      script.async = true;
+      script.src = "https://www.googletagmanager.com/gtag/js?id=G-6J1PG2GSNQ";
+      document.head.appendChild(script);
+    }(window, document));
   </script>
 </head>
 <body class="loading" data-page="home">
@@ -88,6 +95,15 @@
           <span><i data-lucide="code-2"></i> HTML5</span><span><i data-lucide="palette"></i> CSS3</span><span><i data-lucide="panels-top-left"></i> Bootstrap</span><span><i data-lucide="braces"></i> JavaScript</span><span><i data-lucide="atom"></i> React</span><span><i data-lucide="database"></i> MySQL</span><span><i data-lucide="server"></i> PHP</span><span><i data-lucide="route"></i> Laravel</span><span><i data-lucide="hexagon"></i> Node.js</span><span><i data-lucide="layout-template"></i> WordPress</span>
           <span><i data-lucide="code-2"></i> HTML5</span><span><i data-lucide="palette"></i> CSS3</span><span><i data-lucide="panels-top-left"></i> Bootstrap</span><span><i data-lucide="braces"></i> JavaScript</span><span><i data-lucide="atom"></i> React</span><span><i data-lucide="database"></i> MySQL</span><span><i data-lucide="server"></i> PHP</span><span><i data-lucide="route"></i> Laravel</span><span><i data-lucide="hexagon"></i> Node.js</span><span><i data-lucide="layout-template"></i> WordPress</span>
         </div></div>
+      </div>
+    </section>
+
+    <section class="section section-border" aria-labelledby="answer-title">
+      <div class="container-xxl">
+        <div class="section-heading-row">
+          <div><span class="eyebrow reveal-up">At a glance</span><h2 class="section-title reveal-up" id="answer-title">What does Umair Shaikh do?</h2></div>
+          <p class="section-copy reveal-up">Umair Shaikh is a full stack web developer in Mumbai, India. He builds responsive websites and web applications with PHP, Laravel, WordPress, JavaScript, REST APIs, databases, and animation-rich frontend experiences, with documented work across performance, SEO-minded implementation, integrations, and operational systems.</p>
+        </div>
       </div>
     </section>
 
@@ -153,6 +169,6 @@
   <script defer src="assets/vendor/jquery-3.7.1.min.js"></script>
   <script defer src="assets/vendor/bootstrap-5.3.8.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
   <script defer src="assets/vendor/gsap-3.13.0.min.js"></script><script defer src="assets/vendor/ScrollTrigger-3.13.0.min.js"></script><script defer src="assets/vendor/lenis-1.3.11.min.js"></script><script defer src="assets/vendor/lucide-0.468.0.min.js"></script><script defer src="assets/vendor/barba-2.10.3.umd.js"></script>
-  <script defer src="assets/js/portfolio.min.js?v=d2c6673f4c38"></script>
+  <script defer src="assets/js/portfolio.min.js?v=cbe177bb26f2"></script>
 </body>
 </html>

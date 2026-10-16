@@ -3,14 +3,21 @@
   <link rel="preload" href="assets/fonts/manrope-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/space-grotesk-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" media="print" onload="this.media='all'">
-  <noscript><link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></noscript><link rel="stylesheet" href="assets/css/portfolio.min.css?v=fb2ab5081ba6"><link rel="icon" href="assets/icons/favicon.png" type="image/png">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6J1PG2GSNQ"></script>
+  <noscript><link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></noscript><link rel="stylesheet" href="assets/css/portfolio.min.css?v=8b299a78d949"><link rel="icon" href="assets/icons/favicon.png" type="image/png">
+  <!-- Optional analytics: only load after an explicit local opt-in. -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-6J1PG2GSNQ', { send_page_view: false });
+    (function (window, document) {
+      var granted = false;
+      try { granted = window.localStorage.getItem("portfolio-analytics-consent") === "granted"; } catch (_error) {}
+      if (!granted) return;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag("js", new Date());
+      window.gtag("config", "G-6J1PG2GSNQ", { send_page_view: false, anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false });
+      var script = document.createElement("script");
+      script.async = true;
+      script.src = "https://www.googletagmanager.com/gtag/js?id=G-6J1PG2GSNQ";
+      document.head.appendChild(script);
+    }(window, document));
   </script>
 </head><body><div class="noise" aria-hidden="true"></div><main class="not-found"><div><div class="not-found-code" aria-hidden="true">404</div><span class="eyebrow">Wrong turn</span><h1>This page left the map.</h1><p>The link may have changed, or the page may never have existed. The useful work is still right where it should be.</p><div class="d-flex flex-wrap justify-content-center gap-3"><a class="btn btn-primary btn-lg" href="/">Back home <i data-lucide="home" aria-hidden="true"></i></a><a class="btn btn-secondary btn-lg" href="projects.html">Explore projects <i data-lucide="arrow-right" aria-hidden="true"></i></a><a class="btn btn-secondary btn-lg" href="contact.html">Contact Umair <i data-lucide="mail" aria-hidden="true"></i></a></div></div></main><script defer src="assets/vendor/lucide-0.468.0.min.js"></script><script>window.addEventListener('DOMContentLoaded',function(){if(window.lucide)window.lucide.createIcons();});</script></body></html>

@@ -82,9 +82,44 @@
       page_path: window.location.pathname
     }, parameters || {}));
   };
+  Portfolio.Analytics.enable = function () {
+    if (typeof window.gtag !== "function") {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag("js", new Date());
+      window.gtag("config", "G-6J1PG2GSNQ", { send_page_view: false, anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false });
+      if (!document.querySelector("script[data-portfolio-analytics]")) {
+        const script = document.createElement("script");
+        script.async = true;
+        script.dataset.portfolioAnalytics = "true";
+        script.src = "https://www.googletagmanager.com/gtag/js?id=G-6J1PG2GSNQ";
+        document.head.append(script);
+      }
+    }
+    this.trackPageView();
+  };
+  Portfolio.Analytics.initConsent = function () {
+    const banner = document.querySelector("[data-analytics-consent]");
+    if (!banner) return;
+    let consent = null;
+    try { consent = window.localStorage.getItem("portfolio-analytics-consent"); } catch (_error) {}
+    if (!consent) banner.hidden = false;
+    const accept = banner.querySelector("[data-analytics-consent-action='accept']");
+    const decline = banner.querySelector("[data-analytics-consent-action='decline']");
+    if (accept) Portfolio.Lifecycle.global.listen(accept, "click", function () {
+      try { window.localStorage.setItem("portfolio-analytics-consent", "granted"); } catch (_error) {}
+      banner.hidden = true;
+      Portfolio.Analytics.enable();
+    });
+    if (decline) Portfolio.Lifecycle.global.listen(decline, "click", function () {
+      try { window.localStorage.setItem("portfolio-analytics-consent", "denied"); } catch (_error) {}
+      banner.hidden = true;
+    });
+  };
   Portfolio.Analytics.initGlobal = function () {
     if (this.started) return;
     this.started = true;
+    this.initConsent();
 
     document.addEventListener("click", function (event) {
       const target = event.target instanceof Element ? event.target.closest("[data-analytics-event]") : null;

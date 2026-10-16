@@ -175,9 +175,25 @@ if (/rel="preload"[^>]+project-/i.test(home)) errors.push("index.html: below-the
 
 const robots = fs.readFileSync(path.join(root, "robots.txt"), "utf8");
 if (robots !== `User-agent: *\nAllow: /\n\nSitemap: ${baseUrl}/sitemap.xml\n`) errors.push("robots.txt: production policy or sitemap URL is incorrect");
+const llms = fs.readFileSync(path.join(root, "llms.txt"), "utf8");
+if (!llms.includes("# Umair Shaikh") || !llms.includes(`${baseUrl}/projects.html`) || !llms.includes("not a ranking guarantee")) errors.push("llms.txt: missing canonical orientation content or scope disclaimer");
 const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
 sitemapPages.forEach((file) => { if (!sitemap.includes(`<loc>${pageUrl(file)}</loc>`)) errors.push(`sitemap.xml: missing ${pageUrl(file)}`); });
 if (sitemap.includes("privacy.html") || sitemap.includes("404.html")) errors.push("sitemap.xml: privacy or 404 URL must be excluded");
+
+const projectsPage = fs.readFileSync(path.join(root, "projects.html"), "utf8");
+const projectSchema = projectsPage.match(/<script type="application\/ld\+json" data-project-schema>([\s\S]*?)<\/script>/);
+if (!projectSchema) errors.push("projects.html: missing project ItemList JSON-LD");
+else {
+  try {
+    const data = JSON.parse(projectSchema[1]);
+    const itemList = (data["@graph"] || []).find((item) => item["@type"] === "ItemList");
+    if (!itemList || itemList.numberOfItems !== 17 || itemList.itemListElement?.length !== 17) errors.push("projects.html: project ItemList must describe all 17 records");
+  } catch (error) { errors.push(`projects.html: invalid project ItemList JSON-LD (${error.message})`); }
+}
+if ((projectsPage.match(/project-archive-fallback-item/g) || []).length !== 17) errors.push("projects.html: no-script project fallback must preserve all 17 records");
+if (!fs.readFileSync(path.join(root, "services.html"), "utf8").includes("data-services-fallback")) errors.push("services.html: missing no-script services fallback");
+if (!fs.readFileSync(path.join(root, "contact.html"), "utf8").includes("data-contact-fallback")) errors.push("contact.html: missing no-script contact fallback");
 
 const scanFiles = ["README.md", "robots.txt", "sitemap.xml", ...htmlFiles,
   ...fs.readdirSync(path.join(root, "scripts")).map((file) => `scripts/${file}`),
@@ -190,7 +206,7 @@ scanFiles.forEach((file) => {
 });
 
 const required = [
-  ".htaccess", "robots.txt", "sitemap.xml", "README.md", "scripts/site-config.js",
+  ".htaccess", "robots.txt", "sitemap.xml", "llms.txt", "README.md", "scripts/site-config.js",
   "assets/css/portfolio.min.css", "assets/js/portfolio.min.js", "assets/vendor/jquery-3.7.1.min.js",
   "assets/vendor/bootstrap-5.3.8.min.css", "assets/vendor/bootstrap-5.3.8.bundle.min.js",
   "assets/vendor/gsap-3.13.0.min.js", "assets/vendor/ScrollTrigger-3.13.0.min.js",

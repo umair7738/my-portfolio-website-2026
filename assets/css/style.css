@@ -621,6 +621,28 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
 .back-to-top > i, .back-to-top > svg:last-child { position: relative; z-index: 2; width: 17px; height: 17px; transform: none; filter: drop-shadow(0 1px 4px rgba(0,0,0,.45)); }
 .back-to-top.is-returning > i, .back-to-top.is-returning > svg:last-child { animation: return-arrow 1s ease-in-out infinite; }
 
+/* Search and no-script fallbacks */
+.breadcrumb-trail { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; margin-bottom: 1.3rem; color: var(--text-muted); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; }
+.breadcrumb-trail a { color: var(--text-soft); }
+.breadcrumb-trail a:hover { color: var(--text); }
+.breadcrumb-trail [aria-current="page"] { color: var(--text-muted); }
+.project-archive-fallback { margin-top: 3rem; padding-top: 2.2rem; border-top: 1px solid var(--line); }
+.project-archive-fallback > p { max-width: 680px; color: var(--text-soft); }
+.project-archive-fallback-list { display: grid; gap: 1rem; margin: 1.5rem 0 0; padding-left: 1.5rem; }
+.project-archive-fallback-item { padding: 1.15rem 1.25rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface); }
+.project-archive-fallback-item h3 { margin: 0 0 .45rem; font-size: 1.08rem; }
+.project-archive-fallback-item p { margin: .35rem 0; color: var(--text-soft); font-size: .86rem; }
+.project-archive-fallback-item a { font-weight: 800; }
+.service-fallback { margin-top: 2rem; padding: 1.4rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface); }
+.service-fallback h2 { margin: 0 0 .5rem; font-size: 1.25rem; }
+.service-fallback p, .service-fallback li, .contact-fallback { color: var(--text-soft); font-size: .88rem; }
+.contact-fallback { margin-top: 1.5rem; padding: 1rem 1.15rem; border: 1px solid var(--line); border-radius: .85rem; }
+.analytics-consent { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; margin-top: 1.5rem; padding: 1rem 1.15rem; border: 1px solid rgba(255,255,255,.14); border-radius: 1rem; background: rgba(255,255,255,.045); color: rgba(255,255,255,.78); }
+.analytics-consent[hidden] { display: none !important; }
+.analytics-consent strong { display: block; margin-bottom: .2rem; color: #fff; font-size: .78rem; }
+.analytics-consent p { max-width: 620px; margin: 0; font-size: .72rem; line-height: 1.55; }
+.analytics-consent-actions { display: flex; flex-shrink: 0; gap: .55rem; }
+
 /* Utility pages */
 .legal-content { max-width: 840px; }
 .legal-content h2 { margin-top: 3rem; font-size: 1.7rem; }

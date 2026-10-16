@@ -134,6 +134,9 @@
   .proof-card .btn { grid-column: auto; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .footer-grid > div:first-child { grid-column: 1 / -1; }
+  .analytics-consent { align-items: flex-start; flex-direction: column; }
+  .analytics-consent-actions { width: 100%; }
+  .analytics-consent-actions .btn { flex: 1; }
   .footer-bottom { align-items: flex-start; flex-direction: column; }
   .floating-contact span { display: none; }
   .floating-contact { width: 46px; padding: 0; justify-content: center; }

@@ -43,6 +43,7 @@ php -S localhost:8080
 - `contact.html` — validated enquiry form, email, phone, WhatsApp, and LinkedIn
 - `privacy.html`, `404.html`, `robots.txt`, and `sitemap.xml` — production support pages
 - `components/` — reusable fragments loaded by the pages at runtime
+- `llms.txt` — optional human-readable orientation file for answer engines and agents; it is not treated as a ranking signal
 - `data/projects.js` — browser/Node-compatible public source of truth for the 17-project archive
 - `data/project-audit.json` — internal evidence, availability, observed fingerprints, and reviewed capture records; never deployed
 - `assets/js/` — modular site, animation, project, navigation, loader, and form logic
@@ -106,4 +107,4 @@ The services page describes remote availability for UAE and international projec
 
 ## Analytics
 
-GA4 is not activated in this build because no measurement ID or consent configuration has been provided. The router already records one page-view event per initial load and client-side route change when `gtag` is present. `data-analytics-event` hooks cover resume downloads, WhatsApp clicks, and quote requests; successful EmailJS submissions emit `contact_form_submit`. These hooks send no data unless a GA4 `gtag` is installed. Before activation, configure it once with `send_page_view: false` to prevent duplicate automatic and virtual page views, and update the privacy notice and any required consent flow.
+GA4 is configured as an opt-in measurement path using the existing `G-6J1PG2GSNQ` property. The Google tag is not loaded until a visitor chooses “Allow analytics”; choosing “Not now” stores a local denial and keeps analytics unloaded. The router records one page-view event per initial load and client-side route change when `gtag` is present. `data-analytics-event` hooks cover resume downloads, WhatsApp clicks, and quote requests; successful EmailJS submissions emit `contact_form_submit`. Events use `send_page_view: false`, IP anonymization, and disabled Google signals/ad personalization. Review the privacy notice and measurement property before changing the consent behavior.
