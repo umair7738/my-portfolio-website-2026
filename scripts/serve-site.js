@@ -6,7 +6,7 @@ const types = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=
 
 function createStaticServer(options) {
   const settings = options || {};
-  const root = settings.root || path.join(process.cwd(), "dist");
+  const root = path.resolve(settings.root || process.cwd());
   const port = Number(settings.port || process.env.PORT || 4173);
   const server = http.createServer((request, response) => {
     const pathname = decodeURIComponent(new URL(request.url, `http://${request.headers.host}`).pathname);
@@ -31,7 +31,7 @@ function createStaticServer(options) {
 
 if (require.main === module) {
   createStaticServer().then((server) => {
-    console.log(`Serving dist at http://127.0.0.1:${server.address().port}`);
+    console.log(`Serving site at http://127.0.0.1:${server.address().port}`);
     const stop = () => server.close(() => process.exit(0));
     process.once("SIGINT", stop);
     process.once("SIGTERM", stop);

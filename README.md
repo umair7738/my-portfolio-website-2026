@@ -42,22 +42,21 @@ php -S localhost:8080
 - `experience.html` — professional timeline and education
 - `contact.html` — validated enquiry form, email, phone, WhatsApp, and LinkedIn
 - `privacy.html`, `404.html`, `robots.txt`, and `sitemap.xml` — production support pages
-- `components/` — reusable fragments and card templates compiled into deployment HTML
+- `components/` — reusable fragments loaded by the pages at runtime
 - `data/projects.js` — browser/Node-compatible public source of truth for the 17-project archive
 - `data/project-audit.json` — internal evidence, availability, observed fingerprints, and reviewed capture records; never deployed
 - `assets/js/` — modular site, animation, project, navigation, loader, and form logic
 - `assets/css/` — design system, animation helpers, and responsive rules
 - `scripts/site-config.js` — production domain and page metadata source of truth
-- `dist/` — fully composed Hostinger-ready output with crawlable navigation, content, and footer
 - `.htaccess` — Hostinger/Apache redirects, custom 404 handling, security headers, and asset caching
 
 ## Production build
 
-Run `npm run build`. It normalizes production metadata, builds the CSS and JavaScript bundles, composes reusable fragments and project/service data into complete HTML pages, copies the Hostinger configuration, and validates both source and `dist/`.
+Hostinger's GitHub deployment publishes the repository root to `public_html`, so deploy the root-level site files. The HTML pages load shared components from `components/` in the browser.
 
-The build is deterministic and performs no external availability checks, technology fingerprinting, or screenshot capture. `dist/` is generated output and must not be edited manually.
+Run `npm run build` to normalize production metadata, rebuild the CSS and JavaScript bundles, and validate the source site. This build is deterministic and performs no external availability checks, technology fingerprinting, or screenshot capture.
 
-Deploy the contents of `dist/` to the web root. Serving the source HTML directly leaves component placeholders for the browser to fetch and delays the first render.
+Use `npm run serve` for a local HTTP preview.
 
 ## Project evidence and snapshots
 
@@ -81,7 +80,7 @@ npm run audit:projects
 
 ## Archive tests
 
-After building, run the responsive, filter, status, link, and accessibility regression suite with system Chrome:
+Run the responsive, filter, status, link, and accessibility regression suite against the root-level site with system Chrome:
 
 ```bash
 npm run test:projects
