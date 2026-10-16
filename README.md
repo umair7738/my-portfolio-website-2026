@@ -88,7 +88,7 @@ npm run test:projects
 
 ## Before public launch
 
-1. Review the public June 2026 resume PDF whenever experience or profile links change.
+1. Review the public September 2026 resume PDF whenever experience or profile links change.
 2. Change `scripts/site-config.js` if the production domain or per-page metadata changes.
 3. Keep the verified GitHub, CodePen, and LinkedIn URLs in `assets/js/utilities.js` current.
 4. Review the EmailJS service and template configuration if the enquiry workflow changes. The site itself does not store submissions in a database.
