@@ -10,6 +10,15 @@ RewriteRule ^ https://umair-builds.in%{REQUEST_URI} [R=301,L,NE]
 RewriteCond %{THE_REQUEST} \s/+index\.html(?:[\s?]|$) [NC]
 RewriteRule ^index\.html$ https://umair-builds.in/ [R=301,L,NE]
 
+# Redirect legacy page URLs to their clean equivalents.
+RewriteCond %{THE_REQUEST} \s/+((?:about|projects|case-studies|services|skills|experience|contact|privacy))\.html(?:[?\s]) [NC]
+RewriteRule ^(about|projects|case-studies|services|skills|experience|contact|privacy)\.html$ /$1 [R=301,L,NE]
+
+# Serve the existing HTML files at clean, extensionless URLs.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(about|projects|case-studies|services|skills|experience|contact|privacy)/?$ $1.html [L]
+
 ErrorDocument 404 /404.html
 
 <IfModule mod_headers.c>

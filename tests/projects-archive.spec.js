@@ -2,7 +2,7 @@ const { test, expect } = require("@playwright/test");
 
 test.beforeEach(async ({ page }) => {
   await page.route(/https:\/\/fonts\.(?:googleapis|gstatic)\.com\//, (route) => route.abort());
-  await page.goto("/projects.html", { waitUntil: "domcontentloaded" });
+  await page.goto("/projects", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-projects-grid] .project-card")).toHaveCount(17);
   await expect(page.locator(".page-loader")).toBeHidden({ timeout: 15000 });
 });
@@ -13,6 +13,7 @@ async function openArchiveControls(page) {
 }
 
 test("renders the complete archive and truthful status links", async ({ page }) => {
+  await expect(page).toHaveURL(/\/projects$/);
   await expect(page.locator("[data-project-result-count]")).toHaveText("17 projects");
   await expect(page.locator(".project-card.is-featured")).toHaveCount(4);
   await expect(page.locator("#project-bride-is-pride")).toHaveAttribute("data-status", "ARCHIVED");

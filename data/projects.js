@@ -201,7 +201,7 @@
         alt: "Atyaf Al-Majd current website homepage snapshot"
       },
       featuredRank: 4,
-      caseStudy: { href: "case-studies.html#atyaf-al-majd", label: "Atyaf Al-Majd case study" },
+      caseStudy: { href: "/case-studies#atyaf-al-majd", label: "Atyaf Al-Majd case study" },
       auditRef: "audit-atyaf-2026-08-20"
     },
     {
@@ -409,7 +409,7 @@
         alt: "Octa Networks CCIE Security training page snapshot"
       },
       featuredRank: null,
-      caseStudy: { href: "case-studies.html#campaign-pages", label: "Octa Networks campaign pages case study" },
+      caseStudy: { href: "/case-studies#campaign-pages", label: "Octa Networks campaign pages case study" },
       auditRef: "audit-octa-ccie-2026-08-20"
     },
     {
@@ -435,7 +435,7 @@
         alt: "Octa Networks Diwali Sale 2023 campaign page snapshot"
       },
       featuredRank: null,
-      caseStudy: { href: "case-studies.html#campaign-pages", label: "Octa Networks campaign pages case study" },
+      caseStudy: { href: "/case-studies#campaign-pages", label: "Octa Networks campaign pages case study" },
       auditRef: "audit-octa-diwali-2026-08-20"
     },
     {
@@ -461,7 +461,7 @@
         alt: "Octa Networks Christmas campaign page snapshot"
       },
       featuredRank: null,
-      caseStudy: { href: "case-studies.html#campaign-pages", label: "Octa Networks campaign pages case study" },
+      caseStudy: { href: "/case-studies#campaign-pages", label: "Octa Networks campaign pages case study" },
       auditRef: "audit-octa-christmas-2026-08-20"
     },
     {
@@ -487,7 +487,7 @@
         alt: "Portfolio-made archive visual for the Bride Is Pride WordPress project"
       },
       featuredRank: null,
-      caseStudy: { href: "case-studies.html#other-work", label: "Bride Is Pride archive note" },
+      caseStudy: { href: "/case-studies#other-work", label: "Bride Is Pride archive note" },
       auditRef: "audit-bride-2026-08-20"
     },
     {
@@ -513,7 +513,7 @@
         alt: "Portfolio-made archive visual for Equity Exchange Academy"
       },
       featuredRank: null,
-      caseStudy: { href: "case-studies.html#other-work", label: "Equity Exchange Academy archive note" },
+      caseStudy: { href: "/case-studies#other-work", label: "Equity Exchange Academy archive note" },
       auditRef: "audit-equity-2026-08-20"
     },
     {
@@ -539,7 +539,7 @@
         alt: "UTC India current product catalogue homepage snapshot"
       },
       featuredRank: null,
-      caseStudy: { href: "case-studies.html#utc-india", label: "UTC India case study" },
+      caseStudy: { href: "/case-studies#utc-india", label: "UTC India case study" },
       auditRef: "audit-utc-2026-08-20"
     }
   ];

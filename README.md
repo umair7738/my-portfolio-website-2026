@@ -19,17 +19,13 @@ No React, Vue, Angular, Tailwind, TypeScript, or framework build step is used.
 
 ## Local preview
 
-Use an HTTP server so local links, component fallbacks, and browser navigation behave like production.
+Use the project server so clean routes and legacy `.html` redirects work locally as they do on Hostinger.
 
 ```bash
-npx serve .
+npm run serve
 ```
 
-PHP is also suitable:
-
-```bash
-php -S localhost:8080
-```
+Open the local URL printed in the terminal (by default, `http://127.0.0.1:4173`). Opening the files directly or using a generic static server does not apply the clean-route mapping.
 
 ## Content and structure
 

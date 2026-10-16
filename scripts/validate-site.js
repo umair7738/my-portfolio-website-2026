@@ -62,7 +62,11 @@ if (projectData.find((project) => project.slug === "equity-exchange-academy").st
 function localTargetExists(file, target) {
   if (!target || target === "/" || /^(?:https?:|mailto:|tel:|#|javascript:|data:)/i.test(target)) return true;
   const clean = target.split("#")[0].split("?")[0];
-  return !clean || fs.existsSync(path.resolve(path.dirname(path.join(root, file)), clean));
+  if (!clean) return true;
+  const base = clean.startsWith("/") ? root : path.dirname(path.join(root, file));
+  let resolved = path.resolve(base, clean.replace(/^\/+/, ""));
+  if (!fs.existsSync(resolved) && !path.extname(resolved)) resolved += ".html";
+  return fs.existsSync(resolved);
 }
 
 function hasTag(html, pattern, label, file) {
@@ -97,7 +101,7 @@ function validateIdentitySchema(file, data) {
   if (file === "services.html") {
     const webpage = graph.find((item) => item["@type"] === "WebPage");
     const service = graph.find((item) => item["@type"] === "Service");
-    if (!webpage || webpage["@id"] !== `${baseUrl}/services.html#webpage` || webpage.isPartOf?.["@id"] !== `${baseUrl}/#website` || webpage.mainEntity?.["@id"] !== `${baseUrl}/services.html#service`) {
+    if (!webpage || webpage["@id"] !== `${pageUrl("services.html")}#webpage` || webpage.isPartOf?.["@id"] !== `${baseUrl}/#website` || webpage.mainEntity?.["@id"] !== `${pageUrl("services.html")}#service`) {
       errors.push("services.html: WebPage must reference the canonical WebSite and Service entities");
     }
     if (!service || service.provider?.["@id"] !== personId || !service.areaServed?.includes("United Arab Emirates") || !service.areaServed?.includes("India") || service.address) {
@@ -178,6 +182,11 @@ if (robots !== `User-agent: *\nAllow: /\n\nSitemap: ${baseUrl}/sitemap.xml\n`) e
 const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
 sitemapPages.forEach((file) => { if (!sitemap.includes(`<loc>${pageUrl(file)}</loc>`)) errors.push(`sitemap.xml: missing ${pageUrl(file)}`); });
 if (sitemap.includes("privacy.html") || sitemap.includes("404.html")) errors.push("sitemap.xml: privacy or 404 URL must be excluded");
+const htaccess = fs.readFileSync(path.join(root, ".htaccess"), "utf8");
+if (!/RewriteRule \^\(about\|projects\|case-studies\|services\|skills\|experience\|contact\|privacy\)\\\.html\$/i.test(htaccess)
+  || !/RewriteRule \^\(about\|projects\|case-studies\|services\|skills\|experience\|contact\|privacy\)\/\?\$ \$1\.html \[L\]/i.test(htaccess)) {
+  errors.push(".htaccess: missing clean URL redirects or extensionless page rewrites");
+}
 
 const scanFiles = ["README.md", "robots.txt", "sitemap.xml", ...htmlFiles,
   ...fs.readdirSync(path.join(root, "scripts")).map((file) => `scripts/${file}`),

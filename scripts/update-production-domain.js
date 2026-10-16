@@ -1,10 +1,14 @@
 const fs = require("fs");
 const path = require("path");
-const { baseUrl, pages, sitemapPages, pageUrl } = require("./site-config");
+const { baseUrl, pages, indexablePages, sitemapPages, pageUrl } = require("./site-config");
 
 const root = process.cwd();
 const socialImage = `${baseUrl}/assets/images/og-portfolio.webp`;
 const imageAlt = "Umair Shaikh full stack web developer portfolio preview";
+const cleanRoutePattern = new RegExp(
+  `(\\b(?:href|action)=["'])(?:${baseUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})?\\/?(${indexablePages.filter((file) => file !== "index.html").map((file) => file.replace(/\.html$/, "")).join("|")})\\.html(?=[?#]|["'])`,
+  "gi"
+);
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
@@ -18,6 +22,8 @@ function absoluteStructuredValue(value) {
   if (typeof value !== "string") return value;
   if (value === "index.html") return `${baseUrl}/`;
   if (pages[value]) return pageUrl(value);
+  const legacyPage = Object.keys(pages).find((file) => file !== "index.html" && value.startsWith(`${baseUrl}/${file}`));
+  if (legacyPage) return `${pageUrl(legacyPage)}${value.slice(`${baseUrl}/${legacyPage}`.length)}`;
   if (/^#(?:person|website|portfolio-studio|portfolio)$/.test(value)) return `${baseUrl}/${value}`;
   return value;
 }
@@ -83,6 +89,13 @@ Object.entries(pages).forEach(([file, metadata]) => {
   html = upsert(html, /<meta\s+name="twitter:image"[^>]*>/i, `<meta name="twitter:image" content="${socialImage}">`);
   html = upsert(html, /<meta\s+name="twitter:image:alt"[^>]*>/i, `<meta name="twitter:image:alt" content="${imageAlt}">`);
   html = normalizeJsonLd(html, canonical);
+  html = html.replace(cleanRoutePattern, "$1/$2");
+  fs.writeFileSync(target, html);
+});
+
+["404.html", ...fs.readdirSync(path.join(root, "components")).filter((file) => file.endsWith(".html"))].forEach((file) => {
+  const target = file === "404.html" ? path.join(root, file) : path.join(root, "components", file);
+  const html = fs.readFileSync(target, "utf8").replace(cleanRoutePattern, "$1/$2");
   fs.writeFileSync(target, html);
 });
 
