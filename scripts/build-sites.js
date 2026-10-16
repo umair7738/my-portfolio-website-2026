@@ -4,6 +4,7 @@ const vm = require("vm");
 
 const root = process.cwd();
 const dist = path.join(root, "dist");
+const lucide = require(path.join(root, "assets/vendor/lucide-0.468.0.min.js"));
 const htmlFiles = [
   "index.html", "about.html", "projects.html", "case-studies.html", "services.html",
   "skills.html", "experience.html", "contact.html", "privacy.html", "404.html"
@@ -37,6 +38,40 @@ function loadContentData() {
 
 function fillTemplate(template, values) {
   return Object.entries(values).reduce((html, [token, value]) => html.split(token).join(value), template);
+}
+
+function iconKey(name) {
+  return String(name || "").split(/[-_\s]+/).filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join("");
+}
+
+function renderSvgNode(node, rootAttributes) {
+  const [tag, attributes = {}, children = []] = node;
+  const merged = rootAttributes ? { ...attributes, ...rootAttributes } : attributes;
+  const serialized = Object.entries(merged).map(([name, value]) => ` ${name}="${escapeHtml(value)}"`).join("");
+  return `<${tag}${serialized}>${children.map((child) => renderSvgNode(child)).join("")}</${tag}>`;
+}
+
+function inlineLucideIcons(html) {
+  return html.replace(/<i\b([^>]*)data-lucide="([^"]+)"([^>]*)><\/i>/gi, (full, before, name, after) => {
+    const icon = lucide.icons[iconKey(name)];
+    if (!icon) return full;
+    const original = `${before} ${after}`;
+    const classMatch = original.match(/\bclass="([^"]*)"/i);
+    const classes = ["lucide", `lucide-${name}`, classMatch && classMatch[1]].filter(Boolean).join(" ");
+    return renderSvgNode(icon, {
+      class: classes,
+      "data-lucide": name,
+      "aria-hidden": "true",
+      "stroke-width": "1.7"
+    });
+  });
+}
+
+function deferEnhancedMotionOnMobile(html) {
+  const scripts = /<script defer src="assets\/vendor\/gsap-3\.13\.0\.min\.js"><\/script><script defer src="assets\/vendor\/ScrollTrigger-3\.13\.0\.min\.js"><\/script><script defer src="assets\/vendor\/lenis-1\.3\.11\.min\.js"><\/script><script defer src="assets\/vendor\/barba-2\.10\.3\.umd\.js"><\/script>/g;
+  const desktopScripts = '<script defer src="assets/vendor/gsap-3.13.0.min.js"><\\/script><script defer src="assets/vendor/ScrollTrigger-3.13.0.min.js"><\\/script><script defer src="assets/vendor/lenis-1.3.11.min.js"><\\/script><script defer src="assets/vendor/barba-2.10.3.umd.js"><\\/script>';
+  return html.replace(scripts, `<script data-enhanced-motion-loader>if (!window.matchMedia("(max-width: 767.98px), (hover: none), (pointer: coarse)").matches) document.write('${desktopScripts}');</script>`);
 }
 
 function renderProjects(template, projects, renderer, options = {}) {
@@ -109,6 +144,9 @@ function composeHtml(source, data, components) {
   }
   html = html.replace(/<div data-component="([a-z0-9-]+)"><\/div>/g, (full, name) => components[name] || full);
   html = html.replace(/<i(\s+data-lucide="[^"]+")(?![^>]*\saria-hidden=)([^>]*)>/g, '<i$1 aria-hidden="true"$2>');
+  html = inlineLucideIcons(html);
+  html = html.replace(/<script defer src="assets\/vendor\/lucide-0\.468\.0\.min\.js"><\/script>/g, "");
+  html = deferEnhancedMotionOnMobile(html);
   html = html.replace(/<img\b(?![^>]*\sdecoding=)([^>]*)>/g, '<img decoding="async"$1>');
   html = html.replace(/<span data-current-year><\/span>/g, `<span data-current-year>${new Date().getFullYear()}</span>`);
   if (/data-project-schema/.test(html)) {

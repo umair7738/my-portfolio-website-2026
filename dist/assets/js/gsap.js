@@ -6,6 +6,7 @@
   Portfolio.Animations = {
     init(root) {
       const scope = root || document;
+      const lightweightMobileMotion = window.matchMedia("(max-width: 767.98px), (hover: none), (pointer: coarse)").matches;
       if (!window.gsap || !window.ScrollTrigger || Portfolio.utils.prefersReducedMotion()) {
         scope.querySelectorAll(".reveal-up, .reveal-left, .reveal-right, .reveal-scale").forEach(function (element) { element.style.opacity = 1; });
         scope.querySelectorAll("[data-counter]").forEach(function (element) { element.textContent = (element.dataset.counter || "0") + (element.dataset.suffix || ""); });
@@ -22,14 +23,14 @@
         this.responsiveRefresh(scope);
         this.prepareText(scope);
         this.horizontalScroll(scope);
-        this.heroReveal(scope);
+        if (!lightweightMobileMotion) this.heroReveal(scope);
         this.sectionReveals(scope);
         this.sectionChoreography(scope);
-        this.parallax(scope);
+        if (!lightweightMobileMotion) this.parallax(scope);
         this.counters(scope);
         this.skillBars(scope);
         this.timeline(scope);
-        this.floatingShapes(scope);
+        if (!lightweightMobileMotion) this.floatingShapes(scope);
         this.heroPointer(scope);
       }, scope);
       Portfolio.Lifecycle.page.context(context);

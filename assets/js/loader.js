@@ -6,12 +6,34 @@
   Portfolio.Loader = {
     play() {
       const loader = document.querySelector(".page-loader");
+      const compactMobileIntro = window.matchMedia("(max-width: 767.98px), (hover: none), (pointer: coarse)").matches;
       if (!loader) {
         document.body.classList.remove("loading");
         return Promise.resolve();
       }
 
-      if (Portfolio.utils.prefersReducedMotion() || !window.gsap) {
+      if (Portfolio.utils.prefersReducedMotion()) {
+        loader.remove();
+        document.body.classList.remove("loading");
+        return Promise.resolve();
+      }
+
+      if (compactMobileIntro) {
+        const deadline = window.__portfolioMobileIntroDeadline || (performance.now() + 1000);
+        const remaining = Math.max(0, deadline - performance.now());
+        return new Promise(function (resolve) {
+          window.setTimeout(function () {
+            if (window.__finishPortfolioMobileIntro) window.__finishPortfolioMobileIntro();
+            else {
+              loader.remove();
+              document.body.classList.remove("loading", "is-revealing");
+            }
+            resolve();
+          }, remaining);
+        });
+      }
+
+      if (!window.gsap) {
         loader.remove();
         document.body.classList.remove("loading");
         return Promise.resolve();

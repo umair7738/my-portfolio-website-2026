@@ -12,6 +12,7 @@ Production website: `https://umair-builds.in/`
 - GSAP 3.13 with ScrollTrigger
 - Lenis smooth scrolling
 - Lucide icons
+- Self-hosted Manrope and Space Grotesk variable fonts
 - EmailJS browser SDK (loaded only when a contact form is submitted)
 
 No React, Vue, Angular, Tailwind, TypeScript, or framework build step is used.
@@ -55,6 +56,8 @@ php -S localhost:8080
 Run `npm run build`. It normalizes production metadata, builds the CSS and JavaScript bundles, composes reusable fragments and project/service data into complete HTML pages, copies the Hostinger configuration, and validates both source and `dist/`.
 
 The build is deterministic and performs no external availability checks, technology fingerprinting, or screenshot capture. `dist/` is generated output and must not be edited manually.
+
+Deploy the contents of `dist/` to the web root. Serving the source HTML directly leaves component placeholders for the browser to fetch and delays the first render.
 
 ## Project evidence and snapshots
 

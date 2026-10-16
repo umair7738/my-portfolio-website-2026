@@ -48,6 +48,10 @@ Object.entries(namespaces).forEach(([file, namespace]) => {
   if (!/portfolio\.min\.css\?v=[a-f0-9]{12}/.test(html)) errors.push(`${file}: missing hashed CSS asset reference`);
   if (!/portfolio\.min\.js\?v=[a-f0-9]{12}/.test(html)) errors.push(`${file}: missing hashed JS asset reference`);
   if (/emailjs\/browser@4\/dist\/email\.min\.js/.test(html)) errors.push(`${file}: EmailJS must be lazy-loaded by contact.js, not in page HTML`);
+  if (/fonts\.(?:googleapis|gstatic)\.com/.test(html)) errors.push(`${file}: production must use self-hosted fonts`);
+  if (/src="assets\/vendor\/lucide-0\.468\.0\.min\.js"/.test(html)) errors.push(`${file}: production must inline Lucide icons`);
+  if (/<i\b[^>]*data-lucide=/i.test(html)) errors.push(`${file}: unresolved Lucide icon placeholder`);
+  if (!/data-enhanced-motion-loader/.test(html)) errors.push(`${file}: missing mobile motion-library gate`);
   if (html.includes(legacyHost) || html.includes(previousPortfolioHost)) errors.push(`${file}: stale or unverified domain reference`);
   for (const match of html.matchAll(/<img\b([^>]*)>/gi)) {
     if (!/\balt="[^"]*"/i.test(match[1])) errors.push(`${file}: image missing alt`);
@@ -107,7 +111,7 @@ const sitemap = read("sitemap.xml");
 sitemapPages.forEach((file) => { if (!sitemap.includes(`<loc>${pageUrl(file)}</loc>`)) errors.push(`dist/sitemap.xml: missing ${pageUrl(file)}`); });
 if (sitemap.includes("privacy.html") || sitemap.includes("404.html")) errors.push("dist/sitemap.xml: includes a low-value or non-indexable page");
 
-[".htaccess", "assets/vendor/barba-2.10.3.umd.js", "assets/js/portfolio.min.js", "assets/css/portfolio.min.css"].forEach((file) => {
+[".htaccess", "assets/vendor/barba-2.10.3.umd.js", "assets/js/portfolio.min.js", "assets/css/portfolio.min.css", "assets/fonts/manrope-latin-variable.woff2", "assets/fonts/space-grotesk-latin-variable.woff2"].forEach((file) => {
   if (!fs.existsSync(path.join(dist, file))) errors.push(`dist: missing ${file}`);
 });
 

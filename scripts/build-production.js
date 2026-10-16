@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const { minify_sync: minifySync } = require("terser");
 
 function collapseOutsideStrings(source) {
   let output = "";
@@ -74,9 +75,14 @@ const jsFiles = [
   path.join("data", "projects.js"),
   ...["utilities.js", "lifecycle.js", "navigation.js", "loader.js", "projects.js", "contact.js", "gsap.js", "router.js", "app.js"].map((file) => path.join("assets", "js", file))
 ];
-// Keep source formatting here: the previous whitespace-only minifier could mistake
-// regular expressions for strings and produce invalid JavaScript.
-const js = jsFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n").trimEnd();
+const jsSource = jsFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n").trimEnd();
+const minified = minifySync(jsSource, {
+  compress: { passes: 2 },
+  mangle: true,
+  format: { comments: /^!/ }
+});
+if (!minified.code) throw new Error("Terser did not produce a JavaScript bundle.");
+const js = minified.code;
 fs.writeFileSync(path.join("assets", "js", "portfolio.min.js"), js + "\n");
 
 const htmlFiles = fs.readdirSync(process.cwd()).filter((file) => file.endsWith(".html"));
@@ -85,9 +91,15 @@ const cssVersion = hash(css);
 const jsVersion = hash(js);
 const cssPattern = /<link rel="stylesheet" href="assets\/css\/style\.css">\s*<link rel="stylesheet" href="assets\/css\/animations\.css">\s*<link rel="stylesheet" href="assets\/css\/responsive\.css">/g;
 const jsPattern = /<script defer src="assets\/js\/utilities\.js"><\/script>\s*<script defer src="assets\/js\/lifecycle\.js"><\/script>\s*<script defer src="assets\/js\/navigation\.js"><\/script>\s*<script defer src="assets\/js\/loader\.js"><\/script>\s*<script defer src="assets\/js\/projects\.js"><\/script>\s*<script defer src="assets\/js\/contact\.js"><\/script>\s*<script defer src="assets\/js\/gsap\.js"><\/script>\s*<script defer src="assets\/js\/router\.js"><\/script>\s*<script defer src="assets\/js\/app\.js"><\/script>/g;
+const fontResourcePattern = /\s*<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com|assets\/fonts\/(?:manrope-latin-variable|space-grotesk-latin-variable)\.woff2)[^>]*>/g;
+const bootstrapPattern = /<link href="assets\/vendor\/bootstrap-5\.3\.8\.min\.css"[^>]*>(?:\s*<noscript><link href="assets\/vendor\/bootstrap-5\.3\.8\.min\.css"[^>]*><\/noscript>)?/g;
+const fontPreloads = '<link rel="preload" href="assets/fonts/manrope-latin-variable.woff2" as="font" type="font/woff2" crossorigin>\n  <link rel="preload" href="assets/fonts/space-grotesk-latin-variable.woff2" as="font" type="font/woff2" crossorigin>\n  ';
+const deferredBootstrap = '<link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" media="print" onload="this.media=\'all\'">\n  <noscript><link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></noscript>';
 htmlFiles.forEach((file) => {
   const source = fs.readFileSync(file, "utf8");
   const production = source
+    .replace(fontResourcePattern, "")
+    .replace(bootstrapPattern, fontPreloads + deferredBootstrap)
     .replace(cssPattern, '<link rel="stylesheet" href="assets/css/portfolio.min.css?v=' + cssVersion + '">')
     .replace(jsPattern, '<script defer src="assets/js/portfolio.min.js?v=' + jsVersion + '"></script>')
     .replace(/assets\/css\/portfolio\.min\.css(?:\?v=[^"']*)?/g, "assets/css/portfolio.min.css?v=" + cssVersion)
@@ -99,7 +111,9 @@ htmlFiles.forEach((file) => {
     .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/gsap@3\.13\.0\/dist\/gsap\.min\.js/g, "assets/vendor/gsap-3.13.0.min.js")
     .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/gsap@3\.13\.0\/dist\/ScrollTrigger\.min\.js/g, "assets/vendor/ScrollTrigger-3.13.0.min.js")
     .replace(/https:\/\/cdn\.jsdelivr\.net\/npm\/lenis@1\.3\.11\/dist\/lenis\.min\.js/g, "assets/vendor/lenis-1.3.11.min.js")
-    .replace(/https:\/\/unpkg\.com\/lucide@0\.468\.0\/dist\/umd\/lucide\.min\.js/g, "assets/vendor/lucide-0.468.0.min.js");
+    .replace(/https:\/\/unpkg\.com\/lucide@0\.468\.0\/dist\/umd\/lucide\.min\.js/g, "assets/vendor/lucide-0.468.0.min.js")
+    .replace("Last updated: 20 August 2026.", "Last updated: 22 August 2026.")
+    .replace("The website uses Google Fonts and loads EmailJS from jsDelivr only when the contact form is submitted. Those providers may receive standard technical request information such as IP address, browser type, and requested file; EmailJS also processes the form details needed to deliver your enquiry. Their own privacy terms apply.", "The website self-hosts its interface fonts and loads EmailJS from jsDelivr only when the contact form is submitted. EmailJS may receive standard technical request information and processes the form details needed to deliver your enquiry. Its own privacy terms apply.");
   if (production !== source) fs.writeFileSync(file, production);
 });
 
