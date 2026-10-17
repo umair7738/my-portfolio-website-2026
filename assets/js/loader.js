@@ -5,6 +5,7 @@
 
   Portfolio.Loader = {
     play() {
+      if (this.playback) return this.playback;
       const loader = document.querySelector(".page-loader");
       const compactMobileIntro = window.matchMedia("(max-width: 767.98px), (hover: none), (pointer: coarse)").matches;
       if (!loader) {
@@ -18,21 +19,6 @@
         return Promise.resolve();
       }
 
-      if (compactMobileIntro) {
-        const deadline = window.__portfolioMobileIntroDeadline || (performance.now() + 1000);
-        const remaining = Math.max(0, deadline - performance.now());
-        return new Promise(function (resolve) {
-          window.setTimeout(function () {
-            if (window.__finishPortfolioMobileIntro) window.__finishPortfolioMobileIntro();
-            else {
-              loader.remove();
-              document.body.classList.remove("loading", "is-revealing");
-            }
-            resolve();
-          }, remaining);
-        });
-      }
-
       if (!window.gsap) {
         loader.remove();
         document.body.classList.remove("loading");
@@ -40,7 +26,7 @@
       }
 
       // Keep a deliberate but short entrance even when this static site is cached.
-      const duration = 1.25;
+      const duration = compactMobileIntro ? .5 : 1.25;
       const count = { value: 0 };
       const percent = loader.querySelector("[data-loader-percent]");
       const status = loader.querySelector("[data-loader-status]");
@@ -57,7 +43,7 @@
         }
       };
 
-      return new Promise(function (resolve) {
+      this.playback = new Promise(function (resolve) {
         let pageRevealStarted = false;
         const revealPage = function () {
           if (pageRevealStarted) return;
@@ -74,24 +60,39 @@
           }
         });
 
-        window.gsap.set(".loader-letter", { yPercent: 115, rotate: 5 });
+        window.gsap.set(".loader-letter", { y: 0, yPercent: 115, rotate: 5 });
         window.gsap.set(".loader-topline, .loader-console, .loader-meta", { opacity: 0, y: 12 });
         loader.setAttribute("data-loader-started", "");
 
+        if (compactMobileIntro) {
+          timeline
+            .to(".loader-topline", { opacity: 1, y: 0, duration: .12 }, 0)
+            .to(".loader-letter", { yPercent: 0, rotate: 0, duration: .28, stagger: .025, ease: "power4.out" }, .04)
+            .to(".loader-console, .loader-meta", { opacity: 1, y: 0, duration: .18, stagger: .04 }, .16)
+            .to(count, { value: 100, duration: duration, ease: "power2.inOut", onUpdate: updateProgress }, .17)
+            .to(".loader-progress span", { scaleX: 1, duration: duration, ease: "power2.inOut" }, .17)
+            .to(".loader-scan", { xPercent: 180, duration: .42, ease: "power1.inOut" }, .14)
+            .addLabel("reveal", .76);
+        } else {
+          timeline
+            .to(".loader-topline", { opacity: 1, y: 0, duration: .35 })
+            .to(".loader-letter", { yPercent: 0, rotate: 0, duration: .7, stagger: .055, ease: "power4.out" }, "-=.18")
+            .to(".loader-console, .loader-meta", { opacity: 1, y: 0, duration: .35, stagger: .06 }, "-=.44")
+            .to(count, { value: 100, duration: duration, ease: "power2.inOut", onUpdate: updateProgress }, "-=.25")
+            .to(".loader-progress span", { scaleX: 1, duration: duration, ease: "power2.inOut" }, "<")
+            .to(".loader-scan", { xPercent: 180, duration: duration * .85, ease: "power1.inOut" }, "<")
+            .addLabel("reveal", "+=.06");
+        }
+        // Mount hero motion while the panels still cover it, then reveal once.
         timeline
-          .to(".loader-topline", { opacity: 1, y: 0, duration: .35 })
-          .to(".loader-letter", { yPercent: 0, rotate: 0, duration: .7, stagger: .055, ease: "power4.out" }, "-=.18")
-          .to(".loader-console, .loader-meta", { opacity: 1, y: 0, duration: .35, stagger: .06 }, "-=.44")
-          .to(count, { value: 100, duration: duration, ease: "power2.inOut", onUpdate: updateProgress }, "-=.25")
-          .to(".loader-progress span", { scaleX: 1, duration: duration, ease: "power2.inOut" }, "<")
-          .to(".loader-scan", { xPercent: 180, duration: duration * .85, ease: "power1.inOut" }, "<")
-          .call(revealPage, null, "+=.06")
-          .to(".loader-panel-top", { yPercent: -101, duration: .62, ease: "power4.inOut" }, "<")
-          .to(".loader-panel-bottom", { yPercent: 101, duration: .62, ease: "power4.inOut" }, "<")
-          .to(".loader-stage", { y: -28, opacity: 0, duration: .28, ease: "power2.in" }, "<")
-          .to(".loader-grid, .loader-scan", { opacity: 0, duration: .35, ease: "power2.out" }, "<")
-          .to(loader, { autoAlpha: 0, duration: .12 });
+          .call(revealPage, null, "reveal")
+          .to(".loader-panel-top", { yPercent: -101, duration: compactMobileIntro ? .22 : .62, ease: "power4.inOut" }, "reveal")
+          .to(".loader-panel-bottom", { yPercent: 101, duration: compactMobileIntro ? .22 : .62, ease: "power4.inOut" }, "reveal")
+          .to(".loader-stage", { y: -28, opacity: 0, duration: compactMobileIntro ? .18 : .28, ease: "power2.in" }, "reveal")
+          .to(".loader-grid, .loader-scan", { opacity: 0, duration: compactMobileIntro ? .18 : .35, ease: "power2.out" }, "reveal")
+          .to(loader, { autoAlpha: 0, duration: compactMobileIntro ? .02 : .12 });
       });
+      return this.playback;
     }
   };
 })(window);

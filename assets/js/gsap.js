@@ -23,7 +23,7 @@
         this.responsiveRefresh(scope);
         this.prepareText(scope);
         this.horizontalScroll(scope);
-        if (!lightweightMobileMotion) this.heroReveal(scope);
+        this.heroReveal(scope);
         this.sectionReveals(scope);
         this.sectionChoreography(scope);
         if (!lightweightMobileMotion) this.parallax(scope);

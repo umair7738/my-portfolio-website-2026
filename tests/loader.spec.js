@@ -17,7 +17,14 @@ test("does not flash static loader letters before the desktop intro starts", asy
     await expect(page.locator(".page-loader")).toHaveCount(1);
     // Components can finish out of order. Never paint the final letters and
     // then reset them to their entrance position when a slower request ends.
-    await expect(page.locator(".loader-stage")).toBeHidden({ timeout: 1000 });
+    await expect(page.locator(".loader-stage")).toBeVisible();
+    const entrance = await page.locator(".loader-letter").first().evaluate((letter) => ({
+      y: new DOMMatrixReadOnly(getComputedStyle(letter).transform).m42,
+      height: letter.getBoundingClientRect().height,
+      clipped: getComputedStyle(letter.parentElement).overflow === "hidden"
+    }));
+    expect(entrance.clipped).toBe(true);
+    expect(entrance.y).toBeGreaterThan(entrance.height * .9);
     expect(await page.evaluate(() => window.__loaderPlays)).toBe(0);
     releaseFooter();
     await expect(page.locator(".page-loader")).toHaveCount(0, { timeout: 15000 });

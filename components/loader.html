@@ -32,16 +32,3 @@
     </div>
   </div>
 </div>
-<script>
-  (function () {
-    if (!window.matchMedia("(max-width: 767.98px), (hover: none), (pointer: coarse)").matches) return;
-    window.__portfolioMobileIntroDeadline = performance.now() + 1000;
-    window.__finishPortfolioMobileIntro = function () {
-      const loader = document.querySelector(".page-loader");
-      if (loader) loader.remove();
-      document.body.classList.remove("loading", "is-revealing");
-    };
-    window.setTimeout(function () { document.body.classList.add("is-revealing"); }, 760);
-    window.setTimeout(window.__finishPortfolioMobileIntro, 1000);
-  })();
-</script>

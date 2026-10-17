@@ -228,10 +228,10 @@ h1, h2, h3, h4 {
 .loader-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: clamp(46px, 5vw, 78px) clamp(46px, 5vw, 78px); mask-image: radial-gradient(circle at 50% 50%, #000 0, transparent 72%); opacity: .72; }
 .loader-scan { position: absolute; inset: 0 auto 0 -65%; width: 45%; background: linear-gradient(90deg, transparent, rgba(86,151,255,.1), transparent); transform: skewX(-12deg); }
 .loader-stage { position: relative; z-index: 2; display: flex; width: min(90vw, 1440px); height: 100%; margin: auto; flex-direction: column; justify-content:center; padding: clamp(1.4rem, 4vw, 4rem) 0; }
-/* Wait for the intro's initial state before painting its letters. Shared
-   components can arrive before a slower footer or other startup request. */
-.js .page-loader .loader-stage { visibility: hidden; }
-.js .page-loader[data-loader-started] .loader-stage { visibility: visible; }
+/* Match the first animation frame in CSS, so late components cannot flash the
+   completed wordmark. The stage itself stays visible throughout the intro. */
+.js .loader-letter { transform: translateY(115%) rotate(5deg); }
+.js .loader-topline, .js .loader-console, .js .loader-meta { opacity: 0; transform: translateY(12px); }
 .loader-topline { position: absolute; top: clamp(1.4rem, 4vw, 3.5rem); left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; color: rgba(255,255,255,.5); font-size: clamp(.58rem, .8vw, .72rem); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .loader-monogram { display: inline-flex; align-items: center; gap: .7rem; color: #fff; font: 700 .8rem/1 var(--font-display); letter-spacing: -.02em; }
 .loader-monogram span { display: block; width: 36px; height: 1px; background: linear-gradient(90deg, var(--primary), var(--accent)); }
