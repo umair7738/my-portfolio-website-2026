@@ -34,12 +34,14 @@
   --line-strong: rgba(255, 255, 255, 0.2);
   --primary: #6f5cff;
   --primary-2: #268cff;
-  --accent: #58d6ff;
+  --brand-cyan: #06b6d4;
+  --accent: var(--brand-cyan);
   --success: #52e0a4;
   --danger: #ff7d87;
   --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
   --shadow-sm: 0 14px 40px rgba(0, 0, 0, 0.22);
   --gradient: linear-gradient(120deg, #8d7cff 0%, #5f67ff 42%, #35b7ff 100%);
+  --cta-gradient: linear-gradient(120deg, #4b48be 0%, #2c68b8 55%, #08788b 100%);
   --gradient-soft: linear-gradient(140deg, rgba(111, 92, 255, 0.18), rgba(38, 140, 255, 0.08));
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Manrope", sans-serif;
@@ -62,6 +64,7 @@
   --muted: #778095;
   --line: rgba(17, 21, 34, 0.1);
   --line-strong: rgba(17, 21, 34, 0.18);
+  --accent: #0a7188;
   --shadow: 0 30px 80px rgba(28, 37, 66, 0.12);
   --shadow-sm: 0 14px 40px rgba(28, 37, 66, 0.09);
 }
@@ -199,8 +202,8 @@ h1, h2, h3, h4 {
 .btn:hover svg { transform: translate(2px, -2px); }
 .btn-lg { min-height: 60px; padding: 1rem 1.6rem; }
 .btn-sm { min-height: 44px; padding: 0.65rem 1rem; font-size: 0.82rem; }
-.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 12px 35px rgba(92, 91, 255, 0.27); }
-.btn-primary:hover { color: #fff; box-shadow: 0 16px 45px rgba(92, 91, 255, 0.4); }
+.btn-primary { background: var(--cta-gradient); color: #fff; box-shadow: 0 12px 35px rgba(24, 98, 158, 0.24); }
+.btn-primary:hover { color: #fff; box-shadow: 0 16px 45px rgba(24, 98, 158, 0.34); }
 .btn-secondary { border-color: var(--line); background: var(--surface); color: var(--text); backdrop-filter: blur(15px); }
 .btn-secondary:hover { border-color: var(--line-strong); background: var(--surface-strong); }
 .btn-light { background: #fff; color: #111522; }
@@ -268,7 +271,7 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
 .menu-toggle span { position: absolute; top: 50%; left: 50%; width: 17px; height: 1px; background: var(--text); transform-origin: center; transition: transform .25s cubic-bezier(.2,.8,.2,1), width .2s ease; }
 .menu-toggle span:first-child { transform: translate(-50%, -4px); }
 .menu-toggle span:last-child { transform: translate(-50%, 4px); }
-.menu-toggle[aria-expanded="true"] { border-color: rgba(88,214,255,.48); background: var(--surface-strong); transform: rotate(90deg); }
+.menu-toggle[aria-expanded="true"] { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: var(--surface-strong); transform: rotate(90deg); }
 .menu-toggle[aria-expanded="true"] span:first-child { transform: translate(-50%, -50%) rotate(45deg); }
 .menu-toggle[aria-expanded="true"] span:last-child { transform: translate(-50%, -50%) rotate(-45deg); }
 .mobile-menu { width: min(92vw, 480px) !important; background: var(--bg); color: var(--text); transition-duration: .26s; }
@@ -291,7 +294,7 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
 .cursor-ring.is-active { width: 58px; height: 58px; background: rgba(255,255,255,.1); }
 .ambient-grid { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .ambient-grid::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(to bottom, #000 0%, transparent 84%); opacity: .32; }
-.ambient-orb { position: absolute; width: 52vw; height: 52vw; border-radius: 50%; background: radial-gradient(circle, rgba(105,91,255,.24), rgba(38,140,255,.08) 46%, transparent 70%); filter: blur(15px); pointer-events: none; }
+.ambient-orb { position: absolute; width: 52vw; height: 52vw; border-radius: 50%; background: radial-gradient(circle, rgba(105,91,255,.22), rgba(6,182,212,.1) 46%, transparent 70%); filter: blur(15px); pointer-events: none; }
 .noise { position: fixed; inset: 0; z-index: 9997; pointer-events: none; opacity: .024; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E"); }
 
 /* Hero */
@@ -572,7 +575,7 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
 .contact-form .form-control, .contact-form .form-select { min-height: 54px; padding: .78rem 1rem; border: 1px solid var(--line); border-radius: 12px; background-color: var(--bg); color: var(--text); box-shadow: none; }
 .contact-form textarea.form-control { min-height: 150px; resize: vertical; }
 .contact-form .form-control::placeholder { color: var(--muted); opacity: .7; }
-.contact-form .form-control:focus, .contact-form .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(111,92,255,.12); }
+.contact-form .form-control:focus, .contact-form .form-select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent); }
 .contact-form .form-select { color-scheme: dark; }
 [data-theme="light"] .contact-form .form-select { color-scheme: light; }
 .contact-form .is-invalid { border-color: var(--danger); }
@@ -589,7 +592,7 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
 .form-status.error { display: block; border-color: rgba(255,125,135,.35); background: rgba(255,125,135,.08); color: var(--danger); }
 
 /* Footer and floating actions */
-.site-footer { position: relative; overflow: hidden; padding: var(--section-space) 0 1.5rem; border-top: 1px solid var(--line); background: #070910; color: #f5f7fb; }
+.site-footer { --accent: var(--brand-cyan); position: relative; overflow: hidden; padding: var(--section-space) 0 1.5rem; border-top: 1px solid var(--line); background: #070910; color: #f5f7fb; }
 .footer-glow { position: absolute; top: -280px; left: 30%; width: 650px; height: 450px; border-radius: 50%; background: rgba(87,75,255,.13); filter: blur(90px); }
 .footer-intro { padding-bottom: clamp(4rem, 8vw, 7rem); border-bottom: 1px solid rgba(255,255,255,.1); }
 .footer-title { display: inline-block; margin-top: 1.2rem; color: #fff; font: 500 clamp(3rem, 7.5vw, 7.5rem)/.98 var(--font-display); letter-spacing: -.065em; }

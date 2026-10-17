@@ -1,0 +1,113 @@
+{
+  "exports": {
+    "Umair_Builds_Stacked_Light_2000.png": {
+      "size": [
+        2000,
+        1310
+      ],
+      "alpha_bbox": [
+        201,
+        48,
+        1761,
+        1143
+      ]
+    },
+    "Umair_Builds_Wordmark_1600.png": {
+      "size": [
+        1600,
+        278
+      ],
+      "alpha_bbox": [
+        42,
+        38,
+        1546,
+        243
+      ]
+    },
+    "Umair_Builds_Horizontal_Light_2400.png": {
+      "size": [
+        2400,
+        430
+      ],
+      "alpha_bbox": [
+        50,
+        20,
+        2302,
+        412
+      ]
+    },
+    "Umair_Builds_Stacked_Dark_2000.png": {
+      "size": [
+        2000,
+        1310
+      ],
+      "alpha_bbox": [
+        201,
+        48,
+        1761,
+        1143
+      ]
+    },
+    "Umair_Builds_Icon_Light_1024.png": {
+      "size": [
+        1024,
+        1140
+      ],
+      "alpha_bbox": [
+        75,
+        80,
+        957,
+        1057
+      ]
+    },
+    "Umair_Builds_Stacked_With_Tagline_2000.png": {
+      "size": [
+        2000,
+        1500
+      ],
+      "alpha_bbox": [
+        201,
+        48,
+        1761,
+        1297
+      ]
+    },
+    "Umair_Builds_Horizontal_Dark_2400.png": {
+      "size": [
+        2400,
+        430
+      ],
+      "alpha_bbox": [
+        50,
+        20,
+        2302,
+        412
+      ]
+    },
+    "Umair_Builds_Icon_Dark_1024.png": {
+      "size": [
+        1024,
+        1140
+      ],
+      "alpha_bbox": [
+        75,
+        80,
+        957,
+        1057
+      ]
+    },
+    "Umair_Builds_Horizontal_Monochrome_2400.png": {
+      "size": [
+        2400,
+        430
+      ],
+      "alpha_bbox": [
+        50,
+        20,
+        2302,
+        412
+      ]
+    }
+  },
+  "issues": []
+}

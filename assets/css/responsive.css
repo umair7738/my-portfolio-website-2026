@@ -67,6 +67,7 @@
   .section-title { font-size: clamp(2.3rem, 11vw, 4rem); }
   .home-hero { padding-bottom: 3rem; }
   .hero-title .outline { -webkit-text-stroke-width: .7px; }
+  [data-theme="light"] .hero-title .outline { -webkit-text-stroke: .9px rgba(17,21,34,.68); }
   .hero-meta { width: 100%; min-width: 0; }
   .developer-badge { display: none; }
   .trust-row { min-height: 86px; flex-direction: column; align-items: flex-start; justify-content: center; gap: .7rem; }
