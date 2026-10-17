@@ -256,7 +256,7 @@ h1, h2, h3, h4 {
 @media (min-width: 992px) { body[data-page="case-studies"] .site-header.is-hidden { transform: none; } }
 .navbar-shell { display: flex; height: var(--header-height); align-items: center; justify-content: space-between; gap: 1.5rem; }
 .brand { display: inline-flex; flex: 0 0 auto; align-items: center; }
-.brand-logo { display: block; width: 200px; aspect-ratio: 1853 / 301; }
+.brand-logo { display: block; width: 200px; aspect-ratio: 2400 / 430; }
 .brand-logo img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .brand-logo[data-theme-logo]:not([data-logo-ready]) img { visibility: hidden; }
 .desktop-nav { display: flex; align-items: center; gap: .2rem; padding: .3rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); backdrop-filter: blur(14px); }

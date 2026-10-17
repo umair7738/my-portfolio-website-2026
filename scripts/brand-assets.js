@@ -4,6 +4,8 @@ const crypto = require("crypto");
 
 const root = path.resolve(__dirname, "..");
 const sizes = "(max-width: 991.98px) 168px, (max-width: 1199.98px) 160px, 200px";
+const logoWidth = 2400;
+const logoHeight = 430;
 
 function assetUrl(file) {
   const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, file))).digest("hex").slice(0, 12);
@@ -26,7 +28,7 @@ function logoMarkup(placement) {
   const attributes = header
     ? `loading="eager" fetchpriority="high" data-light-src="${logoUrl("light", 400, "png")}" data-dark-src="${logoUrl("dark", 400, "png")}"`
     : `loading="lazy" src="${logoUrl("dark", 400, "png")}"`;
-  return `<a class="brand${header ? " magnetic" : ""}" href="/" aria-label="Umair Builds home"><picture class="brand-logo"${header ? " data-theme-logo" : ""}>${source}<img ${attributes} width="1853" height="301" alt="Umair Builds" decoding="async"></picture></a>`;
+  return `<a class="brand${header ? " magnetic" : ""}" href="/" aria-label="Umair Builds home"><picture class="brand-logo"${header ? " data-theme-logo" : ""}>${source}<img ${attributes} width="${logoWidth}" height="${logoHeight}" alt="Umair Builds" decoding="async"></picture></a>`;
 }
 
 function faviconMarkup() {

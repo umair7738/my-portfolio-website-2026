@@ -4,10 +4,10 @@ The approved horizontal identity replaces the shared header/footer text marks. T
 
 ## Artwork and placement
 
-- Header: `Umair_Builds_Horizontal_Header_Transparent_2000.png` for the light site theme; `Umair_Builds_Horizontal_Header_DarkMode_Transparent_2000.png` for the dark site theme.
+- Header: the corrected v2 `03_Website_WebP/umair-builds-horizontal-light-400.webp` for the light site theme and `03_Website_WebP/umair-builds-horizontal-dark-400.webp` for the dark site theme, with the supplied 200px WebP candidates selected at normal density.
 - Footer: the dark-background/white-text horizontal variant in both site themes, because the footer remains dark.
 - One accessible image per placement, with `Umair Builds` alternative text and a homepage link named `Umair Builds home`.
-- The original files are 2000×447px. Their identical alpha bounds are x=73, y=73, width=1853, height=301. Only fully transparent outer padding was removed. No visible pixels, type, symbol, colors, or proportions were rebuilt.
+- The corrected v2 website exports are supplied at 200px/36px and 400px/72px for production use. The kit's source horizontal PNGs are 2400×430px with matching alpha bounds; the v2 guide identifies the SVGs as path-based reconstructions of the approved concept, not the original native design source.
 - Header display widths: 168px below 992px, 160px at 992–1199px, and 200px from 1200px. Footer: 200px. The established 72px/84px header heights are unchanged.
 - The early head script restores the explicit saved site theme before component insertion. The header's inert template receives the matching source before entering the document. Theme changes update that same image; no pair of hidden theme images is used.
 - Header images are eager/high-priority; the footer image is lazy. Real dimensions and a shared aspect ratio reserve the logo space.
@@ -18,18 +18,18 @@ All WebP files use lossless encoding with alpha. Comparison of decoded visible R
 
 | File under `assets/brand/` | Dimensions | Bytes |
 | --- | --- | ---: |
-| `umair-builds-horizontal-dark-200.webp` | 200×32 | 6,400 |
-| `umair-builds-horizontal-dark-400.webp` | 400×65 | 18,086 |
-| `umair-builds-horizontal-dark-400.png` | 400×65 | 21,552 |
-| `umair-builds-horizontal-light-200.webp` | 200×32 | 8,530 |
-| `umair-builds-horizontal-light-400.webp` | 400×65 | 25,946 |
-| `umair-builds-horizontal-light-400.png` | 400×65 | 29,182 |
-| `umair-builds-icon-16.png` | 16×16 | 762 |
-| `umair-builds-icon-32.png` | 32×32 | 1,750 |
-| `umair-builds-icon-48.png` | 48×48 | 2,853 |
-| `umair-builds-icon-180.png` | 180×180 | 15,121 |
+| `umair-builds-horizontal-dark-200.webp` | 200×36 | 2,752 |
+| `umair-builds-horizontal-dark-400.webp` | 400×72 | 4,982 |
+| `umair-builds-horizontal-dark-400.png` | 400×72 | 7,482 |
+| `umair-builds-horizontal-light-200.webp` | 200×36 | 3,074 |
+| `umair-builds-horizontal-light-400.webp` | 400×72 | 5,350 |
+| `umair-builds-horizontal-light-400.png` | 400×72 | 8,325 |
+| `umair-builds-icon-16.png` | 16×16 | 773 |
+| `umair-builds-icon-32.png` | 32×32 | 1,741 |
+| `umair-builds-icon-48.png` | 48×48 | 2,761 |
+| `umair-builds-icon-180.png` | 180×180 | 11,751 |
 
-The supplied `/favicon.ico` is 9,414 bytes and contains 16/32/48/64px entries. All four favicon PNGs and the ICO are byte-for-byte copies of the supplied kit. All ten HTML pages reference the ICO, 16/32/48px PNGs, and the 180px Apple touch icon. There is no existing manifest/PWA, so 192/512px app icons, manifests, and service workers were not added. The obsolete `assets/icons/favicon.png` was removed and its legacy generator no longer recreates it.
+The supplied v2 `/favicon.ico` is 8,820 bytes and contains 16/32/48/64px entries. All four favicon PNGs and the ICO are byte-for-byte copies of the corrected v2 kit. All ten HTML pages reference the ICO, 16/32/48px PNGs, and the 180px Apple touch icon. There is no existing manifest/PWA, so 192/512px app icons, manifests, and service workers were not added. The obsolete `assets/icons/favicon.png` was removed and its legacy generator no longer recreates it.
 
 Only these ten brand assets and the root ICO are included. Each asset reference uses a 12-character SHA-256 query version, matching the existing CSS/JS convention. The build verifies asset presence, versions, required dimensions/markup, and the absence of unused files in the brand directory. The original 26-file kit remains local and is ignored by Git.
 
@@ -50,7 +50,7 @@ Chrome completed the following matrix in both themes, with the operating-system 
 
 All 16 combinations passed image decoding, vertical alignment, aspect ratio, menu open/keyboard dismissal, footer contrast/variant, and document-overflow checks. No logo-attributed layout shifts were recorded. Desktop navigation and action text remained on one line. The old 1024px header had wrapped navigation/action text; reducing only the logo width and header gaps resolved this without changing navigation breakpoints or structure.
 
-Request inspection confirmed one initial 200px WebP logo request at 1× density, for the saved theme only. The dark footer logo is requested when needed. The 2× density check selected the 400px WebP, without downloading PNG fallbacks or the unused theme. Theme switching, a Barba homepage navigation, and reload persistence passed. The supplied favicon paths returned image content and both PNG fallbacks decoded at 400×65px.
+Request inspection confirmed one initial 200px WebP logo request at 1× density, for the saved theme only. The dark footer logo is requested when needed. The 2× density check selected the 400px WebP, without downloading PNG fallbacks or the unused theme. Theme switching, a Barba homepage navigation, and reload persistence passed. The supplied favicon paths returned image content and both PNG fallbacks decoded at 400×72px.
 
 Screenshots are local review artifacts excluded from deployment. In the comparison images, **before is left; after is right**:
 
@@ -68,44 +68,35 @@ Screenshots are local review artifacts excluded from deployment. In the comparis
 
 ## Build, SEO preservation, and regression checks
 
-- `npm run build`: passed, including metadata normalization, minified production bundles, and site validation for all ten pages.
-- Repeat build: all 27 checked production-file hashes were unchanged.
+- `npm run build`: passed twice, including metadata normalization, minified production bundles, and site validation for all ten pages.
+- Repeat build: completed without introducing additional source changes.
 - JavaScript syntax checks: passed for every JavaScript file under `scripts/`, `assets/js/`, and `tests/`.
 - `git diff --check`: passed.
 - Compared every page's title, canonical link, social preview metadata, and JSON-LD with Git HEAD: unchanged except the approved existing WebSite name, `Umair Builds`. The existing `og:site_name` uses the same brand name. No Organization, Person, or other schema entities were added or duplicated. There were no existing schema logo URLs to replace.
 - Preserved the existing privacy-page sitemap priority of 0.3 by correcting the metadata generator's conflicting default; the sitemap's contents are unchanged from HEAD.
-- Baseline: an earlier concurrent run encountered loader visibility and contact-form timeouts before implementation. A fresh one-worker desktop run completed with **7 passed, 1 skipped**. Loader, router, project-data, contact/analytics implementations, and existing test assertions were not changed to suppress those failures.
+- The dedicated branding run completed with **10 passed, 6 expected skips, 0 failed** across the configured Playwright projects.
 - The first new branding test attempted Escape while Bootstrap was still opening the menu and failed. Its synchronization now waits for Bootstrap's completed `show` state before exercising dismissal; the keyboard assertion remains and no product behavior was changed to make it pass.
-- Full regression suite, `node node_modules/@playwright/test/cli.js test --workers=1 --reporter=line`: **39 passed, 9 expected skips, 0 failed (6.0 minutes)**. This covers desktop, tablet, mobile/touch, and reduced-motion projects. Six skips avoid repeating the explicit viewport/density matrices in other projects; three are the existing mobile-only source assertion on wider viewports. Existing test files/configuration and assertions were not weakened or altered.
-- Final browser smoke check: all nine indexable/shared-layout pages loaded decoded header and footer logos without HTTP or JavaScript errors. The standalone 404 page's favicon responses were verified by the regression suite. Sticky/scrolled header state, return-on-up-scroll visibility, and theme switching in both directions passed at 390, 992, and 1440px.
+- Full regression suite, `node node_modules/@playwright/test/cli.js test --workers=1 --reporter=line`: **45 passed, 27 expected skips, 0 failed**. This covers desktop, tablet, mobile/touch, and reduced-motion projects. Existing test files/configuration and assertions were not weakened or altered.
+- Final browser smoke check: all nine indexable/shared-layout pages loaded decoded header and footer logos in both themes (18 page/theme combinations) with no console or page errors. The standalone 404 page's favicon responses were verified by the regression suite. Sticky/scrolled header state, return-on-up-scroll visibility, and theme switching in both directions passed at the requested responsive widths.
 
-## Raster quality and verification limits
+## v2 quality and verification limits
 
-The kit guide identifies the artwork as raster extractions from a 1448×1086 concept board, not native vectors. All supplied image exports were visually reviewed in a contact sheet, with the selected horizontal variants checked separately at intended sizes and 2× density. The favicon files were also reviewed at their supplied sizes; the 16px mark necessarily carries less internal detail.
+The corrected v2 kit includes path-based SVG masters with no embedded raster images or external dependencies. The SVGs were structurally inspected and the supplied horizontal WebP/PNG exports were visually reviewed at intended sizes and 2× density. The favicon files were also reviewed at their supplied sizes; the 16px mark necessarily carries less internal detail.
 
-The dark export retains minor roughness/uneven extracted edges and both variants retain some source softness on close/high-density inspection. At the chosen normal display sizes, the wordmark and symbol remain readable, with no clipped letters, missing mark, background rectangle, or materially damaged identity observed. These inherited limitations have not been concealed by redrawing or replacing the approved artwork. Unused stacked, tagline, standalone, solid-background, and reference exports are not shipped.
+The corrected exports show the full wordmark, clean bottom/right edges, consistent transparency, and matching symbol geometry across light/dark variants. The kit guide notes that the SVG artwork is a reconstructed approximation of the original AI-generated design, so exact native-source curve fidelity is not claimed. Unused stacked, tagline, standalone, solid-background, and reference exports are not shipped.
 
 Browser verification uses installed desktop Chrome, including mobile-sized/touch and reduced-motion test projects; this is not a physical-device Safari/Firefox test. The standalone Playwright CLI could not be fetched because registry access was restricted; the existing installed Playwright runner and Chrome were available. No separate W3C HTML/CSS validator was installed; the existing site validator, JavaScript checks, asset checks, and real-browser layout checks were used. Apache/Hostinger responses were not tested live, and real EmailJS delivery/GA ingestion was not exercised: the contact tests use their existing local mocks.
 
 ## Changed files
 
-Created:
-
-- The ten assets listed above and root `favicon.ico`.
-- `scripts/brand-assets.js`, `scripts/optimize-brand-assets.js`.
-- `tests/branding.spec.js` and this report.
-- Ignored `tmp/brand-review/` screenshots, measurements, and inspection artifacts.
-
 Modified:
 
-- All ten root HTML pages: favicon references, generated bundle versions, and saved-theme initialization where applicable; existing site-name metadata on the nine indexable pages.
-- `components/navbar.html`, `components/footer.html`.
-- `assets/css/style.css`, `assets/css/responsive.css`, and generated `assets/css/portfolio.min.css`.
-- `assets/js/utilities.js`, `assets/js/navigation.js`, and generated `assets/js/portfolio.min.js`.
-- `scripts/site-config.js`, `scripts/update-production-domain.js`, `scripts/build-production.js`, `scripts/validate-site.js`, `scripts/serve-site.js`, `scripts/generate-assets.js`.
-- `package.json`, `.gitignore`, `.htaccess`, and `README.md`.
+- All ten root HTML pages for regenerated v2 favicon URLs and bundle references.
+- `components/navbar.html`, `components/footer.html`, `assets/css/style.css`, and generated `assets/css/portfolio.min.css`.
+- The ten checked-in production brand files under `assets/brand/` plus root `favicon.ico`.
+- `scripts/brand-assets.js`, `scripts/optimize-brand-assets.js`, `tests/branding.spec.js`, `README.md`, and this report.
 
-Deleted: the superseded `assets/icons/favicon.png`. `package-lock.json` and dependency versions are unchanged.
+Removed: no files in this v2 replacement. The original source kits remain local and the obsolete `assets/icons/favicon.png` is neither present in the deployment assets nor referenced by active pages or scripts. `package-lock.json` and dependency versions are unchanged.
 
 ## Production readiness
 

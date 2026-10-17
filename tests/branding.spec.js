@@ -55,7 +55,7 @@ test("renders approved logos with clearance at every requested width in both the
       expect(layout.image.complete && layout.image.width > 0).toBe(true);
       expect(layout.header.height).toBe(width < 992 ? 72 : 84);
       expect(Math.abs(layout.logo.y + layout.logo.height / 2 - layout.header.height / 2)).toBeLessThan(1);
-      expect(Math.abs(layout.logo.width / layout.logo.height - 1853 / 301)).toBeLessThan(0.01);
+      expect(Math.abs(layout.logo.width / layout.logo.height - 2400 / 430)).toBeLessThan(0.01);
       expect(layout.actions.right).toBeLessThanOrEqual(layout.header.right + 1);
       expect(layout.logo.right + 12).toBeLessThanOrEqual(width < 992 ? layout.actions.x : layout.nav.x);
       if (width >= 992) {
@@ -135,6 +135,6 @@ test("serves every favicon and decodes the PNG logo fallbacks", async ({ page, r
       const image = new Image(); image.src = `/assets/brand/umair-builds-horizontal-${variant}-400.png`;
       await image.decode(); return { width: image.naturalWidth, height: image.naturalHeight };
     }, theme);
-    expect(dimensions).toEqual({ width: 400, height: 65 });
+    expect(dimensions).toEqual({ width: 400, height: 72 });
   }
 });

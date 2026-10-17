@@ -4,47 +4,36 @@ const path = require("path");
 const sharp = require("sharp");
 
 const root = path.resolve(__dirname, "..");
-const kit = path.join(root, "Umair_Builds_Website_Logo_Kit");
+const kit = path.join(root, "Umair_Builds_Logo_Kit_Corrected_v2");
 const output = path.join(root, "assets", "brand");
 
-async function alphaBounds(file) {
-  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-  let left = info.width, top = info.height, right = -1, bottom = -1;
-  for (let y = 0; y < info.height; y += 1) {
-    for (let x = 0; x < info.width; x += 1) {
-      if (!data[(y * info.width + x) * 4 + 3]) continue;
-      left = Math.min(left, x); top = Math.min(top, y);
-      right = Math.max(right, x); bottom = Math.max(bottom, y);
-    }
+async function verifyImage(file, expectedWidth, expectedHeight) {
+  const metadata = await sharp(file).metadata();
+  if (metadata.width !== expectedWidth || metadata.height !== expectedHeight) {
+    throw new Error(`${path.basename(file)} must be ${expectedWidth}×${expectedHeight}, found ${metadata.width}×${metadata.height}`);
   }
-  if (right < left) throw new Error(`Empty artwork: ${file}`);
-  return { left, top, width: right - left + 1, height: bottom - top + 1 };
 }
 
 async function run() {
   fs.mkdirSync(output, { recursive: true });
-  const variants = [
-    ["light", "Umair_Builds_Horizontal_Header_Transparent_2000.png"],
-    ["dark", "Umair_Builds_Horizontal_Header_DarkMode_Transparent_2000.png"]
-  ];
-  const bounds = await Promise.all(variants.map(([, file]) => alphaBounds(path.join(kit, "01_Transparent_PNG", file))));
-  if (JSON.stringify(bounds[0]) !== JSON.stringify(bounds[1])) throw new Error("Theme exports must share the same transparent crop bounds; review before exporting.");
-  for (const [variant, file] of variants) {
-    const source = path.join(kit, "01_Transparent_PNG", file);
+  const websiteAssets = path.join(kit, "03_Website_WebP");
+  for (const variant of ["light", "dark"]) {
     for (const width of [200, 400]) {
-      await sharp(source).extract(bounds[0]).resize({ width, withoutEnlargement: true })
-        .webp({ lossless: true, effort: 6 })
-        .toFile(path.join(output, `umair-builds-horizontal-${variant}-${width}.webp`));
+      const source = path.join(websiteAssets, `umair-builds-horizontal-${variant}-${width}.webp`);
+      await verifyImage(source, width, width === 200 ? 36 : 72);
+      fs.copyFileSync(source, path.join(output, path.basename(source)));
     }
-    await sharp(source).extract(bounds[0]).resize({ width: 400, withoutEnlargement: true })
-      .png({ compressionLevel: 9, adaptiveFiltering: true })
-      .toFile(path.join(output, `umair-builds-horizontal-${variant}-400.png`));
+    const png = path.join(websiteAssets, `umair-builds-horizontal-${variant}-400.png`);
+    await verifyImage(png, 400, 72);
+    fs.copyFileSync(png, path.join(output, path.basename(png)));
   }
   for (const size of [16, 32, 48, 180]) {
-    fs.copyFileSync(path.join(kit, "03_Favicons", `favicon-${size}x${size}.png`), path.join(output, `umair-builds-icon-${size}.png`));
+    const source = path.join(kit, "05_Favicons", `favicon-${size}x${size}.png`);
+    await verifyImage(source, size, size);
+    fs.copyFileSync(source, path.join(output, `umair-builds-icon-${size}.png`));
   }
-  fs.copyFileSync(path.join(kit, "03_Favicons", "favicon.ico"), path.join(root, "favicon.ico"));
-  console.log(`Exported approved logos with a ${bounds[0].width}×${bounds[0].height} alpha-only crop; copied supplied favicons unchanged.`);
+  fs.copyFileSync(path.join(kit, "05_Favicons", "favicon.ico"), path.join(root, "favicon.ico"));
+  console.log("Copied the approved v2 website derivatives and supplied v2 favicons without redrawing or re-rasterizing the artwork.");
   for (const file of fs.readdirSync(output)) {
     const full = path.join(output, file);
     const meta = await sharp(full).metadata();
