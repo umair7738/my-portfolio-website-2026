@@ -71,6 +71,26 @@
     }
   };
 
+  // One image per logo: choose the site's explicit theme while the navbar is
+  // still in an inert template, before a browser can request the wrong variant.
+  Portfolio.updateBrandLogos = function (root) {
+    const theme = document.documentElement.dataset.theme === "light" ? "light" : "dark";
+    (root || document).querySelectorAll("[data-theme-logo]").forEach(function (picture) {
+      if (picture.dataset.logoTheme === theme) return;
+      const image = picture.querySelector("img");
+      const source = picture.querySelector("source");
+      picture.dataset.logoTheme = theme;
+      picture.removeAttribute("data-logo-ready");
+      image.onload = function () {
+        if (image.currentSrc.includes("horizontal-" + picture.dataset.logoTheme + "-")) {
+          picture.setAttribute("data-logo-ready", "");
+        }
+      };
+      source.srcset = source.dataset[theme + "Srcset"];
+      image.src = image.dataset[theme + "Src"];
+    });
+  };
+
   Portfolio.loadComponents = function (root) {
     const scope = root || document;
     const elements = Array.from(scope.querySelectorAll("[data-component]")).filter(function (element) {
@@ -79,6 +99,16 @@
     return Promise.all(elements.map(function (element) {
       const component = element.dataset.component;
       return new Promise(function (resolve) {
+        if (component === "navbar") {
+          $.get("components/navbar.html").done(function (markup) {
+            const template = document.createElement("template");
+            template.innerHTML = markup;
+            Portfolio.updateBrandLogos(template.content);
+            element.replaceChildren(template.content);
+            resolve();
+          }).fail(function () { element.innerHTML = ""; resolve(); });
+          return;
+        }
         $(element).load("components/" + component + ".html", function (_response, status) {
           if (status === "error") {
             element.innerHTML = "";

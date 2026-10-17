@@ -1,4 +1,7 @@
 @media (max-width: 1199.98px) {
+  .site-header .brand-logo { width: 160px; }
+  .navbar-shell { gap: .75rem; }
+  .desktop-nav, .navbar-actions { flex-shrink: 0; }
   .desktop-nav a { padding-inline: .65rem; }
   .developer-badge { right: 2%; opacity: .7; }
   .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -20,7 +23,7 @@
   .mobile-nav { margin: 1.25rem 0 2rem; }
   .mobile-nav a { display: grid; grid-template-columns: 2.5ch minmax(0, 1fr); gap: .85rem; }
   .mobile-menu-contact a { overflow-wrap: anywhere; }
-  .brand-copy { display: none; }
+  .site-header .brand-logo { width: 168px; }
   .home-hero { min-height: auto; padding-top: calc(var(--header-height) + 2.25rem); }
   .developer-badge { top: 10%; right: -30px; width: 125px; height: 125px; }
   .hero-bottom { grid-template-columns: 1fr; }

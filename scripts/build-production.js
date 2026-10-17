@@ -3,6 +3,7 @@ const path = require("path");
 const crypto = require("crypto");
 const { minify_sync: minifySync } = require("terser");
 const { baseUrl } = require("./site-config");
+const { faviconMarkup, updateBrandComponents } = require("./brand-assets");
 const projectData = require(path.join(process.cwd(), "data", "projects.js"));
 
 function escapeHtml(value) {
@@ -185,6 +186,9 @@ const js = minified.code;
 fs.writeFileSync(path.join("assets", "js", "portfolio.min.js"), js + "\n");
 
 const htmlFiles = fs.readdirSync(process.cwd()).filter((file) => file.endsWith(".html"));
+updateBrandComponents();
+const brandIcons = faviconMarkup();
+const earlyThemeScript = '<script>document.documentElement.classList.add("js");try{var savedTheme=localStorage.getItem("portfolio-theme");if(savedTheme==="light"||savedTheme==="dark")document.documentElement.dataset.theme=savedTheme;}catch(_error){}</script>';
 const hash = (value) => crypto.createHash("sha256").update(value).digest("hex").slice(0, 12);
 const cssVersion = hash(css);
 const jsVersion = hash(js);
@@ -203,6 +207,8 @@ htmlFiles.forEach((file) => {
   const source = fs.readFileSync(file, "utf8");
   const breadcrumb = breadcrumbLabels[file] ? `<nav class="breadcrumb-trail" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">${escapeHtml(breadcrumbLabels[file])}</span></nav>` : "";
   const production = source
+    .replace(/<script>document\.documentElement\.classList\.add\("js"\);(?:try\{var savedTheme=[\s\S]*?catch\(_error\)\{\})?<\/script>/, earlyThemeScript)
+    .replace(/<!-- BRAND_ICONS_START -->[\s\S]*?<!-- BRAND_ICONS_END -->|<link rel="icon" href="assets\/icons\/favicon\.png" type="image\/png">/, brandIcons)
     .replace(fontResourcePattern, "")
     .replace(bootstrapPattern, fontPreloads + deferredBootstrap)
     .replace(analyticsPattern, conditionalAnalytics)

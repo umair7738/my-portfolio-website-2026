@@ -1,4 +1,5 @@
 const baseUrl = "https://umair-builds.in";
+const siteName = "Umair Builds";
 
 const pages = {
   "index.html": {
@@ -55,4 +56,4 @@ function pageUrl(file) {
   return file === "index.html" ? `${baseUrl}/` : `${baseUrl}/${file}`;
 }
 
-module.exports = { baseUrl, pages, indexablePages, sitemapPages, pageUrl };
+module.exports = { baseUrl, siteName, pages, indexablePages, sitemapPages, pageUrl };

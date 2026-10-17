@@ -2,7 +2,6 @@ const sharp = require("sharp");
 const path = require("path");
 
 const outputDir = path.join(process.cwd(), "assets", "images");
-const iconDir = path.join(process.cwd(), "assets", "icons");
 
 const projects = [
   ["project-utc-india.webp", "#0f1b38", "#5a3fd4", "UTC INDIA", "WORDPRESS  /  PRODUCT CATALOGUE", "#56d4ff"],
@@ -54,8 +53,7 @@ function projectArt([file, start, end, title, subtitle, accent], index) {
 
 async function run() {
   await Promise.all(projects.map(projectArt));
-  const favicon = `<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g"><stop stop-color="#6f5cff"/><stop offset="1" stop-color="#268cff"/></linearGradient></defs><rect width="128" height="128" rx="34" fill="url(#g)"/><text x="64" y="78" text-anchor="middle" fill="white" font-size="42" font-family="Arial, sans-serif" font-weight="700">US</text></svg>`;
-  await sharp(Buffer.from(favicon)).png().toFile(path.join(iconDir, "favicon.png"));
+  // Approved brand assets are maintained separately by npm run optimize:brand.
 }
 
 run().catch((error) => {

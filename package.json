@@ -4,6 +4,7 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
+    "optimize:brand": "node scripts/optimize-brand-assets.js",
     "update-domain": "node scripts/update-production-domain.js",
     "build-production": "node scripts/build-production.js",
     "validate-site": "node scripts/validate-site.js",

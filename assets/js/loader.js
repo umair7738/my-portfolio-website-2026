@@ -76,6 +76,7 @@
 
         window.gsap.set(".loader-letter", { yPercent: 115, rotate: 5 });
         window.gsap.set(".loader-topline, .loader-console, .loader-meta", { opacity: 0, y: 12 });
+        loader.setAttribute("data-loader-started", "");
 
         timeline
           .to(".loader-topline", { opacity: 1, y: 0, duration: .35 })

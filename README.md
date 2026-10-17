@@ -59,6 +59,16 @@ Run `npm run build` to normalize production metadata, rebuild the CSS and JavaSc
 
 Use `npm run serve` for a local HTTP preview.
 
+## Umair Builds brand assets
+
+The shared header uses one theme-selected horizontal logo; the footer always uses the approved white-text variant on its dark surface. The header follows the saved `portfolio-theme` preference, independently of the operating system. `assets/brand/` contains only the lossless WebP logo sizes, PNG fallbacks, and supplied favicon PNGs used by the site; the supplied multi-size ICO is at `/favicon.ico`.
+
+`npm run build` updates logo and favicon references with the same 12-character content-hash query convention as the CSS/JS bundles. The build uses checked-in optimized files and does not require the original logo kit. Keep `components/`, the root HTML files, `/favicon.ico`, and `assets/` together when preparing the Hostinger files.
+
+To regenerate derivatives locally, retain the approved `Umair_Builds_Website_Logo_Kit/` folder and run `npm run optimize:brand`, followed by `npm run build`. The exporter removes only fully transparent outer padding and preserves the approved pixels; it does not recreate the identity. The original kit, `tmp/` screenshots/review artifacts, tests, tooling, and internal evidence files are not public deployment assets. The kit is ignored by Git and must not be manually uploaded.
+
+Run `npx playwright test tests/branding.spec.js --workers=1` for the theme, navigation-clearance, image-request, favicon, and responsive checks. The desktop project runs the explicit 320/375/390/768/992/1024/1199/1440px matrix in both themes and writes review screenshots under ignored `tmp/brand-review/`. The exports retain minor softness and edge roughness inherited from the supplied raster extraction, especially in the dark variant at high pixel density; no vector artwork or print-quality reconstruction is claimed.
+
 ## Project evidence and snapshots
 
 Public roles, dates, descriptions, and delivery technologies must cite entries in `data/project-audit.json`. Separately labeled public-site technology audits may publish reviewed signals from a live domain, with their audit date and confidence, without presenting those signals as Umair's delivery record.

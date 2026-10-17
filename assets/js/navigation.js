@@ -49,16 +49,19 @@
 
     initTheme() {
       const root = document.documentElement;
-      const stored = localStorage.getItem("portfolio-theme");
-      const initial = stored || "dark";
+      let stored;
+      try { stored = localStorage.getItem("portfolio-theme"); } catch (_error) {}
+      const initial = stored === "light" ? "light" : "dark";
       root.dataset.theme = initial;
+      Portfolio.updateBrandLogos(document);
 
       document.querySelectorAll(".theme-toggle").forEach(function (button) {
         button.setAttribute("aria-pressed", String(initial === "light"));
         Portfolio.Lifecycle.global.listen(button, "click", function () {
           const next = root.dataset.theme === "light" ? "dark" : "light";
           root.dataset.theme = next;
-          localStorage.setItem("portfolio-theme", next);
+          Portfolio.updateBrandLogos(document);
+          try { localStorage.setItem("portfolio-theme", next); } catch (_error) {}
           button.setAttribute("aria-pressed", String(next === "light"));
           if (window.gsap && !Portfolio.utils.prefersReducedMotion()) {
             window.gsap.fromTo(button, { rotate: -24, scale: .82 }, { rotate: 0, scale: 1, duration: .55, ease: "back.out(2)" });

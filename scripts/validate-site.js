@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
-const { baseUrl, pages, sitemapPages, pageUrl } = require("./site-config");
+const { baseUrl, siteName, pages, sitemapPages, pageUrl } = require("./site-config");
+const { assetUrl, faviconMarkup, logoMarkup } = require("./brand-assets");
 const projectData = require(path.join(process.cwd(), "data", "projects.js"));
 const projectAudit = require(path.join(process.cwd(), "data", "project-audit.json"));
 
@@ -62,7 +63,7 @@ if (projectData.find((project) => project.slug === "equity-exchange-academy").st
 function localTargetExists(file, target) {
   if (!target || target === "/" || /^(?:https?:|mailto:|tel:|#|javascript:|data:)/i.test(target)) return true;
   const clean = target.split("#")[0].split("?")[0];
-  return !clean || fs.existsSync(path.resolve(path.dirname(path.join(root, file)), clean));
+  return !clean || fs.existsSync(clean.startsWith("/") ? path.join(root, clean.slice(1)) : path.resolve(path.dirname(path.join(root, file)), clean));
 }
 
 function hasTag(html, pattern, label, file) {
@@ -87,7 +88,7 @@ function validateIdentitySchema(file, data) {
     const webpage = graph.find((item) => item["@type"] === "WebPage");
     if (profilePages.length) errors.push("index.html: homepage must not use ProfilePage");
     if (!person || person["@id"] !== personId || person.name !== "Umair Shaikh") errors.push("index.html: canonical Person entity is missing or incorrect");
-    if (!website || website["@id"] !== `${baseUrl}/#website` || website.publisher?.["@id"] !== personId) errors.push("index.html: WebSite must reference the canonical Person entity");
+    if (!website || website["@id"] !== `${baseUrl}/#website` || website.publisher?.["@id"] !== personId || website.name !== siteName) errors.push("index.html: WebSite must use the approved site name and reference the canonical Person entity");
     if (!webpage || webpage["@id"] !== `${baseUrl}/#webpage` || webpage.isPartOf?.["@id"] !== `${baseUrl}/#website` || webpage.mainEntity?.["@id"] !== personId) {
       errors.push("index.html: WebPage must reference the canonical WebSite and Person entities");
     }
@@ -211,11 +212,36 @@ const required = [
   "assets/vendor/bootstrap-5.3.8.min.css", "assets/vendor/bootstrap-5.3.8.bundle.min.js",
   "assets/vendor/gsap-3.13.0.min.js", "assets/vendor/ScrollTrigger-3.13.0.min.js",
   "assets/vendor/lenis-1.3.11.min.js", "assets/vendor/lucide-0.468.0.min.js",
-  "assets/vendor/barba-2.10.3.umd.js", "assets/images/og-portfolio.webp", "assets/icons/favicon.png",
+  "assets/vendor/barba-2.10.3.umd.js", "assets/images/og-portfolio.webp", "favicon.ico",
   "assets/fonts/manrope-latin-variable.woff2", "assets/fonts/space-grotesk-latin-variable.woff2",
   "assets/umair_resume_september_2026.pdf", "data/projects.js", "data/project-audit.json"
 ];
 required.forEach((target) => { if (!fs.existsSync(path.join(root, target))) errors.push(`missing required file ${target}`); });
+
+// Check generated branding, including the deferred theme URLs and all srcset candidates.
+htmlFiles.forEach((file) => {
+  const html = fs.readFileSync(path.join(root, file), "utf8");
+  if (!html.includes(faviconMarkup())) errors.push(`${file}: missing or stale approved favicon declarations`);
+  if ((html.match(/rel="icon"/g) || []).length !== 4 || (html.match(/rel="apple-touch-icon"/g) || []).length !== 1) errors.push(`${file}: duplicate or incomplete favicon declarations`);
+  if (/assets\/icons\/favicon\.png/.test(html)) errors.push(`${file}: obsolete favicon reference`);
+});
+for (const [component, placement] of [["navbar", "header"], ["footer", "footer"]]) {
+  const html = fs.readFileSync(path.join(root, "components", `${component}.html`), "utf8");
+  if (!html.includes(logoMarkup(placement))) errors.push(`${component}: missing or stale approved logo markup`);
+  if ((html.match(/<img\b/g) || []).length !== 1) errors.push(`${component}: expected one accessible brand image`);
+  for (const match of html.matchAll(/(?:src|srcset)="([^"]+)"/g)) {
+    for (const candidate of match[1].split(",")) {
+      const url = candidate.trim().split(/\s+/)[0];
+      if (!localTargetExists("index.html", url)) errors.push(`${component}: missing brand asset ${url}`);
+      else if (url !== assetUrl(url.split("?")[0])) errors.push(`${component}: stale brand asset version ${url}`);
+    }
+  }
+}
+const expectedBrandFiles = [
+  ...["light", "dark"].flatMap((theme) => [200, 400].map((size) => `umair-builds-horizontal-${theme}-${size}.webp`).concat(`umair-builds-horizontal-${theme}-400.png`)),
+  ...[16, 32, 48, 180].map((size) => `umair-builds-icon-${size}.png`)
+].sort();
+if (JSON.stringify(fs.readdirSync(path.join(root, "assets", "brand")).sort()) !== JSON.stringify(expectedBrandFiles)) errors.push("brand assets: missing or unnecessary production files");
 
 if (warnings.length) console.log("Warnings:\n- " + warnings.join("\n- "));
 if (errors.length) {

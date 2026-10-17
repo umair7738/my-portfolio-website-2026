@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { baseUrl, pages, sitemapPages, pageUrl } = require("./site-config");
+const { baseUrl, siteName, pages, sitemapPages, pageUrl } = require("./site-config");
 
 const root = process.cwd();
 const socialImage = `${baseUrl}/assets/images/og-portfolio.webp`;
@@ -37,6 +37,7 @@ function normalizeStructuredData(value, canonical) {
     normalized.url = `${baseUrl}/`;
   }
   if (types.includes("WebSite")) {
+    normalized.name = siteName;
     normalized["@id"] = `${baseUrl}/#website`;
     normalized.url = `${baseUrl}/`;
   }
@@ -75,7 +76,7 @@ Object.entries(pages).forEach(([file, metadata]) => {
   html = upsert(html, /<meta\s+property="og:image:alt"[^>]*>/i, `<meta property="og:image:alt" content="${imageAlt}">`);
   html = upsert(html, /<meta\s+property="og:image:width"[^>]*>/i, '<meta property="og:image:width" content="1200">');
   html = upsert(html, /<meta\s+property="og:image:height"[^>]*>/i, '<meta property="og:image:height" content="630">');
-  html = upsert(html, /<meta\s+property="og:site_name"[^>]*>/i, '<meta property="og:site_name" content="Umair Shaikh Portfolio">');
+  html = upsert(html, /<meta\s+property="og:site_name"[^>]*>/i, `<meta property="og:site_name" content="${escapeAttribute(siteName)}">`);
   html = upsert(html, /<meta\s+property="og:locale"[^>]*>/i, '<meta property="og:locale" content="en_IN">');
   html = upsert(html, /<meta\s+name="twitter:card"[^>]*>/i, '<meta name="twitter:card" content="summary_large_image">');
   html = upsert(html, /<meta\s+name="twitter:title"[^>]*>/i, `<meta name="twitter:title" content="${escapeAttribute(metadata.title)}">`);
@@ -89,7 +90,7 @@ Object.entries(pages).forEach(([file, metadata]) => {
 fs.writeFileSync(path.join(root, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${baseUrl}/sitemap.xml\n`);
 
 const sitemapEntries = sitemapPages.map((file) => {
-  const priority = file === "index.html" ? "1.0" : ["projects.html", "case-studies.html"].includes(file) ? "0.9" : "0.8";
+  const priority = file === "index.html" ? "1.0" : file === "privacy.html" ? "0.3" : ["projects.html", "case-studies.html"].includes(file) ? "0.9" : "0.8";
   const changefreq = ["index.html", "projects.html", "case-studies.html", "services.html"].includes(file) ? "monthly" : "yearly";
   return `  <url><loc>${pageUrl(file)}</loc><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
 }).join("\n");
