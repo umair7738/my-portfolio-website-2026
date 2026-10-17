@@ -179,7 +179,7 @@ const llms = fs.readFileSync(path.join(root, "llms.txt"), "utf8");
 if (!llms.includes("# Umair Shaikh") || !llms.includes(`${baseUrl}/projects.html`) || !llms.includes("not a ranking guarantee")) errors.push("llms.txt: missing canonical orientation content or scope disclaimer");
 const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
 sitemapPages.forEach((file) => { if (!sitemap.includes(`<loc>${pageUrl(file)}</loc>`)) errors.push(`sitemap.xml: missing ${pageUrl(file)}`); });
-if (sitemap.includes("privacy.html") || sitemap.includes("404.html")) errors.push("sitemap.xml: privacy or 404 URL must be excluded");
+if (sitemap.includes("404.html")) errors.push("sitemap.xml: 404 URL must be excluded");
 
 const projectsPage = fs.readFileSync(path.join(root, "projects.html"), "utf8");
 const projectSchema = projectsPage.match(/<script type="application\/ld\+json" data-project-schema>([\s\S]*?)<\/script>/);

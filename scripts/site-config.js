@@ -49,7 +49,7 @@ const pages = {
 };
 
 const indexablePages = Object.keys(pages);
-const sitemapPages = indexablePages.filter((file) => file !== "privacy.html");
+const sitemapPages = indexablePages;
 
 function pageUrl(file) {
   return file === "index.html" ? `${baseUrl}/` : `${baseUrl}/${file}`;
