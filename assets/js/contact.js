@@ -69,7 +69,7 @@
           const emailjs = await loadEmailJs();
           emailjs.init({ publicKey: config.publicKey });
           await emailjs.sendForm(config.serviceId, config.templateId, form);
-          if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("contact_form_submit");
+          if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("generate_lead");
           status.className = "form-status success";
           status.textContent = "Thanks — your enquiry has been sent. I’ll get back to you soon.";
           form.reset();
