@@ -35,7 +35,7 @@
       const updateProgress = function () {
         const value = Math.round(count.value);
         percent.textContent = String(value).padStart(3, "0");
-        const nextStatus = value < 34 ? "Loading interface" : value < 68 ? "Composing motion" : value < 94 ? "Polishing details" : "Experience ready";
+        const nextStatus = value < 34 ? Portfolio.I18n.t("ui.loader.loading", "Loading interface") : value < 68 ? Portfolio.I18n.t("ui.loader.motion", "Composing motion") : value < 94 ? Portfolio.I18n.t("ui.loader.polishing", "Polishing details") : Portfolio.I18n.t("ui.loader.ready", "Experience ready");
         if (nextStatus !== currentStatus) {
           currentStatus = nextStatus;
           status.textContent = nextStatus;

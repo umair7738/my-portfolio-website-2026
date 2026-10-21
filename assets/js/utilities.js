@@ -130,7 +130,7 @@
     if (service && projectType) {
       const readable = service.replace(/-/g, " ");
       Array.from(projectType.options).some(function (option) {
-        if (option.textContent.toLowerCase().includes(readable.toLowerCase())) {
+        if (option.dataset.serviceSlug === service || option.value.toLowerCase().includes(readable.toLowerCase())) {
           option.selected = true;
           return true;
         }

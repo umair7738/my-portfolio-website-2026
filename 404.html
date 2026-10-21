@@ -3,21 +3,31 @@
   <link rel="preload" href="assets/fonts/manrope-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/space-grotesk-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" media="print" onload="this.media='all'">
-  <noscript><link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></noscript><link rel="stylesheet" href="assets/css/portfolio.min.css?v=e43873ec06a6"><!-- BRAND_ICONS_START -->
+  <noscript><link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></noscript><link rel="stylesheet" href="assets/css/portfolio.min.css?v=bec23a44a0c4"><!-- BRAND_ICONS_START -->
   <link rel="icon" href="/favicon.ico?v=ebdc7e503eef" sizes="16x16 32x32 48x48 64x64" type="image/x-icon">
   <link rel="icon" href="assets/brand/umair-builds-icon-16.png?v=e4108284caad" sizes="16x16" type="image/png">
   <link rel="icon" href="assets/brand/umair-builds-icon-32.png?v=2c553d826026" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/brand/umair-builds-icon-48.png?v=9ac72c00e5d5" sizes="48x48" type="image/png">
   <link rel="apple-touch-icon" href="assets/brand/umair-builds-icon-180.png?v=fe398565ba97" sizes="180x180">
   <!-- BRAND_ICONS_END -->
+  <script defer src="assets/js/i18n.js"></script>
+  <script>window.addEventListener("DOMContentLoaded",function(){if(window.Portfolio&&Portfolio.I18n)Portfolio.I18n.init().then(function(){Portfolio.I18n.applyToPage(document.body);});});</script>
   <!-- Optional analytics: only load after an explicit local opt-in. -->
   <script>
     (function (window, document) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag("consent", "default", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        wait_for_update: 500
+      });
       var granted = false;
       try { granted = window.localStorage.getItem("portfolio-analytics-consent") === "granted"; } catch (_error) {}
       if (!granted) return;
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag("consent", "update", { analytics_storage: "granted" });
       window.gtag("js", new Date());
       window.gtag("config", "G-6J1PG2GSNQ", { send_page_view: false, anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false });
       var script = document.createElement("script");
@@ -26,4 +36,4 @@
       document.head.appendChild(script);
     }(window, document));
   </script>
-</head><body><div class="noise" aria-hidden="true"></div><main class="not-found"><div><div class="not-found-code" aria-hidden="true">404</div><span class="eyebrow">Wrong turn</span><h1>This page left the map.</h1><p>The link may have changed, or the page may never have existed. The useful work is still right where it should be.</p><div class="d-flex flex-wrap justify-content-center gap-3"><a class="btn btn-primary btn-lg" href="/">Back home <i data-lucide="home" aria-hidden="true"></i></a><a class="btn btn-secondary btn-lg" href="projects.html">Explore projects <i data-lucide="arrow-right" aria-hidden="true"></i></a><a class="btn btn-secondary btn-lg" href="contact.html">Contact Umair <i data-lucide="mail" aria-hidden="true"></i></a></div></div></main><script defer src="assets/vendor/lucide-0.468.0.min.js"></script><script>window.addEventListener('DOMContentLoaded',function(){if(window.lucide)window.lucide.createIcons();});</script></body></html>
+</head><body><div class="noise" aria-hidden="true"></div><main class="not-found"><div><div class="not-found-code" aria-hidden="true">404</div><span class="eyebrow" data-i18n-text="0:404.text.0001">Wrong turn</span><h1 data-i18n-text="0:404.text.0002">This page left the map.</h1><p data-i18n-text="0:404.text.0003">The link may have changed, or the page may never have existed. The useful work is still right where it should be.</p><div class="d-flex flex-wrap justify-content-center gap-3"><a class="btn btn-primary btn-lg" href="/" data-i18n-text="0:404.text.0004">Back home <i data-lucide="home" aria-hidden="true"></i></a><a class="btn btn-secondary btn-lg" href="projects.html" data-i18n-text="0:404.text.0005">Explore projects <i data-lucide="arrow-right" aria-hidden="true"></i></a><a class="btn btn-secondary btn-lg" href="contact.html" data-i18n-text="0:404.text.0006">Contact Umair <i data-lucide="mail" aria-hidden="true"></i></a></div></div></main><script defer src="assets/vendor/lucide-0.468.0.min.js"></script><script>window.addEventListener('DOMContentLoaded',function(){if(window.lucide)window.lucide.createIcons();});</script></body></html>

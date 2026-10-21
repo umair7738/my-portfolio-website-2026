@@ -5,9 +5,10 @@
 
   function boot() {
     Portfolio.loadComponents()
-      .then(function () {
+      .then(async function () {
         Portfolio.hydrateGlobalContent();
         Portfolio.Navigation.initGlobal();
+        if (Portfolio.I18n) await Portfolio.I18n.init();
         Portfolio.Router.init();
       })
       .catch(function () {

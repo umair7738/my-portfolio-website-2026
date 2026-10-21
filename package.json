@@ -8,6 +8,7 @@
     "update-domain": "node scripts/update-production-domain.js",
     "build-production": "node scripts/build-production.js",
     "validate-site": "node scripts/validate-site.js",
+    "validate-i18n": "node scripts/validate-i18n.js",
     "build": "npm run update-domain && npm run build-production && npm run validate-site",
     "audit:projects": "node scripts/audit-project-technologies.js",
     "capture:projects": "node scripts/capture-project-snapshots.js",

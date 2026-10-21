@@ -1,16 +1,16 @@
 <template id="project-card-template">
-  <article class="project-card reveal-up{{featuredClass}}" id="project-{{slug}}" data-category="{{category}}" data-status="{{status}}" data-search="{{search}}" data-featured-rank="{{featuredRank}}">
+  <article class="project-card reveal-up{{featuredClass}}" id="project-{{slug}}" data-category="{{category}}" data-status="{{status}}" data-search="{{search}}" data-featured-rank="{{featuredRank}}" data-project-slug="{{slug}}">
     {{visualOpen}}
       {{picture}}
       <span class="project-index">{{index}}</span>
       <span class="project-open"><i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
       <div class="project-browser-chrome" aria-hidden="true"><span></span><span></span><span></span><small>{{host}}</small></div>
-      <span class="project-media-disclosure">{{mediaDisclosure}}</span>
+      <span class="project-media-disclosure" data-i18n-text="0:project.{{slug}}.mediaDisclosure">{{mediaDisclosure}}</span>
     {{visualClose}}
     <div class="project-card-body">
-      <div class="project-card-top"><span class="project-category">{{categoryLabel}} · {{typeLabel}}</span><span class="project-card-badges">{{featuredBadge}}<span class="project-status project-status-{{statusClass}}"><span aria-hidden="true"></span>{{statusLabel}}</span></span></div>
+    <div class="project-card-top"><span class="project-category" data-i18n-text="0:project.{{slug}}.categoryType">{{categoryLabel}} · {{typeLabel}}</span><span class="project-card-badges">{{featuredBadge}}<span class="project-status project-status-{{statusClass}}" data-i18n-text="0:ui.project.status.{{status}}"><span aria-hidden="true"></span>{{statusLabel}}</span></span></div>
       <h3>{{titleOpen}}{{title}}{{titleClose}}</h3>
-      <p>{{description}}</p>
+      <p data-i18n-text="0:project.{{slug}}.description">{{description}}</p>
       {{detailLine}}
       {{technologyList}}
       <div class="project-links">{{links}}</div>

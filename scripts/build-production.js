@@ -89,11 +89,19 @@ const contactFallback = `<noscript data-contact-fallback><p class="contact-fallb
 const conditionalAnalytics = `<!-- Optional analytics: only load after an explicit local opt-in. -->
   <script>
     (function (window, document) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag("consent", "default", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        wait_for_update: 500
+      });
       var granted = false;
       try { granted = window.localStorage.getItem("portfolio-analytics-consent") === "granted"; } catch (_error) {}
       if (!granted) return;
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag("consent", "update", { analytics_storage: "granted" });
       window.gtag("js", new Date());
       window.gtag("config", "G-6J1PG2GSNQ", { send_page_view: false, anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false });
       var script = document.createElement("script");
@@ -173,7 +181,7 @@ fs.writeFileSync(path.join("assets", "css", "portfolio.min.css"), css + "\n");
 
 const jsFiles = [
   path.join("data", "projects.js"),
-  ...["utilities.js", "lifecycle.js", "navigation.js", "loader.js", "projects.js", "contact.js", "gsap.js", "router.js", "app.js"].map((file) => path.join("assets", "js", file))
+  ...["utilities.js", "lifecycle.js", "i18n.js", "navigation.js", "loader.js", "projects.js", "contact.js", "gsap.js", "router.js", "app.js"].map((file) => path.join("assets", "js", file))
 ];
 const jsSource = jsFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n").trimEnd();
 const minified = minifySync(jsSource, {
@@ -192,7 +200,7 @@ const earlyThemeScript = '<script>document.documentElement.classList.add("js");t
 const hash = (value) => crypto.createHash("sha256").update(value).digest("hex").slice(0, 12);
 const cssVersion = hash(css);
 const jsVersion = hash(js);
-const analyticsPattern = /<!-- Google tag \(gtag\.js\) -->\s*<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-6J1PG2GSNQ"><\/script>\s*<script>[\s\S]*?<\/script>/g;
+const analyticsPattern = /(?:<!-- Google tag \(gtag\.js\) -->\s*<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-6J1PG2GSNQ"><\/script>|<!-- Optional analytics: only load after an explicit local opt-in\. -->)\s*<script>[\s\S]*?<\/script>/g;
 const projectSchemaPattern = /<script type="application\/ld\+json" data-project-schema>[\s\S]*?<\/script>/;
 const projectFallbackPattern = /<!-- PROJECT_ARCHIVE_NOSCRIPT_START -->[\s\S]*?<!-- PROJECT_ARCHIVE_NOSCRIPT_END -->/;
 const breadcrumbPattern = /<nav class="breadcrumb-trail" aria-label="Breadcrumb"><a href="\/">Home<\/a><span aria-hidden="true">\/<\/span><span aria-current="page">[^<]+<\/span><\/nav>/g;

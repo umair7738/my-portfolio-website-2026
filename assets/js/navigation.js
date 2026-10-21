@@ -165,7 +165,7 @@
         if (floating) floating.classList.toggle("visible", window.scrollY > 500);
         if (floating) {
           floating.style.setProperty("--water-y", (100 - ratio * 100).toFixed(2) + "%");
-          floating.setAttribute("aria-label", "Back to top — " + Math.round(ratio * 100) + "% page progress");
+          floating.setAttribute("aria-label", Portfolio.I18n.format("ui.navigation.backProgress", "Back to top — {progress}% page progress", { progress: Math.round(ratio * 100) }));
         }
       };
       Portfolio.Lifecycle.global.listen(window, "scroll", update, { passive: true });

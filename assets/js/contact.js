@@ -44,7 +44,7 @@
         const status = form.querySelector(".form-status");
         if (!valid) {
           status.className = "form-status error";
-          status.textContent = "Please review the highlighted fields.";
+          status.textContent = Portfolio.I18n.t("ui.form.invalid", "Please review the highlighted fields.");
           const firstInvalid = form.querySelector(".is-invalid, input:invalid");
           if (window.gsap && !Portfolio.utils.prefersReducedMotion()) {
             window.gsap.fromTo(form.querySelectorAll(".is-invalid"), { x: -5 }, { x: 0, duration: .38, ease: "elastic.out(1,.3)", stagger: .04 });
@@ -58,24 +58,24 @@
           !/^YOUR_EMAILJS_/.test(config.publicKey) && !/^YOUR_EMAILJS_/.test(config.serviceId) && !/^YOUR_EMAILJS_/.test(config.templateId);
         if (!configured) {
           status.className = "form-status error";
-          status.textContent = "Email delivery is not configured yet. Please contact me directly by email.";
+          status.textContent = Portfolio.I18n.t("ui.form.unconfigured", "Email delivery is not configured yet. Please contact me directly by email.");
           return;
         }
         const submit = form.querySelector("button[type='submit']");
         if (submit) submit.disabled = true;
         status.className = "form-status";
-        status.textContent = "Sending your enquiry…";
+        status.textContent = Portfolio.I18n.t("ui.form.sending", "Sending your enquiry…");
         try {
           const emailjs = await loadEmailJs();
           emailjs.init({ publicKey: config.publicKey });
           await emailjs.sendForm(config.serviceId, config.templateId, form);
           if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("generate_lead");
           status.className = "form-status success";
-          status.textContent = "Thanks — your enquiry has been sent. I’ll get back to you soon.";
+          status.textContent = Portfolio.I18n.t("ui.form.success", "Thanks — your enquiry has been sent. I’ll get back to you soon.");
           form.reset();
         } catch (_error) {
           status.className = "form-status error";
-          status.textContent = "The enquiry could not be sent. Please email me directly instead.";
+          status.textContent = Portfolio.I18n.t("ui.form.failure", "The enquiry could not be sent. Please email me directly instead.");
         } finally {
           if (submit) submit.disabled = false;
         }

@@ -96,6 +96,12 @@
         document.head.append(script);
       }
     }
+    window.gtag("consent", "update", {
+      analytics_storage: "granted",
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied"
+    });
     this.trackPageView();
   };
   Portfolio.Analytics.initConsent = function () {
@@ -128,6 +134,22 @@
   };
 
   Portfolio.Page = {
+    remountAfterLocale() {
+      const root = document.querySelector("[data-barba='container']");
+      if (!root) return;
+      Portfolio.Lifecycle.page.teardown();
+      Portfolio.Lifecycle.resetPage();
+      Portfolio.Lifecycle.page.setRoot(root);
+      if (Portfolio.Projects) {
+        Portfolio.Projects.refreshSearchIndex(root);
+        Portfolio.Projects.initFilters(root);
+      }
+      if (Portfolio.Navigation) Portfolio.Navigation.initPage(root);
+      if (Portfolio.Contact) Portfolio.Contact.init(root);
+      if (Portfolio.Animations) Portfolio.Animations.init(root);
+      Portfolio.utils.refreshIcons(root);
+      if (window.ScrollTrigger) window.requestAnimationFrame(function () { window.ScrollTrigger.refresh(); });
+    },
     syncHead(nextHtml, namespace) {
       if (!nextHtml) return;
       const nextDocument = new DOMParser().parseFromString(nextHtml, "text/html");
@@ -170,6 +192,7 @@
       if (!config.initial) await Portfolio.loadComponents(root);
       Portfolio.hydrateGlobalContent(root);
       if (Portfolio.Projects) Portfolio.Projects.init(root);
+      if (Portfolio.I18n) await Portfolio.I18n.applyToPage(root);
       if (Portfolio.Navigation && typeof Portfolio.Navigation.initPage === "function") Portfolio.Navigation.initPage(root);
       if (Portfolio.Contact) Portfolio.Contact.init(root);
 

@@ -69,13 +69,13 @@
     const loading = priority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
     const sizes = featured ? "(min-width: 1320px) 1280px, (min-width: 768px) calc(100vw - 4.5rem), 100vw" : "(min-width: 1320px) 632px, (min-width: 768px) 50vw, 100vw";
     if (!mobile || !desktop.avif960) {
-      return '<img src="' + escape(desktop.webp960) + '" alt="' + escape(media.alt) + '" width="' + escape(desktop.width) + '" height="' + escape(desktop.height) + '" ' + loading + ' decoding="async">';
+      return '<img src="' + escape(desktop.webp960) + '" alt="' + escape(media.alt) + '" data-i18n-attrs="alt:project.' + escape(project.slug) + '.alt" width="' + escape(desktop.width) + '" height="' + escape(desktop.height) + '" ' + loading + ' decoding="async">';
     }
     return '<picture>' +
       '<source media="(max-width: 767.98px)" type="image/avif" srcset="' + escape(mobile.avif) + '">' +
       '<source media="(max-width: 767.98px)" type="image/webp" srcset="' + escape(mobile.webp) + '">' +
       '<source type="image/avif" srcset="' + escape(desktop.avif960) + ' 960w, ' + escape(desktop.avif1440) + ' 1440w" sizes="' + sizes + '">' +
-      '<img src="' + escape(desktop.webp960) + '" srcset="' + escape(desktop.webp960) + ' 960w, ' + escape(desktop.webp1440) + ' 1440w" sizes="' + sizes + '" alt="' + escape(media.alt) + '" width="' + escape(desktop.width) + '" height="' + escape(desktop.height) + '" ' + loading + ' decoding="async">' +
+      '<img src="' + escape(desktop.webp960) + '" srcset="' + escape(desktop.webp960) + ' 960w, ' + escape(desktop.webp1440) + ' 1440w" sizes="' + sizes + '" alt="' + escape(media.alt) + '" data-i18n-attrs="alt:project.' + escape(project.slug) + '.alt" width="' + escape(desktop.width) + '" height="' + escape(desktop.height) + '" ' + loading + ' decoding="async">' +
       '</picture>';
   }
 
@@ -84,20 +84,20 @@
     const primary = primaryLink(project);
     const externalAttributes = primary && primary.external ? ' target="_blank" rel="noopener"' : "";
     const visualOpen = primary
-      ? '<a class="project-visual" href="' + escape(primary.href) + '" aria-label="' + escape(primary.label) + '"' + externalAttributes + '>'
-      : '<div class="project-visual" aria-label="' + escape(project.title + " archived project visual") + '">';
+      ? '<a class="project-visual" href="' + escape(primary.href) + '" aria-label="' + escape(primary.label) + '" data-i18n-attrs="aria-label:project.' + escape(project.slug) + '.primaryAria"' + externalAttributes + '>'
+      : '<div class="project-visual" aria-label="' + escape(project.title + " archived project visual") + '" data-i18n-attrs="aria-label:project.' + escape(project.slug) + '.archiveAria">';
     const titleOpen = primary ? '<a href="' + escape(primary.href) + '"' + externalAttributes + '>' : "";
     const statusLabel = project.status.value === "LIVE" ? "Live" : project.status.value === "ARCHIVED" ? "Archived" : "Unavailable";
     const deliveryTechnologies = (project.deliveryTechnologies || []).map(function (technology) { return "<li>" + escape(technology.name) + "</li>"; }).join("");
     const technologyList = deliveryTechnologies
-      ? '<ul class="tag-list project-technologies" aria-label="Project technologies">' + deliveryTechnologies + "</ul>"
+      ? '<ul class="tag-list project-technologies" aria-label="Project technologies" data-i18n-attrs="aria-label:ui.project.technologies">' + deliveryTechnologies + "</ul>"
       : "";
     const detailItems = [project.typeLabel, project.role, project.year].filter(Boolean);
-    const detailLine = detailItems.length ? '<p class="project-detail-line">' + detailItems.map(escape).join(" · ") + "</p>" : "";
+    const detailLine = detailItems.length ? '<p class="project-detail-line" data-i18n-text="0:project.' + escape(project.slug) + '.detailLine">' + detailItems.map(escape).join(" · ") + "</p>" : "";
     const links = [];
-    if (project.status.value === "LIVE" && project.url) links.push('<a href="' + escape(project.url) + '" target="_blank" rel="noopener">Live site <i data-lucide="external-link" aria-hidden="true"></i></a>');
-    else if (project.status.value === "UNAVAILABLE") links.push('<span class="project-link-muted">Currently unavailable</span>');
-    if (project.caseStudy) links.push('<a href="' + escape(project.caseStudy.href) + '">Case study <i data-lucide="arrow-right" aria-hidden="true"></i></a>');
+    if (project.status.value === "LIVE" && project.url) links.push('<a href="' + escape(project.url) + '" target="_blank" rel="noopener" data-i18n-text="0:ui.project.liveSite">Live site <i data-lucide="external-link" aria-hidden="true"></i></a>');
+    else if (project.status.value === "UNAVAILABLE") links.push('<span class="project-link-muted" data-i18n-text="0:ui.project.unavailable">Currently unavailable</span>');
+    if (project.caseStudy) links.push('<a href="' + escape(project.caseStudy.href) + '" data-i18n-text="0:ui.project.caseStudy">Case study <i data-lucide="arrow-right" aria-hidden="true"></i></a>');
     const disclosure = project.media.kind === "ARCHIVE_TREATMENT" ? "Archive visual · live snapshot unavailable" : "Current site snapshot · " + project.media.capturedOn;
     const values = {
       "{{slug}}": escape(project.slug), "{{category}}": escape(project.category), "{{status}}": escape(project.status.value),
@@ -106,7 +106,7 @@
       "{{titleOpen}}": titleOpen, "{{titleClose}}": primary ? "</a>" : "", "{{picture}}": pictureMarkup(project, options.priority, featured),
       "{{index}}": String(index + 1).padStart(2, "0"), "{{host}}": escape(hostFor(project.url)), "{{mediaDisclosure}}": escape(disclosure),
       "{{categoryLabel}}": escape(project.categoryLabel), "{{typeLabel}}": escape(project.typeLabel),
-      "{{featuredBadge}}": featured ? '<span class="project-featured-badge"><i data-lucide="sparkles" aria-hidden="true"></i> Featured</span>' : "",
+      "{{featuredBadge}}": featured ? '<span class="project-featured-badge" data-i18n-text="0:ui.project.featured"><i data-lucide="sparkles" aria-hidden="true"></i> Featured</span>' : "",
       "{{statusClass}}": project.status.value.toLowerCase(), "{{statusLabel}}": statusLabel, "{{title}}": escape(project.title),
       "{{description}}": escape(project.description), "{{detailLine}}": detailLine, "{{technologyList}}": technologyList, "{{links}}": links.join("")
     };
@@ -136,8 +136,9 @@
       if (!container || !template) return;
       const limit = Number(container.dataset.serviceLimit || Portfolio.serviceData.length);
       container.innerHTML = Portfolio.serviceData.slice(0, limit).map(function (service, index) {
-        const items = service.items.map(function (item) { return "<li>" + escape(item) + "</li>"; }).join("");
-        const values = { "{{icon}}": escape(service.icon), "{{number}}": String(index + 1).padStart(2, "0"), "{{title}}": escape(service.title), "{{description}}": escape(service.description), "{{items}}": items, "{{slug}}": Portfolio.utils.slugify(service.title) };
+        const slug = Portfolio.utils.slugify(service.title);
+        const items = service.items.map(function (item, itemIndex) { return '<li data-i18n-text="0:service.' + escape(slug) + '.item.' + itemIndex + '">' + escape(item) + "</li>"; }).join("");
+        const values = { "{{icon}}": escape(service.icon), "{{number}}": String(index + 1).padStart(2, "0"), "{{title}}": escape(service.title), "{{description}}": escape(service.description), "{{items}}": items, "{{slug}}": slug };
         return Object.keys(values).reduce(function (html, token) { return html.split(token).join(values[token]); }, template.innerHTML);
       }).join("");
     },
@@ -145,9 +146,9 @@
       const scope = root || document;
       const grid = scope.querySelector("[data-projects-grid]");
       if (!grid || !scope.querySelector("[data-project-filter]")) return;
-      let activeCategory = "all";
-      let activeStatus = "all";
-      let query = "";
+      let activeCategory = scope.querySelector("[data-project-filter].active")?.dataset.projectFilter || "all";
+      let activeStatus = scope.querySelector("[data-project-status]")?.value || "all";
+      let query = scope.querySelector("[data-project-search]")?.value.trim().toLowerCase() || "";
       const resultCount = scope.querySelector("[data-project-result-count]");
       const empty = scope.querySelector("[data-project-empty]");
       const search = scope.querySelector("[data-project-search]");
@@ -162,7 +163,7 @@
           if (show) visibleCards.push(card);
         });
         if (empty) empty.hidden = visibleCards.length > 0;
-        if (resultCount) resultCount.textContent = visibleCards.length + (visibleCards.length === 1 ? " project" : " projects");
+        if (resultCount) resultCount.textContent = Portfolio.I18n.format(visibleCards.length === 1 ? "ui.project.resultOne" : "ui.project.resultMany", visibleCards.length === 1 ? "{count} project" : "{count} projects", { count: visibleCards.length });
         if (clear) clear.hidden = !query;
         if (window.gsap && !Portfolio.utils.prefersReducedMotion()) window.gsap.fromTo(visibleCards, { y: 18, scale: .975, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .5, stagger: .045, ease: "power3.out", overwrite: true });
         if (window.ScrollTrigger) window.ScrollTrigger.refresh();
@@ -181,6 +182,12 @@
       if (search) Portfolio.Lifecycle.page.listen(search, "input", function () { query = search.value.trim().toLowerCase(); apply(); });
       if (clear) Portfolio.Lifecycle.page.listen(clear, "click", function () { if (search) { search.value = ""; query = ""; search.focus(); apply(); } });
       apply();
+    },
+    refreshSearchIndex(root) {
+      (root || document).querySelectorAll(".project-card").forEach(function (card) {
+        if (!card.dataset.searchEnglish) card.dataset.searchEnglish = card.dataset.search;
+        card.dataset.search = (card.dataset.searchEnglish + " " + card.textContent).toLowerCase();
+      });
     },
     init(root) {
       const scope = root || document;

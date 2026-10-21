@@ -263,7 +263,45 @@ h1, h2, h3, h4 {
 .desktop-nav a { position: relative; padding: .52rem .83rem; border-radius: 999px; color: var(--text-soft); font-size: .75rem; font-weight: 700; transition: color .25s, background .25s; }
 .desktop-nav a:hover, .desktop-nav a.active { background: var(--surface-strong); color: var(--text); }
 .navbar-actions { display: flex; align-items: center; gap: .65rem; }
-html:not(.js) .theme-toggle, html:not(.js) .menu-toggle { display: none; }
+.site-header.is-language-open { transform: none; }
+.language-picker { position: relative; flex: 0 0 auto; }
+.language-trigger { display: inline-flex; min-width: 105px; height: 44px; align-items: center; justify-content: center; gap: .5rem; padding: 0 .8rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); cursor: pointer; font: 700 .75rem var(--font-body); transition: border-color .2s ease, background .2s ease, box-shadow .2s ease; }
+.language-trigger:hover, .language-trigger[aria-expanded="true"] { border-color: var(--accent); background: var(--surface-strong); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
+.language-trigger svg { width: 14px; height: 14px; transition: transform .2s ease; }
+.language-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
+.language-flag { flex: 0 0 auto; font-family: system-ui, sans-serif; font-size: 1.25rem; line-height: 1; }
+.language-flag-art { display: block; width: 24px; height: 16px; border-radius: 2px; background-position: center; background-size: cover; box-shadow: 0 0 0 1px rgba(255,255,255,.15); }
+.language-panel { position: absolute; top: calc(100% + .7rem); right: 0; z-index: 1100; width: min(340px, calc(100vw - 2rem)); padding: 1rem; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface-solid); color: var(--text); box-shadow: var(--shadow); backdrop-filter: blur(20px); }
+.language-panel[hidden] { display: none; }
+.language-search-label { display: block; margin-bottom: .6rem; color: var(--text); font: 700 .9rem var(--font-display); }
+.language-search-wrap { display: flex; align-items: center; gap: .6rem; padding: .65rem .8rem; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-soft); }
+.language-search-wrap:focus-within { border-color: var(--accent); }
+.language-search-wrap svg { width: 16px; height: 16px; color: var(--muted); }
+.language-search-wrap input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font-size: .82rem; }
+.language-search-wrap input::placeholder { color: var(--muted); }
+.language-list { display: grid; max-height: min(360px, 52vh); gap: .25rem; overflow-y: auto; margin-top: .7rem; scrollbar-width: thin; }
+.language-option { display: flex; width: 100%; min-height: 52px; align-items: center; gap: .7rem; padding: .5rem .6rem; border: 1px solid transparent; border-radius: 11px; background: transparent; color: var(--text); cursor: pointer; text-align: start; }
+.language-option:hover:not(:disabled), .language-option[aria-selected="true"] { border-color: var(--line); background: var(--surface-strong); }
+.language-option[aria-selected="true"] { box-shadow: inset 3px 0 var(--accent); }
+.language-option:disabled { cursor: not-allowed; opacity: .48; }
+.language-option-label { display: grid; min-width: 0; flex: 1; line-height: 1.25; }
+.language-option-label strong { overflow: hidden; font: 700 .78rem var(--font-body); text-overflow: ellipsis; white-space: nowrap; }
+.language-option-label small { color: var(--text-soft); font-size: .68rem; }
+.language-unavailable { color: var(--muted); font-size: .62rem; white-space: nowrap; }
+.language-status { margin: .5rem 0 0; color: var(--danger); font-size: .7rem; }
+.language-status:empty { display: none; }
+html[data-locale="hi-IN"] { --font-body: "Nirmala UI", "Noto Sans Devanagari", sans-serif; --font-display: "Nirmala UI", "Noto Sans Devanagari", sans-serif; }
+html[data-locale="bn-BD"] { --font-body: "Nirmala UI", "Noto Sans Bengali", sans-serif; --font-display: "Nirmala UI", "Noto Sans Bengali", sans-serif; }
+html[data-locale="ar-AE"], html[data-locale="ur-PK"] { --font-body: "Segoe UI", "Noto Naskh Arabic", Tahoma, sans-serif; --font-display: "Segoe UI", "Noto Naskh Arabic", Tahoma, sans-serif; }
+html[data-locale="zh-CN"] { --font-body: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; --font-display: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; }
+html[data-locale="ja-JP"] { --font-body: "Yu Gothic", "Noto Sans CJK JP", sans-serif; --font-display: "Yu Gothic", "Noto Sans CJK JP", sans-serif; }
+html[data-locale="ko-KR"] { --font-body: "Malgun Gothic", "Noto Sans CJK KR", sans-serif; --font-display: "Malgun Gothic", "Noto Sans CJK KR", sans-serif; }
+html[data-locale="th-TH"] { --font-body: "Leelawadee UI", "Noto Sans Thai", sans-serif; --font-display: "Leelawadee UI", "Noto Sans Thai", sans-serif; }
+html[data-locale="ru-RU"], html[data-locale="pl-PL"], html[data-locale="tr-TR"], html[data-locale="vi-VN"] { --font-body: "Segoe UI", Arial, sans-serif; --font-display: "Segoe UI", Arial, sans-serif; }
+html[data-locale="hi-IN"] h1, html[data-locale="hi-IN"] h2, html[data-locale="hi-IN"] h3, html[data-locale="bn-BD"] h1, html[data-locale="bn-BD"] h2, html[data-locale="bn-BD"] h3, html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 { font-family: inherit; letter-spacing: normal; }
+html[dir="rtl"] .language-panel { direction: ltr; }
+html[dir="rtl"] .language-option[aria-selected="true"] { box-shadow: inset 3px 0 var(--accent); }
+html:not(.js) .theme-toggle, html:not(.js) .menu-toggle, html:not(.js) .language-picker { display: none; }
 .theme-toggle .theme-icon-dark { display: none; }
 [data-theme="light"] .theme-toggle .theme-icon-light { display: none; }
 [data-theme="light"] .theme-toggle .theme-icon-dark { display: block; }

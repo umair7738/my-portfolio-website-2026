@@ -1,49 +1,62 @@
 <header class="site-header" data-site-header>
   <div class="container-xxl">
-    <nav class="navbar-shell" aria-label="Primary navigation">
+    <nav class="navbar-shell" aria-label="Primary navigation" data-i18n-attrs="aria-label:components.navbar.attr.0001">
       <!-- BRAND_LOGO_START --><a class="brand magnetic" href="/" aria-label="Umair Builds home"><picture class="brand-logo" data-theme-logo><source type="image/webp" sizes="(max-width: 991.98px) 168px, (max-width: 1199.98px) 160px, 200px" data-light-srcset="assets/brand/umair-builds-horizontal-light-200.webp?v=e06a66f924ce 200w, assets/brand/umair-builds-horizontal-light-400.webp?v=dfd1552d5764 400w" data-dark-srcset="assets/brand/umair-builds-horizontal-dark-200.webp?v=e8886d3460c8 200w, assets/brand/umair-builds-horizontal-dark-400.webp?v=b82831a9f779 400w"><img loading="eager" fetchpriority="high" data-light-src="assets/brand/umair-builds-horizontal-light-400.png?v=428496b65a9e" data-dark-src="assets/brand/umair-builds-horizontal-dark-400.png?v=fa55b1d89e21" width="2400" height="430" alt="Umair Builds" decoding="async"></picture></a><!-- BRAND_LOGO_END -->
 
-      <div class="desktop-nav" role="navigation" aria-label="Desktop navigation">
-        <a data-nav="home" href="/">Home</a>
-        <a data-nav="about" href="about.html">About</a>
-        <a data-nav="projects" href="projects.html">Projects</a>
-        <a data-nav="case-studies" href="case-studies.html">Case studies</a>
-        <a data-nav="services" href="services.html">Services</a>
-        <a data-nav="skills" href="skills.html">Skills</a>
-        <a data-nav="experience" href="experience.html">Experience</a>
+      <div class="desktop-nav" role="navigation" aria-label="Desktop navigation" data-i18n-attrs="aria-label:components.navbar.attr.0004">
+        <a data-nav="home" href="/" data-i18n-text="0:components.navbar.text.0001">Home</a>
+        <a data-nav="about" href="about.html" data-i18n-text="0:components.navbar.text.0002">About</a>
+        <a data-nav="projects" href="projects.html" data-i18n-text="0:components.navbar.text.0003">Projects</a>
+        <a data-nav="case-studies" href="case-studies.html" data-i18n-text="0:components.navbar.text.0004">Case studies</a>
+        <a data-nav="services" href="services.html" data-i18n-text="0:components.navbar.text.0005">Services</a>
+        <a data-nav="skills" href="skills.html" data-i18n-text="0:components.navbar.text.0006">Skills</a>
+        <a data-nav="experience" href="experience.html" data-i18n-text="0:components.navbar.text.0007">Experience</a>
       </div>
 
       <div class="navbar-actions">
-        <button class="icon-btn theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
+        <div class="language-picker" data-language-picker>
+          <button class="language-trigger" data-language-trigger type="button" aria-label="Choose language" data-i18n-attrs="aria-label:ui.language.choose" aria-haspopup="dialog" aria-expanded="false" aria-controls="languagePanel" disabled>
+            <span class="language-flag" data-language-flag aria-hidden="true"><span class="language-flag-art" style="background-image:url('assets/flags/in.svg')"></span></span>
+            <span class="language-trigger-country" data-language-country>India</span>
+            <i data-lucide="chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="language-panel" data-language-panel id="languagePanel" role="dialog" aria-label="Choose website language" data-i18n-attrs="aria-label:ui.language.dialog" hidden>
+            <label class="language-search-label" for="languageSearch" data-i18n-text="0:ui.language.choose">Choose language</label>
+            <div class="language-search-wrap"><i data-lucide="search" aria-hidden="true"></i><input id="languageSearch" data-language-search type="search" autocomplete="off" placeholder="Search country or language" aria-label="Search country or language" data-i18n-attrs="placeholder:ui.language.search;aria-label:ui.language.search"></div>
+            <div class="language-list" data-language-list role="listbox" aria-label="Available languages"></div>
+            <p class="language-status" data-language-status role="status" aria-live="polite"></p>
+          </div>
+        </div>
+        <button class="icon-btn theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false" data-i18n-attrs="aria-label:components.navbar.attr.0005">
           <i data-lucide="sun" class="theme-icon-light" aria-hidden="true"></i>
           <i data-lucide="moon" class="theme-icon-dark" aria-hidden="true"></i>
         </button>
-        <a class="btn btn-primary btn-sm magnetic d-none d-lg-inline-flex" href="contact.html">
+        <a class="btn btn-primary btn-sm magnetic d-none d-lg-inline-flex" href="contact.html" data-i18n-text="0:components.navbar.text.0008">
           Start a project <i data-lucide="arrow-up-right" aria-hidden="true"></i>
         </a>
-        <button class="menu-toggle d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-expanded="false" aria-label="Open navigation">
+        <button class="menu-toggle d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-expanded="false" aria-label="Open navigation" data-i18n-attrs="aria-label:components.navbar.attr.0006">
           <span></span><span></span>
         </button>
       </div>
     </nav>
   </div>
 
-  <div class="offcanvas offcanvas-end mobile-menu" tabindex="-1" id="mobileMenu" aria-label="Mobile navigation">
+  <div class="offcanvas offcanvas-end mobile-menu" tabindex="-1" id="mobileMenu" aria-label="Mobile navigation" data-i18n-attrs="aria-label:components.navbar.attr.0007">
     <div class="offcanvas-body">
-      <p class="eyebrow">Explore</p>
+      <p class="eyebrow" data-i18n-text="0:components.navbar.text.0009">Explore</p>
       <div class="mobile-nav">
-        <a data-nav="home" href="/"><span>01</span>Home</a>
-        <a data-nav="about" href="about.html"><span>02</span>About</a>
-        <a data-nav="projects" href="projects.html"><span>03</span>Projects</a>
-        <a data-nav="case-studies" href="case-studies.html"><span>04</span>Case studies</a>
-        <a data-nav="services" href="services.html"><span>05</span>Services</a>
-        <a data-nav="skills" href="skills.html"><span>06</span>Skills</a>
-        <a data-nav="experience" href="experience.html"><span>07</span>Experience</a>
-        <a data-nav="contact" href="contact.html"><span>08</span>Contact</a>
+        <a data-nav="home" href="/" data-i18n-text="0:components.navbar.text.0010"><span>01</span>Home</a>
+        <a data-nav="about" href="about.html" data-i18n-text="0:components.navbar.text.0011"><span>02</span>About</a>
+        <a data-nav="projects" href="projects.html" data-i18n-text="0:components.navbar.text.0012"><span>03</span>Projects</a>
+        <a data-nav="case-studies" href="case-studies.html" data-i18n-text="0:components.navbar.text.0013"><span>04</span>Case studies</a>
+        <a data-nav="services" href="services.html" data-i18n-text="0:components.navbar.text.0014"><span>05</span>Services</a>
+        <a data-nav="skills" href="skills.html" data-i18n-text="0:components.navbar.text.0015"><span>06</span>Skills</a>
+        <a data-nav="experience" href="experience.html" data-i18n-text="0:components.navbar.text.0016"><span>07</span>Experience</a>
+        <a data-nav="contact" href="contact.html" data-i18n-text="0:components.navbar.text.0017"><span>08</span>Contact</a>
       </div>
       <div class="mobile-menu-contact">
-        <a href="mailto:umairshaikh7738@gmail.com">umairshaikh7738@gmail.com</a>
-        <span>Mumbai, India</span>
+        <a href="mailto:umairshaikh7738@gmail.com" data-i18n-text="0:components.navbar.text.0018">umairshaikh7738@gmail.com</a>
+        <span data-i18n-text="0:components.navbar.text.0019">Mumbai, India</span>
       </div>
     </div>
   </div>
