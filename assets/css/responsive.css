@@ -126,7 +126,7 @@
   .proof-card .btn { grid-column: auto; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .footer-grid > div:first-child { grid-column: 1 / -1; }
-  .analytics-consent { align-items: flex-start; flex-direction: column; }
+  .analytics-consent { right: 16px; bottom: 16px; left: 16px; align-items: stretch; flex-direction: column; gap: 1rem; padding: 18px; }
   .analytics-consent-actions { width: 100%; }
   .analytics-consent-actions .btn { flex: 1; }
   .footer-bottom { align-items: flex-start; flex-direction: column; }
