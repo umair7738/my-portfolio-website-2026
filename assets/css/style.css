@@ -681,7 +681,8 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle, html:not(.js) .language
 .service-fallback h2 { margin: 0 0 .5rem; font-size: 1.25rem; }
 .service-fallback p, .service-fallback li, .contact-fallback { color: var(--text-soft); font-size: .88rem; }
 .contact-fallback { margin-top: 1.5rem; padding: 1rem 1.15rem; border: 1px solid var(--line); border-radius: .85rem; }
-.analytics-consent { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; margin-top: 1.5rem; padding: 1rem 1.15rem; border: 1px solid rgba(255,255,255,.14); border-radius: 1rem; background: rgba(255,255,255,.045); color: rgba(255,255,255,.78); }
+.analytics-consent { position: fixed; right: clamp(1rem,3vw,2rem); bottom: clamp(1rem,3vw,2rem); left: clamp(1rem,3vw,2rem); z-index: 1200; display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; max-width: 980px; margin: 0 auto; padding: 1rem 1.15rem; border: 1px solid rgba(255,255,255,.18); border-radius: 1rem; background: rgba(16,21,34,.94); color: rgba(255,255,255,.78); box-shadow: 0 18px 60px rgba(0,0,0,.38); isolation: isolate; }
+.analytics-consent::before { content: ""; position: fixed; inset: 0; z-index: -1; background: rgba(3,6,12,.42); backdrop-filter: blur(4px); pointer-events: none; }
 .analytics-consent[hidden] { display: none !important; }
 .analytics-consent strong { display: block; margin-bottom: .2rem; color: #fff; font-size: .78rem; }
 .analytics-consent p { max-width: 620px; margin: 0; font-size: .72rem; line-height: 1.55; }
