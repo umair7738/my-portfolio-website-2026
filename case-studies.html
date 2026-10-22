@@ -3,7 +3,7 @@
   <link rel="preload" href="assets/fonts/manrope-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/space-grotesk-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" media="print" onload="this.media='all'">
-  <noscript><link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></noscript><link rel="stylesheet" href="assets/css/portfolio.min.css?v=48030f94164f"><!-- BRAND_ICONS_START -->
+  <noscript><link href="assets/vendor/bootstrap-5.3.8.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></noscript><link rel="stylesheet" href="assets/css/portfolio.min.css?v=3a8016831255"><!-- BRAND_ICONS_START -->
   <link rel="icon" href="/favicon.ico?v=ebdc7e503eef" sizes="16x16 32x32 48x48 64x64" type="image/x-icon">
   <link rel="icon" href="assets/brand/umair-builds-icon-16.png?v=e4108284caad" sizes="16x16" type="image/png">
   <link rel="icon" href="assets/brand/umair-builds-icon-32.png?v=2c553d826026" sizes="32x32" type="image/png">
@@ -24,6 +24,9 @@
   <!-- Optional analytics: only load after an explicit local opt-in. -->
   <script>
     (function (window, document) {
+      var granted = false;
+      try { granted = window.localStorage.getItem("portfolio-analytics-consent") === "granted"; } catch (_error) {}
+      if (!granted) return;
       window.dataLayer = window.dataLayer || [];
       window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
       window.gtag("consent", "default", {
@@ -33,9 +36,6 @@
         ad_personalization: "denied",
         wait_for_update: 500
       });
-      var granted = false;
-      try { granted = window.localStorage.getItem("portfolio-analytics-consent") === "granted"; } catch (_error) {}
-      if (!granted) return;
       window.gtag("consent", "update", { analytics_storage: "granted" });
       window.gtag("js", new Date());
       window.gtag("config", "G-6J1PG2GSNQ", { send_page_view: false, anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false });
@@ -81,5 +81,5 @@
   </div></div></section>
   <section class="section section-border" id="evidence" aria-labelledby="evidence-title"><div class="container-xxl"><span class="eyebrow reveal-up" data-i18n-text="0:case-studies.text.0118">Evidence notes</span><h2 class="section-title reveal-up" id="evidence-title" data-i18n-text="0:case-studies.text.0119;1:case-studies.text.0120">Trust is built by<br>showing the boundary.</h2><div class="row g-4"><div class="col-lg-4"><div class="case-callout reveal-up"><strong data-i18n-text="0:case-studies.text.0121">Project-owner record</strong><p data-i18n-text="0:case-studies.text.0122">Delivery stacks and independent design-and-development ownership supplied directly by Umair Shaikh.</p></div></div><div class="col-lg-4"><div class="case-callout reveal-up"><strong data-i18n-text="0:case-studies.text.0123">Public-site audit</strong><p data-i18n-text="0:case-studies.text.0124">Dated technology signals and snapshots describe the live domains without rewriting delivery history.</p></div></div><div class="col-lg-4"><div class="case-callout reveal-up"><strong data-i18n-text="0:case-studies.text.0125">Not claimed</strong><p data-i18n-text="0:case-studies.text.0126">Undocumented metrics, research, team size, tests, or source repositories.</p></div></div></div></div></section>
   <div data-component="cta-banner"></div></main></div><div data-component="footer"></div><div data-component="floating-actions"></div>
-  <script defer src="assets/vendor/jquery-3.7.1.min.js"></script><script defer src="assets/vendor/bootstrap-5.3.8.bundle.min.js"></script><script defer src="assets/vendor/gsap-3.13.0.min.js"></script><script defer src="assets/vendor/ScrollTrigger-3.13.0.min.js"></script><script defer src="assets/vendor/lenis-1.3.11.min.js"></script><script defer src="assets/vendor/lucide-0.468.0.min.js"></script><script defer src="assets/vendor/barba-2.10.3.umd.js"></script><script defer src="assets/js/portfolio.min.js?v=4de702ef5834"></script>
+  <script defer src="assets/vendor/jquery-3.7.1.min.js"></script><script defer src="assets/vendor/bootstrap-5.3.8.bundle.min.js"></script><script defer src="assets/vendor/gsap-3.13.0.min.js"></script><script defer src="assets/vendor/ScrollTrigger-3.13.0.min.js"></script><script defer src="assets/vendor/lenis-1.3.11.min.js"></script><script defer src="assets/vendor/lucide-0.468.0.min.js"></script><script defer src="assets/vendor/barba-2.10.3.umd.js"></script><script defer src="assets/js/portfolio.min.js?v=cdd210780683"></script>
 </body></html>

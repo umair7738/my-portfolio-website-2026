@@ -3,6 +3,12 @@
 
   const Portfolio = window.Portfolio = window.Portfolio || {};
   const STORAGE_KEY = "portfolio-locale";
+  const PROVIDER_KEY = "portfolio-locale-provider";
+  const googleCodes = {
+    "hi-IN": "hi", "ar-AE": "ar", "es-ES": "es", "fr-FR": "fr", "de-DE": "de", "pt-BR": "pt",
+    "it-IT": "it", "nl-NL": "nl", "pl-PL": "pl", "tr-TR": "tr", "ru-RU": "ru", "zh-CN": "zh-CN",
+    "ja-JP": "ja", "ko-KR": "ko", "id-ID": "id", "vi-VN": "vi", "th-TH": "th", "bn-BD": "bn", "ur-PK": "ur"
+  };
   const SKIP_SELECTOR = "script, style, template, noscript, svg, [data-i18n-ignore], [contenteditable], [data-language-list]";
   const locales = [
     { code: "en-IN", flag: "🇮🇳", country: "India", language: "English", native: "English", dir: "ltr" },
@@ -27,6 +33,7 @@
     { code: "ur-PK", flag: "🇵🇰", country: "Pakistan", language: "Urdu", native: "اردو", dir: "rtl" }
   ];
   const originalText = new WeakMap();
+  const sourceText = new WeakMap();
   const bundles = new Map();
   let manifestPromise;
   let referencePromise;
@@ -34,8 +41,48 @@
   let activeCode = "en-IN";
   let activeBundle = null;
   let pending = null;
+  let googleProviderActive = false;
+  const googleFallbackEnabled = true;
+  let googleScriptPromise;
 
   function localeFor(code) { return locales.find(function (item) { return item.code === code; }); }
+  function googleCodeFor(code) { return googleCodes[code] || ""; }
+  function setGoogleCookie(code) {
+    const target = googleCodeFor(code);
+    if (!target) document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+    else document.cookie = "googtrans=/en/" + target + "; path=/";
+  }
+  function googleSelect() { return document.querySelector(".goog-te-combo"); }
+  function loadGoogleTranslate() {
+    if (window.google && window.google.translate && window.google.translate.TranslateElement) return Promise.resolve();
+    if (googleScriptPromise) return googleScriptPromise;
+    googleScriptPromise = new Promise(function (resolve, reject) {
+      window.PortfolioGoogleTranslateInit = function () {
+        try {
+          new window.google.translate.TranslateElement({ pageLanguage: "en", includedLanguages: Object.keys(googleCodes).map(googleCodeFor).join(","), autoDisplay: false }, "google_translate_element");
+          resolve();
+        } catch (error) { reject(error); }
+      };
+      const script = document.createElement("script");
+      script.src = "https://translate.google.com/translate_a/element.js?cb=PortfolioGoogleTranslateInit";
+      script.async = true;
+      script.onerror = function () { reject(new Error("Google Translate could not be loaded.")); };
+      document.head.appendChild(script);
+    });
+    return googleScriptPromise;
+  }
+  async function chooseGoogleLanguage(code) {
+    await loadGoogleTranslate();
+    let select = googleSelect();
+    if (!select) {
+      await new Promise(function (resolve) { window.setTimeout(resolve, 120); });
+      select = googleSelect();
+    }
+    if (!select) throw new Error("Google Translate is unavailable right now.");
+    setGoogleCookie(code);
+    select.value = googleCodeFor(code);
+    select.dispatchEvent(new Event("change"));
+  }
   function flagImage(code) {
     const flag = document.createElement("span");
     flag.className = "language-flag-art";
@@ -96,6 +143,16 @@
       return [pair.slice(0, split), pair.slice(split + 1)];
     });
   }
+  function keyedTextNodes(element) {
+    const nodes = [];
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walker.nextNode())) {
+      const owner = node.parentElement && node.parentElement.closest("[data-i18n-text]");
+      if (owner === element && /\p{L}/u.test(node.nodeValue)) nodes.push(node);
+    }
+    return nodes;
+  }
   function collect(root, bundle) {
     const operations = [];
     const scope = root || document;
@@ -107,14 +164,15 @@
         if (entries.length !== 1 || entries[0][0] !== "0") throw new Error("Animated text needs one translation key.");
         operations.push({ splitElement: element, value: translatedValue(entries[0][1], bundle) });
       } else {
-      const textNodes = Array.from(element.childNodes).filter(function (node) {
-        return node.nodeType === Node.TEXT_NODE && /\p{L}/u.test(node.nodeValue);
-      });
+      const textNodes = keyedTextNodes(element);
+      if (!sourceText.has(element)) sourceText.set(element, textNodes.map(function (node) { return originalText.get(node) || node.nodeValue; }));
+      const sourceValues = sourceText.get(element) || [];
       parseKeyMap(element.dataset.i18nText).forEach(function (entry) {
         const node = textNodes[Number(entry[0])];
         if (!node) throw new Error("Translation source node missing: " + entry[1]);
-        if (!originalText.has(node)) originalText.set(node, node.nodeValue);
-        operations.push({ node: node, value: withOriginalSpacing(originalText.get(node), translatedValue(entry[1], bundle)) });
+        const source = sourceValues[Number(entry[0])] || originalText.get(node) || node.nodeValue;
+        if (!originalText.has(node)) originalText.set(node, source);
+        operations.push({ node: node, value: withOriginalSpacing(source, translatedValue(entry[1], bundle)) });
       });
       }
       parseKeyMap(element.dataset.i18nAttrs).forEach(function (entry) {
@@ -132,6 +190,7 @@
     });
     activeCode = code;
     activeBundle = bundle;
+    googleProviderActive = false;
     const locale = localeFor(code);
     document.documentElement.lang = code;
     document.documentElement.dir = locale.dir;
@@ -151,6 +210,7 @@
     locales: locales,
     get code() { return activeCode; },
     get pending() { return pending; },
+    get googleFallbackEnabled() { return googleFallbackEnabled; },
     async readyLocales() { return manifest(); },
     t(translationKey, fallback) { return activeBundle ? translatedValue(translationKey, activeBundle) : fallback; },
     format(translationKey, fallback, values) {
@@ -164,7 +224,11 @@
       document.documentElement.dir = "ltr";
       document.documentElement.dataset.locale = "en-IN";
       let saved = "en-IN";
-      try { saved = window.localStorage.getItem(STORAGE_KEY) || "en-IN"; } catch (_error) {}
+      let savedProvider = "local";
+      try {
+        saved = window.localStorage.getItem(STORAGE_KEY) || "en-IN";
+        savedProvider = window.localStorage.getItem(PROVIDER_KEY) || "local";
+      } catch (_error) {}
       if (saved !== "en-IN" && localeFor(saved)) {
         const ready = await manifest();
         if (ready.has(saved)) {
@@ -172,6 +236,12 @@
           catch (_error) {
             try { window.localStorage.removeItem(STORAGE_KEY); } catch (_storageError) {}
             this.showError("Saved language could not be loaded. English is shown.");
+          }
+        } else if (savedProvider === "google" && googleCodeFor(saved)) {
+          try { await this.setGoogleLocale(saved, { save: false }); }
+          catch (_error) {
+            try { window.localStorage.removeItem(STORAGE_KEY); window.localStorage.removeItem(PROVIDER_KEY); } catch (_storageError) {}
+            this.showError("Saved Google translation could not be loaded. English is shown.");
           }
         } else {
           try { window.localStorage.removeItem(STORAGE_KEY); } catch (_error) {}
@@ -181,13 +251,39 @@
       }
       this.initPicker();
     },
+    async setGoogleLocale(code, options) {
+      const id = ++requestId;
+      const locale = localeFor(code);
+      if (!locale || !googleCodeFor(code)) throw new Error("Google Translate does not support this language.");
+      const run = (async function () {
+        await chooseGoogleLanguage(code);
+        if (id !== requestId) return false;
+        googleProviderActive = true;
+        activeCode = code;
+        activeBundle = null;
+        document.documentElement.lang = code;
+        document.documentElement.dir = locale.dir;
+        document.documentElement.dataset.locale = code;
+        if (!options || options.save !== false) {
+          try { window.localStorage.setItem(STORAGE_KEY, code); window.localStorage.setItem(PROVIDER_KEY, "google"); } catch (_error) {}
+        }
+        window.dispatchEvent(new CustomEvent("portfolio:localechange", { detail: { code: code, provider: "google" } }));
+        return true;
+      })();
+      pending = run;
+      try { return await run; }
+      finally { if (pending === run) pending = null; }
+    },
     async setLocale(code, options) {
       const id = ++requestId;
       const run = (async function () {
         const locale = localeFor(code);
         if (!locale) throw new Error("Unknown language.");
         const ready = await manifest();
-        if (!ready.has(code)) throw new Error(locale.language + " translation is not complete yet.");
+        if (!ready.has(code)) {
+          if (googleFallbackEnabled && googleCodeFor(code)) return await Portfolio.I18n.setGoogleLocale(code, options);
+          throw new Error(locale.language + " translation is not complete yet.");
+        }
         const bundle = code === "en-IN" ? await reference() : await bundleFor(code);
         if (id !== requestId) return false;
         const operations = collect(document.body, bundle);
@@ -201,7 +297,12 @@
           commit(operations, code, bundle);
           if (remount) Portfolio.Page.remountAfterLocale();
           if (!options || options.save !== false) {
-            try { window.localStorage.setItem(STORAGE_KEY, code); } catch (_error) {}
+            try { window.localStorage.setItem(STORAGE_KEY, code); window.localStorage.setItem(PROVIDER_KEY, "local"); } catch (_error) {}
+          }
+          if (code === "en-IN") {
+            setGoogleCookie(code);
+            const select = googleSelect();
+            if (select) { select.value = ""; select.dispatchEvent(new Event("change")); }
           }
           window.dispatchEvent(new CustomEvent("portfolio:localechange", { detail: { code: code } }));
         } catch (error) {
@@ -217,6 +318,10 @@
     },
     async applyToPage(root) {
       if (pending) { try { await pending; } catch (_error) {} }
+      if (googleProviderActive) {
+        try { await chooseGoogleLanguage(activeCode); } catch (_error) {}
+        return;
+      }
       try { applyCurrent(root); }
       catch (_error) { await this.setLocale("en-IN"); }
     },
@@ -236,10 +341,18 @@
       const self = this;
       let filtered = [];
       let activeIndex = 0;
+      function setPageScrollPaused(paused) {
+        if (!window.portfolioLenis) return;
+        if (paused && typeof window.portfolioLenis.stop === "function") window.portfolioLenis.stop();
+        if (!paused && typeof window.portfolioLenis.start === "function") window.portfolioLenis.start();
+      }
       function close() {
         panel.hidden = true;
         trigger.setAttribute("aria-expanded", "false");
+        document.documentElement.classList.remove("language-panel-open");
+        document.body.classList.remove("language-panel-open");
         picker.closest(".site-header")?.classList.remove("is-language-open");
+        setPageScrollPaused(false);
       }
       function render(query) {
         const term = query.trim().toLocaleLowerCase();
@@ -253,7 +366,7 @@
           option.className = "language-option";
           option.setAttribute("role", "option");
           option.setAttribute("aria-selected", String(item.code === activeCode));
-          option.disabled = !ready.has(item.code);
+          option.disabled = !ready.has(item.code) && !googleFallbackEnabled;
           option.dataset.languageCode = item.code;
           const flag = document.createElement("span"); flag.className = "language-flag"; flag.append(flagImage(item.code));
           const label = document.createElement("span"); label.className = "language-option-label";
@@ -261,13 +374,9 @@
           const language = document.createElement("small"); language.textContent = item.native + " · " + item.language;
           label.append(country, language);
           option.append(flag, label);
-          if (!ready.has(item.code)) {
-            const state = document.createElement("small"); state.className = "language-unavailable"; state.textContent = self.t("ui.language.notReady", "Not ready");
-            option.append(state);
-          }
           list.append(option);
         });
-        activeIndex = Math.max(0, filtered.findIndex(function (item) { return ready.has(item.code); }));
+        activeIndex = Math.max(0, filtered.findIndex(function (item) { return ready.has(item.code) || googleFallbackEnabled; }));
       }
       function syncTrigger() {
         const locale = localeFor(activeCode);
@@ -285,7 +394,10 @@
         const opening = panel.hidden;
         panel.hidden = !opening;
         trigger.setAttribute("aria-expanded", String(opening));
+        document.documentElement.classList.toggle("language-panel-open", opening);
+        document.body.classList.toggle("language-panel-open", opening);
         picker.closest(".site-header")?.classList.toggle("is-language-open", opening);
+        setPageScrollPaused(opening);
         if (opening) { search.value = ""; render(""); search.focus(); }
       });
       search.addEventListener("input", function () { render(search.value); });
@@ -299,6 +411,15 @@
           focusOption(current + (event.key === "ArrowDown" ? 1 : -1));
         }
       });
+      function containScroll(event) {
+        if (panel.hidden) return;
+        const target = event.target instanceof Element ? event.target : null;
+        const insideList = !!(target && target.closest("[data-language-list]"));
+        event.stopPropagation();
+        if (!insideList) event.preventDefault();
+      }
+      document.addEventListener("wheel", containScroll, { capture: true, passive: false });
+      document.addEventListener("touchmove", containScroll, { capture: true, passive: false });
       list.addEventListener("click", async function (event) {
         const option = event.target.closest("[data-language-code]");
         if (!option || option.disabled) return;

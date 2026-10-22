@@ -109,9 +109,11 @@ body {
 
 ::selection { background: var(--primary); color: #fff; }
 
-::-webkit-scrollbar { width: 9px; }
+html { scrollbar-color: var(--surface-strong) var(--bg); scrollbar-width: thin; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--surface-strong); border-radius: 20px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
 a { color: inherit; text-decoration: none; }
 a:hover { color: inherit; }
@@ -264,6 +266,8 @@ h1, h2, h3, h4 {
 .desktop-nav a:hover, .desktop-nav a.active { background: var(--surface-strong); color: var(--text); }
 .navbar-actions { display: flex; align-items: center; gap: .65rem; }
 .site-header.is-language-open { transform: none; }
+html.language-panel-open, body.language-panel-open { overflow: hidden; }
+html.language-panel-open { scrollbar-gutter: stable; }
 .language-picker { position: relative; flex: 0 0 auto; }
 .language-trigger { display: inline-flex; min-width: 105px; height: 44px; align-items: center; justify-content: center; gap: .5rem; padding: 0 .8rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); cursor: pointer; font: 700 .75rem var(--font-body); transition: border-color .2s ease, background .2s ease, box-shadow .2s ease; }
 .language-trigger:hover, .language-trigger[aria-expanded="true"] { border-color: var(--accent); background: var(--surface-strong); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
@@ -279,7 +283,11 @@ h1, h2, h3, h4 {
 .language-search-wrap svg { width: 16px; height: 16px; color: var(--muted); }
 .language-search-wrap input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font-size: .82rem; }
 .language-search-wrap input::placeholder { color: var(--muted); }
-.language-list { display: grid; max-height: min(360px, 52vh); gap: .25rem; overflow-y: auto; margin-top: .7rem; scrollbar-width: thin; }
+.language-list { display: grid; max-height: min(360px, 52vh); gap: .25rem; overflow-y: auto; margin-top: .7rem; overscroll-behavior: contain; scrollbar-color: var(--accent) transparent; scrollbar-gutter: stable; scrollbar-width: thin; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+.language-list::-webkit-scrollbar { width: 8px; }
+.language-list::-webkit-scrollbar-track { margin: .35rem 0; border-radius: 99px; background: color-mix(in srgb, var(--bg-soft) 72%, transparent); }
+.language-list::-webkit-scrollbar-thumb { min-height: 36px; border: 2px solid transparent; border-radius: 99px; background: linear-gradient(180deg, var(--accent), var(--primary)) padding-box; }
+.language-list::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, var(--accent), var(--primary)) padding-box; }
 .language-option { display: flex; width: 100%; min-height: 52px; align-items: center; gap: .7rem; padding: .5rem .6rem; border: 1px solid transparent; border-radius: 11px; background: transparent; color: var(--text); cursor: pointer; text-align: start; }
 .language-option:hover:not(:disabled), .language-option[aria-selected="true"] { border-color: var(--line); background: var(--surface-strong); }
 .language-option[aria-selected="true"] { box-shadow: inset 3px 0 var(--accent); }
@@ -287,9 +295,11 @@ h1, h2, h3, h4 {
 .language-option-label { display: grid; min-width: 0; flex: 1; line-height: 1.25; }
 .language-option-label strong { overflow: hidden; font: 700 .78rem var(--font-body); text-overflow: ellipsis; white-space: nowrap; }
 .language-option-label small { color: var(--text-soft); font-size: .68rem; }
-.language-unavailable { color: var(--muted); font-size: .62rem; white-space: nowrap; }
 .language-status { margin: .5rem 0 0; color: var(--danger); font-size: .7rem; }
 .language-status:empty { display: none; }
+.google-translate-widget { position: fixed; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.goog-te-banner-frame.skiptranslate, body > .skiptranslate { display: none !important; }
+body.translated-ltr, body.translated-rtl { top: 0 !important; }
 html[data-locale="hi-IN"] { --font-body: "Nirmala UI", "Noto Sans Devanagari", sans-serif; --font-display: "Nirmala UI", "Noto Sans Devanagari", sans-serif; }
 html[data-locale="bn-BD"] { --font-body: "Nirmala UI", "Noto Sans Bengali", sans-serif; --font-display: "Nirmala UI", "Noto Sans Bengali", sans-serif; }
 html[data-locale="ar-AE"], html[data-locale="ur-PK"] { --font-body: "Segoe UI", "Noto Naskh Arabic", Tahoma, sans-serif; --font-display: "Segoe UI", "Noto Naskh Arabic", Tahoma, sans-serif; }

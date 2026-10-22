@@ -63,7 +63,10 @@ test("keeps form values and project filter identifiers stable", async ({ page })
   await expect(page.locator("#projectType")).toHaveValue("Business website");
   await page.goto("/projects.html");
   await page.waitForFunction(() => window.Portfolio && Portfolio.Router.started);
+  await page.waitForSelector(".page-loader", { state: "detached" });
   const filter = page.locator("[data-project-filter]").nth(1);
+  await filter.scrollIntoViewIfNeeded();
+  await expect(filter).toBeVisible();
   await filter.click();
   const category = await filter.getAttribute("data-project-filter");
   await page.evaluate(() => Portfolio.I18n.setLocale("ar-AE"));
@@ -77,4 +80,63 @@ test("does not accept an invalid saved locale", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("lang", "en-IN");
   expect(await page.evaluate(() => localStorage.getItem("portfolio-locale"))).toBeNull();
+});
+
+test("keeps page scroll locked while the language list scrolls", async ({ page }) => {
+  await mockLocales(page);
+  await page.goto("/");
+  await page.evaluate(() => window.scrollTo(0, 360));
+  const before = await page.evaluate(() => window.scrollY);
+  await page.locator("[data-language-trigger]").click();
+  await expect(page.locator("[data-language-panel]")).toBeVisible();
+  await expect(page.locator("html")).toHaveClass(/language-panel-open/);
+  const list = page.locator("[data-language-list]");
+  await list.hover();
+  await page.mouse.wheel(0, 520);
+  await page.waitForTimeout(100);
+  const state = await page.evaluate(() => ({ pageY: window.scrollY, listY: document.querySelector("[data-language-list]").scrollTop }));
+  expect(state.pageY).toBe(before);
+  expect(state.listY).toBeGreaterThan(0);
+  await page.locator("[data-language-trigger]").click();
+  await expect(page.locator("html")).not.toHaveClass(/language-panel-open/);
+});
+
+test("uses the Google Translate fallback from the same selector", async ({ page }) => {
+  await page.route("**/assets/i18n/manifest.json", (route) => route.fulfill({ json: { ready: ["en-IN"] } }));
+  await page.route("https://translate.google.com/translate_a/element.js?cb=PortfolioGoogleTranslateInit", (route) => route.fulfill({
+    contentType: "application/javascript",
+    body: `window.google={translate:{TranslateElement:function(_,id){var s=document.createElement('select');s.className='goog-te-combo';['','hi','ar','es','fr','de','pt','it','nl','pl','tr','ru','zh-CN','ja','ko','id','vi','th','bn','ur'].forEach(function(v){var o=document.createElement('option');o.value=v;s.append(o)});document.getElementById(id).append(s)}}};window.PortfolioGoogleTranslateInit();`
+  }));
+  await page.goto("/");
+  await page.locator("[data-language-trigger]").click();
+  await expect(page.locator("[data-language-google-toggle]")).toHaveCount(0);
+  await expect(page.locator(".language-unavailable")).toHaveCount(0);
+  await page.locator("[data-language-code='es-ES']").click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "es-ES");
+  expect(await page.evaluate(() => localStorage.getItem("portfolio-locale-provider"))).toBe("google");
+});
+
+test("handles Google wrapped text nodes when returning to a local locale", async ({ page }) => {
+  await page.route("**/assets/i18n/manifest.json", (route) => route.fulfill({ json: { ready: ["en-IN"] } }));
+  await page.route("https://translate.google.com/translate_a/element.js?cb=PortfolioGoogleTranslateInit", (route) => route.fulfill({
+    contentType: "application/javascript",
+    body: `window.google={translate:{TranslateElement:function(_,id){var s=document.createElement('select');s.className='goog-te-combo';['','hi','ar','es','fr','de','pt','it','nl','pl','tr','ru','zh-CN','ja','ko','id','vi','th','bn','ur'].forEach(function(v){var o=document.createElement('option');o.value=v;s.append(o)});document.getElementById(id).append(s)}}};window.PortfolioGoogleTranslateInit();`
+  }));
+  await page.goto("/");
+  await page.locator("[data-language-trigger]").click();
+  await page.locator("[data-language-code='es-ES']").click();
+  await page.evaluate(() => {
+    const element = document.querySelector('[data-i18n-text="0:index.text.0001"]');
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    const node = walker.nextNode();
+    const wrapper = document.createElement("font");
+    wrapper.textContent = node.nodeValue;
+    node.replaceWith(wrapper);
+  });
+  const result = await page.evaluate(async () => {
+    await Portfolio.I18n.setLocale("en-IN");
+    return { code: Portfolio.I18n.code, text: document.querySelector('[data-i18n-text="0:index.text.0001"]').textContent };
+  });
+  expect(result.code).toBe("en-IN");
+  expect(result.text).toBe("Skip to main content");
 });

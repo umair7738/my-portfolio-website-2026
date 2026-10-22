@@ -89,6 +89,9 @@ const contactFallback = `<noscript data-contact-fallback><p class="contact-fallb
 const conditionalAnalytics = `<!-- Optional analytics: only load after an explicit local opt-in. -->
   <script>
     (function (window, document) {
+      var granted = false;
+      try { granted = window.localStorage.getItem("portfolio-analytics-consent") === "granted"; } catch (_error) {}
+      if (!granted) return;
       window.dataLayer = window.dataLayer || [];
       window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
       window.gtag("consent", "default", {
@@ -98,9 +101,6 @@ const conditionalAnalytics = `<!-- Optional analytics: only load after an explic
         ad_personalization: "denied",
         wait_for_update: 500
       });
-      var granted = false;
-      try { granted = window.localStorage.getItem("portfolio-analytics-consent") === "granted"; } catch (_error) {}
-      if (!granted) return;
       window.gtag("consent", "update", { analytics_storage: "granted" });
       window.gtag("js", new Date());
       window.gtag("config", "G-6J1PG2GSNQ", { send_page_view: false, anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false });
