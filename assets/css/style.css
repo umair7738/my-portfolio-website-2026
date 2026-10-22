@@ -522,9 +522,9 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle, html:not(.js) .language
 .timeline { position: relative; }
 .timeline::before { content: ""; position: absolute; top: 0; bottom: 0; left: 147px; width: 1px; background: var(--line); }
 .timeline-progress { position: absolute; top: 0; left: 147px; width: 1px; height: 0; background: var(--gradient); }
-.timeline-item { display: grid; grid-template-columns: 115px 1fr; gap: 65px; padding-bottom: 5rem; }
+.timeline-item { display: grid; grid-template-columns: 115px minmax(0, 1fr); gap: 65px; padding-bottom: 5rem; min-width: 0; }
 .timeline-date { color: var(--muted); font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.timeline-content { position: relative; padding: 0 0 0 1.2rem; }
+.timeline-content { position: relative; min-width: 0; padding: 0 0 0 1.2rem; overflow-wrap: anywhere; }
 .timeline-content::before { content: ""; position: absolute; top: .55rem; left: -37px; width: 11px; height: 11px; border: 2px solid var(--primary); border-radius: 50%; background: var(--bg); box-shadow: 0 0 0 7px rgba(111,92,255,.11); }
 .timeline-content h2 { margin-bottom: .35rem; font-size: clamp(1.55rem, 3vw, 2.4rem); }
 .timeline-company { display: block; margin-bottom: 1.2rem; color: var(--accent); font-size: .82rem; font-weight: 800; }

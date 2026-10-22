@@ -112,7 +112,7 @@
   .service-card { min-height: 400px; }
   .timeline::before, .timeline-progress { left: 5px; }
   .timeline-percent { left: 5px; }
-  .timeline-item { grid-template-columns: 1fr; gap: .8rem; padding-left: 2.4rem; }
+  .timeline-item { grid-template-columns: minmax(0, 1fr); gap: .8rem; padding-left: 2.4rem; }
   .timeline-content { padding-left: 0; }
   .timeline-content::before { top: -2.2rem; left: -2.68rem; }
   .education-card { grid-template-columns: auto 1fr; }
