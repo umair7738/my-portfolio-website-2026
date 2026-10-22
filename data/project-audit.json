@@ -2,7 +2,7 @@
   "version": 1,
   "auditedOn": "2026-08-20",
   "policy": {
-    "publicTechnologyRule": "Only delivery technologies supported by resumes, source repositories, or project records are public.",
+    "publicTechnologyRule": "Only delivery technologies supported by professional profiles, source repositories, or project records are public.",
     "publicAuditRule": "Reviewed public-site technology signals may be published as a dated audit that remains separate from delivery metadata.",
     "runtimeFingerprinting": false,
     "captureRunsDuringBuild": false
@@ -96,49 +96,49 @@
       "source": "https://sagarspecialitychemicals.com/",
       "observedOn": "2026-08-20"
     },
-    "resume-2024-atyaf": {
-      "kind": "resume",
+    "archive-2024-atyaf": {
+      "kind": "project-record",
       "supports": [
         "description",
         "role",
         "deliveryTechnologies"
       ],
-      "source": "February 2024 project-detailed resume"
+      "source": "February 2024 project archive"
     },
-    "resume-2024-octa-pages": {
-      "kind": "resume",
+    "archive-2024-octa-pages": {
+      "kind": "project-record",
       "supports": [
         "description",
         "role",
         "year"
       ],
-      "source": "February 2024 project-detailed resume"
+      "source": "February 2024 project archive"
     },
-    "resume-2024-bride": {
-      "kind": "resume",
+    "archive-2024-bride": {
+      "kind": "project-record",
       "supports": [
         "description",
         "role",
         "deliveryTechnologies"
       ],
-      "source": "February 2024 project-detailed resume"
+      "source": "February 2024 project archive"
     },
-    "resume-2024-equity": {
-      "kind": "resume",
+    "archive-2024-equity": {
+      "kind": "project-record",
       "supports": [
         "description",
         "role"
       ],
-      "source": "February 2024 project-detailed resume"
+      "source": "February 2024 project archive"
     },
-    "resume-2024-utc": {
-      "kind": "resume",
+    "archive-2024-utc": {
+      "kind": "project-record",
       "supports": [
         "description",
         "role",
         "deliveryTechnologies"
       ],
-      "source": "February 2024 project-detailed resume"
+      "source": "February 2024 project archive"
     }
   },
   "projects": {

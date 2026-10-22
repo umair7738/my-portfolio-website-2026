@@ -116,6 +116,11 @@
           previous = window.scrollY;
           update();
         });
+        Portfolio.Lifecycle.global.listen(document, "keydown", function (event) {
+          if (event.key !== "Escape" || !mobileMenu.classList.contains("show")) return;
+          const instance = window.bootstrap && window.bootstrap.Offcanvas.getInstance(mobileMenu);
+          if (instance) instance.hide();
+        });
         mobileMenu.querySelectorAll(".mobile-nav a").forEach(function (link) {
           Portfolio.Lifecycle.global.listen(link, "click", function () {
             const instance = window.bootstrap && window.bootstrap.Offcanvas.getInstance(mobileMenu);

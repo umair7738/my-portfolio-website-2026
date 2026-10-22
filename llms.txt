@@ -9,14 +9,14 @@
 - [Projects](https://umair-builds.in/projects.html): 17 project records with status, scope, and documented technology boundaries.
 - [Case studies](https://umair-builds.in/case-studies.html): transparent notes for UTC India, Atyaf Al Majd, Octa Networks pages, and archived work.
 - [Services](https://umair-builds.in/services.html): remote web-development services available from Mumbai for India, UAE, and international collaboration.
-- [Skills](https://umair-builds.in/skills.html): resume-verified frontend, PHP framework, CMS, database, API, payment, performance, and SEO toolkit.
-- [Experience](https://umair-builds.in/experience.html): resume-backed professional timeline and education.
+- [Skills](https://umair-builds.in/skills.html): practical frontend, PHP framework, CMS, database, API, payment, performance, and SEO toolkit.
+- [Experience](https://umair-builds.in/experience.html): professional timeline and education.
 - [Contact](https://umair-builds.in/contact.html): direct email, phone, WhatsApp, LinkedIn, and enquiry form.
 - [Privacy](https://umair-builds.in/privacy.html): contact-form, analytics-consent, local-preference, and external-service policy.
 
 ## Evidence boundaries
 
-- Current role and skills reflect the June 2026 resume. Named project records also preserve supported detail from the February 2024 resume.
+- Current role and skills reflect hands-on delivery. Named project records preserve supported detail from earlier project work.
 - Public-site technology signals in the project archive are dated observations, separately labeled from delivery technologies.
 - Missing metrics, testimonials, certifications, client relationships, and project outcomes are not implied.
 - Umair is based in Mumbai, India. The site does not claim a Dubai office, UAE registration, or UAE client history.

@@ -55,7 +55,7 @@ No blocking crawl, canonical, redirect, security-header, sitemap, or broken-rout
 
 | Search intent/entity | Primary page(s) | Evidence boundary |
 | --- | --- | --- |
-| Umair Shaikh, full stack web developer, Mumbai | `/`, `/about.html`, `/experience.html` | Current portfolio/resume positioning |
+| Umair Shaikh, full stack web developer, Mumbai | `/`, `/about.html`, `/experience.html` | Current portfolio positioning |
 | PHP, Laravel, REST APIs, databases | `/skills.html`, `/services.html`, `/experience.html` | Skills and documented work only |
 | JavaScript, responsive frontend, GSAP, Lenis | `/`, `/skills.html`, `/projects.html` | Technologies used in the site/project records |
 | WordPress, custom websites, integrations | `/services.html`, `/projects.html`, `/case-studies.html` | Service descriptions and documented projects |

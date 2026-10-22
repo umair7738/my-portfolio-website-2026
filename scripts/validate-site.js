@@ -214,7 +214,7 @@ const required = [
   "assets/vendor/lenis-1.3.11.min.js", "assets/vendor/lucide-0.468.0.min.js",
   "assets/vendor/barba-2.10.3.umd.js", "assets/images/og-portfolio.webp", "favicon.ico",
   "assets/fonts/manrope-latin-variable.woff2", "assets/fonts/space-grotesk-latin-variable.woff2",
-  "assets/umair_resume_september_2026.pdf", "data/projects.js", "data/project-audit.json"
+  "assets/umair-professional-profile-september-2026.pdf", "data/projects.js", "data/project-audit.json"
 ];
 required.forEach((target) => { if (!fs.existsSync(path.join(root, target))) errors.push(`missing required file ${target}`); });
 

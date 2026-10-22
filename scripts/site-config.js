@@ -34,7 +34,7 @@ const pages = {
   },
   "experience.html": {
     title: "Full Stack Web Development Experience | Umair Shaikh",
-    description: "Review Umair Shaikh's resume-backed full stack experience across Laravel, WordPress, operational systems, APIs, payments, performance, SEO, and deployment.",
+    description: "Review Umair Shaikh's full stack experience across Laravel, WordPress, operational systems, APIs, payments, performance, SEO, and deployment.",
     ogType: "website"
   },
   "contact.html": {

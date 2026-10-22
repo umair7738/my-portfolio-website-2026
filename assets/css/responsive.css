@@ -16,6 +16,10 @@
   .navbar-shell { gap: .75rem; }
   .language-trigger { width: 44px; min-width: 44px; padding: 0; }
   .language-trigger-country, .language-trigger svg { display: none; }
+  /* The compact trigger sits before the theme and menu controls. Anchor its
+     panel to the viewport on touch layouts so it cannot extend off the left. */
+  .language-panel { position: fixed; top: var(--header-height); right: max(var(--container-gutter), env(safe-area-inset-right)); left: auto; width: min(340px, calc(100vw - (var(--container-gutter) * 2))); }
+  .language-list { max-height: min(360px, 52vh, calc(100dvh - var(--header-height) - 8rem)); }
   .desktop-nav { display: none; }
   html:not(.js) .site-header { position: relative; }
   html:not(.js) .navbar-shell { height: auto; flex-wrap: wrap; padding-block: .8rem; }

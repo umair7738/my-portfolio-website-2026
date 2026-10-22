@@ -3,4 +3,5 @@ tmp/
 node_modules/
 playwright-report/
 test-results/
+output/playwright/
 Umair_Builds_Website_Logo_Kit/

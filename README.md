@@ -1,6 +1,6 @@
 # Umair Shaikh — Portfolio
 
-A production-oriented, multi-page personal portfolio built as a premium software-company-style experience. Current experience and skills are grounded in Umair Shaikh's June 2026 resume; the named project archive is supported by the earlier February 2024 resume. Undocumented metrics, testimonials, certificates, and work history are not fabricated.
+A production-oriented, multi-page personal portfolio built as a premium software-company-style experience. Current experience and skills are grounded in hands-on delivery; the named project archive is supported by documented project work. Undocumented metrics, testimonials, certificates, and work history are not fabricated.
 
 Production website: `https://umair-builds.in/`
 
@@ -35,10 +35,10 @@ php -S localhost:8080
 
 - `index.html` — home and overview
 - `about.html` — story, philosophy, strengths, and career snapshot
-- `projects.html` — searchable and filterable resume-listed project archive
+- `projects.html` — searchable and filterable selected project archive
 - `case-studies.html` — transparent case-study notes with evidence boundaries
 - `services.html` — service catalogue and engagement models
-- `skills.html` — resume-verified technology groups
+- `skills.html` — practical technology groups
 - `experience.html` — professional timeline and education
 - `contact.html` — validated enquiry form, email, phone, WhatsApp, and LinkedIn
 - `privacy.html`, `404.html`, `robots.txt`, and `sitemap.xml` — production support pages
@@ -99,7 +99,7 @@ npm run test:projects
 
 ## Before public launch
 
-1. Review the public September 2026 resume PDF whenever experience or profile links change.
+1. Review the public September 2026 professional profile PDF whenever experience or profile links change.
 2. Change `scripts/site-config.js` if the production domain or per-page metadata changes.
 3. Keep the verified GitHub, CodePen, and LinkedIn URLs in `assets/js/utilities.js` current.
 4. Review the EmailJS service and template configuration if the enquiry workflow changes. The site itself does not store submissions in a database.
@@ -117,4 +117,4 @@ The services page describes remote availability for UAE and international projec
 
 ## Analytics
 
-GA4 is configured as an opt-in measurement path using the existing `G-6J1PG2GSNQ` property. The Google tag is not loaded until a visitor chooses “Allow analytics”; choosing “Not now” stores a local denial and keeps analytics unloaded. The router records one page-view event per initial load and client-side route change when `gtag` is present. `data-analytics-event` hooks cover resume downloads, WhatsApp clicks, and quote requests; each successful EmailJS submission emits one GA4 `generate_lead` event. Events use `send_page_view: false`, IP anonymization, and disabled Google signals/ad personalization. Review the privacy notice and measurement property before changing the consent behavior.
+GA4 is configured as an opt-in measurement path using the existing `G-6J1PG2GSNQ` property. The Google tag is not loaded until a visitor chooses “Allow analytics”; choosing “Not now” stores a local denial and keeps analytics unloaded. The router records one page-view event per initial load and client-side route change when `gtag` is present. `data-analytics-event` hooks cover profile downloads, WhatsApp clicks, and quote requests; each successful EmailJS submission emits one GA4 `generate_lead` event. Events use `send_page_view: false`, IP anonymization, and disabled Google signals/ad personalization. Review the privacy notice and measurement property before changing the consent behavior.

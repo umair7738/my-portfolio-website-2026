@@ -265,7 +265,7 @@ h1, h2, h3, h4 {
 .desktop-nav a { position: relative; padding: .52rem .83rem; border-radius: 999px; color: var(--text-soft); font-size: .75rem; font-weight: 700; transition: color .25s, background .25s; }
 .desktop-nav a:hover, .desktop-nav a.active { background: var(--surface-strong); color: var(--text); }
 .navbar-actions { display: flex; align-items: center; gap: .65rem; }
-.site-header.is-language-open { transform: none; }
+.site-header.is-language-open { z-index: 1201; transform: none; }
 html.language-panel-open, body.language-panel-open { overflow: hidden; }
 html.language-panel-open { scrollbar-gutter: stable; }
 .language-picker { position: relative; flex: 0 0 auto; }
