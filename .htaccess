@@ -13,6 +13,10 @@ RewriteRule ^index\.html$ https://umair-builds.in/ [R=301,L,NE]
 ErrorDocument 404 /404.html
 
 <IfModule mod_headers.c>
+  # Prevent the portfolio from being embedded in an attacker-controlled frame.
+  # Keep the existing HTTPS-upgrade directive while adding frame protection.
+  Header always set Content-Security-Policy "upgrade-insecure-requests; frame-ancestors 'self'"
+  Header always set X-Frame-Options "SAMEORIGIN"
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
