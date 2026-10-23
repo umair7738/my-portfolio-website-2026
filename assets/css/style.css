@@ -431,6 +431,7 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle, html:not(.js) .language
 /* Projects */
 .projects-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.25rem, 3vw, 2.5rem); }
 .project-card { min-width: 0; content-visibility: auto; contain-intrinsic-size: auto 720px; }
+.projects-grid[data-projects-featured] .project-card { content-visibility: visible; contain-intrinsic-size: none; }
 .project-card[hidden] { display: none !important; }
 .projects-grid:not([data-projects-featured]) .project-card.is-featured-1 { grid-column: 1 / -1; content-visibility: visible; }
 .project-card.is-featured .project-visual { border-color: rgba(88,214,255,.26); box-shadow: 0 24px 70px rgba(0,0,0,.2); }

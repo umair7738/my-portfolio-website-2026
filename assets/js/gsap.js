@@ -12,7 +12,10 @@
         scope.querySelectorAll("[data-counter]").forEach(function (element) { element.textContent = (element.dataset.counter || "0") + (element.dataset.suffix || ""); });
         scope.querySelectorAll(".skill-item").forEach(function (element) { element.classList.add("is-visible"); });
         scope.querySelectorAll(".timeline").forEach(function (element) { element.style.setProperty("--timeline-progress", "1"); });
-        scope.querySelectorAll(".process-steps").forEach(function (element) { element.style.setProperty("--process-progress", "1"); });
+        scope.querySelectorAll(".process-steps").forEach(function (element) {
+          element.style.setProperty("--process-progress", "1");
+          element.querySelectorAll(".process-step").forEach(function (step) { step.classList.add("is-process-active"); });
+        });
         document.documentElement.classList.add("motion-ready");
         return;
       }
@@ -114,7 +117,9 @@
     },
 
     sectionReveals(root) {
-      const titleElements = Array.from(root.querySelectorAll(".section-title"));
+      const titleElements = Array.from(root.querySelectorAll(".section-title")).filter(function (element) {
+        return !element.closest(".horizontal-heading");
+      });
       titleElements.forEach(function (element) {
         window.gsap.fromTo(element,
           { y: 44, autoAlpha: 0, clipPath: "inset(0 0 100% 0)" },
@@ -130,7 +135,9 @@
       ];
 
       revealGroups.forEach(function (group) {
-        const elements = Array.from(root.querySelectorAll(group.selector)).filter(function (element) { return !element.matches(".section-title"); });
+        const elements = Array.from(root.querySelectorAll(group.selector)).filter(function (element) {
+          return !element.matches(".section-title, .process-step");
+        });
         if (!elements.length) return;
         window.gsap.set(elements, group.from);
         window.ScrollTrigger.batch(elements, {
@@ -181,6 +188,7 @@
 
       const process = root.querySelector(".process-steps");
       if (process && !process.querySelector(".process-motion-line")) {
+        process.style.setProperty("--process-progress", "0");
         const progress = document.createElement("span");
         progress.className = "process-motion-line";
         progress.setAttribute("aria-hidden", "true");
@@ -191,19 +199,90 @@
         percentage.textContent = "00%";
         process.append(percentage);
         const steps = Array.from(process.querySelectorAll(".process-step"));
-        window.ScrollTrigger.create({
-          trigger: process,
-          start: "top 78%",
-          end: "bottom 48%",
-          scrub: .65,
-          onUpdate: function (self) {
-            const value = self.progress;
-            process.style.setProperty("--process-progress", value.toFixed(4));
-            percentage.textContent = String(Math.round(value * 100)).padStart(2, "0") + "%";
-            steps.forEach(function (step, index) {
-              const checkpoint = steps.length === 1 ? 0 : index / (steps.length - 1);
-              step.classList.toggle("is-process-active", value + .04 >= checkpoint);
-            });
+        const revealedSteps = new WeakSet();
+        steps.forEach(function (step) {
+          window.gsap.set(step, { autoAlpha: 0 });
+          window.gsap.set(Array.from(step.children), { x: 14 });
+        });
+        let geometry = { mobile: false, start: 0, end: 0, length: 0, checkpoints: [] };
+        const measureGeometry = function () {
+          const mobile = window.matchMedia("(max-width: 767.98px)").matches;
+          if (!mobile || !steps.length) {
+            geometry = {
+              mobile: false,
+              start: 0,
+              end: 0,
+              length: 0,
+              checkpoints: steps.map(function (_step, index) { return steps.length === 1 ? 0 : index / (steps.length - 1); })
+            };
+            process.style.removeProperty("--process-line-top");
+            process.style.removeProperty("--process-line-length");
+            process.style.removeProperty("--process-marker-y");
+            return geometry;
+          }
+
+          const dotCenters = steps.map(function (step) {
+            const dot = window.getComputedStyle(step, "::before");
+            return step.offsetTop + parseFloat(dot.top || "0") + (parseFloat(dot.height || "0") / 2);
+          });
+          const start = dotCenters[0];
+          const end = dotCenters[dotCenters.length - 1];
+          const length = Math.max(1, end - start);
+          geometry = {
+            mobile: true,
+            start: start,
+            end: end,
+            length: length,
+            checkpoints: dotCenters.map(function (center) { return (center - start) / length; })
+          };
+          process.style.setProperty("--process-line-top", start.toFixed(2) + "px");
+          process.style.setProperty("--process-line-length", length.toFixed(2) + "px");
+          return geometry;
+        };
+        const revealStep = function (step, index) {
+          if (revealedSteps.has(step)) return;
+          revealedSteps.add(step);
+          window.gsap.timeline()
+            .to(step, { autoAlpha: 1, duration: .42, ease: "power2.out" })
+            .to(Array.from(step.children), { x: 0, duration: .62, stagger: .055, ease: "power3.out" }, index ? "-=.32" : "-=.34");
+        };
+        const updateProcess = function (value, reveal) {
+          const normalized = Math.max(0, Math.min(1, value));
+          process.style.setProperty("--process-progress", normalized.toFixed(4));
+          percentage.textContent = String(Math.round(normalized * 100)).padStart(2, "0") + "%";
+          if (geometry.mobile) {
+            process.style.setProperty("--process-marker-y", (geometry.start + (geometry.length * normalized)).toFixed(2) + "px");
+          }
+          steps.forEach(function (step, index) {
+            const checkpoint = geometry.checkpoints[index] == null ? 0 : geometry.checkpoints[index];
+            const active = normalized + .025 >= checkpoint;
+            step.classList.toggle("is-process-active", active);
+            if (active && reveal) revealStep(step, index);
+          });
+        };
+
+        measureGeometry();
+        updateProcess(0, false);
+        const processState = { value: 0 };
+        window.gsap.to(processState, {
+          value: 1,
+          ease: "none",
+          onUpdate: function () {
+            updateProcess(processState.value, processState.value > 0);
+          },
+          scrollTrigger: {
+            trigger: process,
+            start: function () {
+              const current = measureGeometry();
+              return current.mobile ? "top+=" + current.start + " 78%" : "top 78%";
+            },
+            end: function () {
+              const current = measureGeometry();
+              return current.mobile ? "top+=" + current.end + " 48%" : "bottom 48%";
+            },
+            scrub: window.matchMedia("(max-width: 767.98px)").matches ? .28 : .5,
+            invalidateOnRefresh: true,
+            onRefreshInit: measureGeometry
           }
         });
       }
@@ -288,6 +367,24 @@
       const track = root.querySelector(".horizontal-track");
       if (!section || !track) return;
       const media = window.gsap.matchMedia();
+      if (heading) {
+        const eyebrow = heading.querySelector(".eyebrow");
+        const title = heading.querySelector(".section-title");
+        const copy = heading.querySelector(".section-copy");
+        const headingTimeline = window.gsap.timeline({ paused: true });
+        if (eyebrow) window.gsap.set(eyebrow, { y: 18, autoAlpha: 0 });
+        if (title) window.gsap.set(title, { y: 48, autoAlpha: 0, clipPath: "inset(0 0 100% 0)" });
+        if (copy) window.gsap.set(copy, { y: 28, autoAlpha: 0 });
+        if (eyebrow) headingTimeline.to(eyebrow, { y: 0, autoAlpha: 1, duration: .58, ease: "power3.out" });
+        if (title) headingTimeline.to(title, { y: 0, autoAlpha: 1, clipPath: "inset(0 0 0% 0)", duration: .92, ease: "power4.out" }, eyebrow ? "-=.36" : 0);
+        if (copy) headingTimeline.to(copy, { y: 0, autoAlpha: 1, duration: .68, ease: "power3.out" }, title ? "-=.52" : 0);
+        window.ScrollTrigger.create({
+          trigger: heading,
+          start: "top 88%",
+          once: true,
+          onEnter: function () { headingTimeline.play(); }
+        });
+      }
       media.add("(min-width: 992px)", function () {
         const distance = function () { return Math.max(0, track.scrollWidth - window.innerWidth + (heading ? heading.offsetWidth : 0) + 80); };
         window.gsap.from(Array.from(track.querySelectorAll(".horizontal-panel")), { y: 55, opacity: .25, duration: 1, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: section, start: "top 82%", once: true } });

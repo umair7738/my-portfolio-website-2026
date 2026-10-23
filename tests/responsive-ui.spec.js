@@ -79,3 +79,129 @@ test("keeps the language picker usable and in bounds across the responsive matri
     }
   }
 });
+
+test("keeps fixed quick actions out of short mobile reading areas", async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "The explicit short-viewport check runs once in Chromium.");
+  for (const viewport of [
+    { name: "short", width: 390, height: 506, expected: "none" },
+    { name: "standard", width: 390, height: 844, expected: "flex" }
+  ]) {
+    const context = await browser.newContext({ viewport, isMobile: true, hasTouch: true });
+    const page = await context.newPage();
+    try {
+      await page.goto("/", { waitUntil: "domcontentloaded" });
+      await expect(page.locator(".floating-actions")).toHaveCSS("display", viewport.expected);
+    } finally {
+      await context.close();
+    }
+  }
+});
+
+test("aligns and advances the home process timeline at 425 by 642", async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "The exact mobile regression check runs once in Chromium.");
+  const context = await browser.newContext({ viewport: { width: 425, height: 642 }, isMobile: true, hasTouch: true });
+  const page = await context.newPage();
+  try {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".process-motion-line")).toBeAttached();
+    await expect(page.locator(".page-loader")).toBeHidden({ timeout: 10000 });
+    const consent = page.getByRole("button", { name: "Not now" });
+    if (await consent.isVisible()) await consent.click();
+
+    const initialLayout = await page.evaluate(() => {
+      const process = document.querySelector(".process-steps");
+      const projects = document.querySelector("[data-projects-featured]");
+      const trigger = window.ScrollTrigger.getAll().find((item) => item.trigger === process);
+      return {
+        projectHeight: projects.getBoundingClientRect().height,
+        processTop: process.getBoundingClientRect().top + window.scrollY,
+        triggerStart: trigger.start,
+        triggerEnd: trigger.end
+      };
+    });
+    const cards = page.locator("[data-projects-featured] .project-card");
+    for (let index = 0; index < await cards.count(); index += 1) {
+      await cards.nth(index).scrollIntoViewIfNeeded();
+      await page.waitForTimeout(120);
+    }
+    await page.locator(".horizontal-section").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(250);
+    const layoutAfterApproach = await page.evaluate(() => {
+      const process = document.querySelector(".process-steps");
+      const projects = document.querySelector("[data-projects-featured]");
+      const trigger = window.ScrollTrigger.getAll().find((item) => item.trigger === process);
+      return {
+        projectHeight: projects.getBoundingClientRect().height,
+        processTop: process.getBoundingClientRect().top + window.scrollY,
+        triggerStart: trigger.start,
+        triggerEnd: trigger.end
+      };
+    });
+    expect(layoutAfterApproach.projectHeight).toBeCloseTo(initialLayout.projectHeight, 0);
+    expect(layoutAfterApproach.processTop).toBeCloseTo(initialLayout.processTop, 0);
+    expect(layoutAfterApproach.triggerStart).toBeCloseTo(initialLayout.triggerStart, 0);
+    expect(layoutAfterApproach.triggerEnd).toBeCloseTo(initialLayout.triggerEnd, 0);
+
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = "auto";
+      window.ScrollTrigger.refresh();
+      const trigger = window.ScrollTrigger.getAll().find((item) => item.trigger && item.trigger.matches(".process-steps"));
+      window.scrollTo(0, trigger.start + ((trigger.end - trigger.start) * .5));
+      window.ScrollTrigger.update();
+    });
+    await page.waitForTimeout(500);
+
+    const middle = await page.evaluate(() => {
+      const process = document.querySelector(".process-steps");
+      const line = process.querySelector(".process-motion-line");
+      const marker = process.querySelector(".process-percent");
+      const steps = Array.from(process.querySelectorAll(".process-step"));
+      const dotCenter = (step) => {
+        const box = step.getBoundingClientRect();
+        const dot = getComputedStyle(step, "::before");
+        return {
+          x: box.left + parseFloat(dot.left) + (parseFloat(dot.width) / 2),
+          y: box.top + parseFloat(dot.top) + (parseFloat(dot.height) / 2)
+        };
+      };
+      const lineBox = line.getBoundingClientRect();
+      const markerBox = marker.getBoundingClientRect();
+      const dots = steps.map(dotCenter);
+      return {
+        progress: parseFloat(getComputedStyle(process).getPropertyValue("--process-progress")),
+        lineCenterX: lineBox.left + (lineBox.width / 2),
+        lineStartY: lineBox.top,
+        firstDot: dots[0],
+        markerLeft: markerBox.left,
+        markerRight: markerBox.right,
+        viewportWidth: document.documentElement.clientWidth,
+        horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+        active: steps.map((step) => step.classList.contains("is-process-active")),
+        textOpacity: steps.map((step) => parseFloat(getComputedStyle(step.querySelector("h3")).opacity))
+      };
+    });
+
+    expect(middle.horizontalOverflow).toBe(false);
+    expect(Math.abs(middle.lineCenterX - middle.firstDot.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(middle.lineStartY - middle.firstDot.y)).toBeLessThanOrEqual(1);
+    expect(middle.markerLeft).toBeGreaterThanOrEqual(0);
+    expect(middle.markerRight).toBeLessThanOrEqual(middle.viewportWidth);
+    expect(middle.progress).toBeGreaterThan(.45);
+    expect(middle.progress).toBeLessThan(.55);
+    expect(middle.active).toEqual([true, true, false, false]);
+    expect(middle.textOpacity[0]).toBeCloseTo(1, 1);
+    expect(middle.textOpacity[2]).toBeCloseTo(.48, 1);
+    await page.screenshot({ path: path.join(process.cwd(), "output", "playwright", "home-process-425x642-mid.png") });
+
+    await page.evaluate(() => {
+      const trigger = window.ScrollTrigger.getAll().find((item) => item.trigger && item.trigger.matches(".process-steps"));
+      window.scrollTo(0, trigger.end + 2);
+      window.ScrollTrigger.update();
+    });
+    await page.waitForTimeout(400);
+    await expect(page.locator(".process-step.is-process-active")).toHaveCount(4);
+    await page.screenshot({ path: path.join(process.cwd(), "output", "playwright", "home-process-425x642.png") });
+  } finally {
+    await context.close();
+  }
+});

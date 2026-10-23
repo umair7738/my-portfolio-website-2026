@@ -39,10 +39,10 @@
 .process-steps { --process-progress: 0; position: relative; }
 .process-motion-line { position: absolute; top: -1px; left: 0; right: 0; z-index: 1; height: 3px; background: var(--gradient); box-shadow: 0 0 24px rgba(88,214,255,.55); transform: scaleX(var(--process-progress)); transform-origin: left; will-change: transform; }
 .process-percent { position: absolute; top: -38px; left: calc(var(--process-progress) * 100%); z-index: 3; min-width: 48px; padding: .28rem .5rem; border: 1px solid rgba(88,214,255,.32); border-radius: 999px; background: var(--surface-solid); color: var(--accent); font: 800 .58rem/1 var(--font-body); letter-spacing: .08em; text-align: center; transform: translateX(-50%); box-shadow: 0 8px 24px rgba(0,0,0,.25); }
-.process-step { transition: opacity .35s ease, transform .45s cubic-bezier(.2,.75,.2,1); }
+.process-step > span, .process-step > h3, .process-step > p { transition: opacity .35s ease, color .35s ease; }
 .process-step::before { z-index: 2; transition: background-color .3s ease, box-shadow .3s ease, transform .3s ease; }
-.process-step:not(.is-process-active) { opacity: .48; }
-.process-step.is-process-active { transform: translateY(-5px); }
+.process-step:not(.is-process-active) > span, .process-step:not(.is-process-active) > h3, .process-step:not(.is-process-active) > p { opacity: .48; }
+.process-step.is-process-active > span, .process-step.is-process-active > h3, .process-step.is-process-active > p { opacity: 1; }
 .process-step.is-process-active::before { background: var(--accent); box-shadow: 0 0 0 7px rgba(88,214,255,.12), 0 0 22px rgba(88,214,255,.75); transform: scale(1.12); }
 
 .timeline { --timeline-progress: 0; }
@@ -86,3 +86,4 @@
 [data-motion="reduced"] .motion-card { transform: none !important; }
 [data-motion="reduced"] .motion-card::before { display: none; }
 [data-motion="reduced"] .section-motion-line, [data-motion="reduced"] .process-motion-line { display: none; }
+[data-motion="reduced"] .process-step > span, [data-motion="reduced"] .process-step > h3, [data-motion="reduced"] .process-step > p { opacity: 1; }

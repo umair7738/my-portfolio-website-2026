@@ -92,11 +92,12 @@
   .feature-card { min-height: 340px; }
   .feature-card:nth-child(1), .feature-card:nth-child(2) { min-height: 500px; padding-bottom: 14rem; }
   .code-window { right: -30px; bottom: -28px; width: 80%; min-width: 290px; }
-  .process-steps { grid-template-columns: 1fr; gap: .35rem; padding-left: 1.8rem; }
-  .process-step { padding: 1.5rem 0 1.8rem 1.35rem; border-top: 0; border-left: 1px solid var(--line); }
-  .process-step::before { top: 1.9rem; left: -5px; }
-  .process-motion-line { top: 0; right: auto; bottom: 0; left: 0; width: 3px; height: 100%; transform: scaleY(var(--process-progress)); transform-origin: top; }
-  .process-percent { top: calc(var(--process-progress) * 100%); left: 0; transform: translate(-50%,-50%); }
+  .process-steps { --process-axis-x: 1.8rem; --process-line-top: calc(1.9rem + 4px); --process-line-length: calc(100% - 6.8rem); --process-marker-y: var(--process-line-top); grid-template-columns: 1fr; gap: .35rem; padding-left: var(--process-axis-x); }
+  .process-steps::before { content: ""; position: absolute; top: var(--process-line-top); left: var(--process-axis-x); z-index: 0; width: 1px; height: var(--process-line-length); background: var(--line); transform: translateX(-50%); }
+  .process-step { padding: 1.5rem 0 1.8rem 1.35rem; border-top: 0; border-left: 0; }
+  .process-step::before { top: 1.9rem; left: -4px; }
+  .process-motion-line { top: var(--process-line-top); right: auto; bottom: auto; left: var(--process-axis-x); width: 3px; height: var(--process-line-length); transform: translateX(-50%) scaleY(var(--process-progress)); transform-origin: top; }
+  .process-percent { top: var(--process-marker-y); left: var(--process-axis-x); min-width: 40px; padding: .24rem .35rem; font-size: .52rem; transform: translate(-100%,-50%); }
   .horizontal-track { grid-template-columns: 1fr; }
   .horizontal-panel { min-height: 400px; }
   .process-step { padding-bottom: 2rem; }
@@ -172,6 +173,9 @@
   .mobile-nav { margin: .75rem 0 1rem; }
   .mobile-nav a { padding-block: .48rem; font-size: clamp(1.25rem, 6vw, 1.65rem); }
   .mobile-menu-contact { font-size: .72rem; }
+  /* Fixed utility controls would otherwise cover the active reading area on
+     short mobile viewports, including the process timeline. */
+  .floating-actions { display: none; }
 }
 
 @media (hover: none), (pointer: coarse) {
