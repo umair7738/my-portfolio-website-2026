@@ -21,6 +21,11 @@
       }
 
       window.gsap.registerPlugin(window.ScrollTrigger);
+      if (window.matchMedia("(hover: none), (pointer: coarse)").matches) {
+        // Chrome's collapsing mobile toolbar changes only the viewport height.
+        // Treating that as a layout resize makes every scrubbed trigger jump.
+        window.ScrollTrigger.config({ ignoreMobileResize: true });
+      }
       const context = window.gsap.context(() => {
         this.initLenis();
         this.responsiveRefresh(scope);
@@ -43,6 +48,8 @@
     responsiveRefresh(root) {
       let timer = 0;
       let frame = 0;
+      const touchViewport = window.matchMedia("(hover: none), (pointer: coarse)");
+      let viewportWidth = document.documentElement.clientWidth;
       const refresh = function () {
         window.clearTimeout(timer);
         timer = window.setTimeout(function () {
@@ -52,8 +59,19 @@
           });
         }, 120);
       };
-      Portfolio.Lifecycle.page.listen(window, "resize", refresh, { passive: true });
-      Portfolio.Lifecycle.page.listen(window, "orientationchange", refresh, { passive: true });
+      const refreshForResize = function () {
+        const nextWidth = document.documentElement.clientWidth;
+        const widthChanged = Math.abs(nextWidth - viewportWidth) > 1;
+        if (touchViewport.matches && !widthChanged) return;
+        viewportWidth = nextWidth;
+        refresh();
+      };
+      const refreshForOrientation = function () {
+        viewportWidth = document.documentElement.clientWidth;
+        refresh();
+      };
+      Portfolio.Lifecycle.page.listen(window, "resize", refreshForResize, { passive: true });
+      Portfolio.Lifecycle.page.listen(window, "orientationchange", refreshForOrientation, { passive: true });
       Portfolio.Lifecycle.page.register(function () {
         window.clearTimeout(timer);
         window.cancelAnimationFrame(frame);
