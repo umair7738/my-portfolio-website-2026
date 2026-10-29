@@ -2,7 +2,7 @@
   "use strict";
 
   const Portfolio = window.Portfolio = window.Portfolio || {};
-  const knownPages = new Set(["/", "/index", "/index.html", "/about", "/about.html", "/projects", "/projects.html", "/case-studies", "/case-studies.html", "/services", "/services.html", "/skills", "/skills.html", "/experience", "/experience.html", "/contact", "/contact.html", "/privacy", "/privacy.html"]);
+  const knownPages = new Set(["/", "/index", "/index.html", "/about", "/about.html", "/projects", "/projects.html", "/case-studies", "/case-studies.html", "/services", "/services.html", "/wordpress-developer-mumbai.html", "/laravel-crm-development.html", "/skills", "/skills.html", "/experience", "/experience.html", "/contact", "/contact.html", "/privacy", "/privacy.html"]);
 
   function pathIsKnown(url) {
     return knownPages.has(new URL(url, window.location.href).pathname);

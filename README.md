@@ -59,6 +59,8 @@ Run `npm run build` to normalize production metadata, rebuild the CSS and JavaSc
 
 When a page's content or links change significantly, update its date in `sitemapLastmod` in `scripts/site-config.js` before building. The generated sitemap uses those dates and omits `priority` and `changefreq`.
 
+The focused `wordpress-developer-mumbai.html` and `laravel-crm-development.html` pages are separate service intents, not city-name variants. Keep their location and delivery claims accurate; add project outcomes only when they are documented. Both pages are registered in `scripts/site-config.js`, linked from Services and the footer, and included in the sitemap.
+
 Use `npm run serve` for a local HTTP preview.
 
 ## Umair Builds brand assets

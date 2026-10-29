@@ -13,7 +13,7 @@ const errors = [];
 const warnings = [];
 const barbaPages = {
   "index.html": "home", "about.html": "about", "projects.html": "projects",
-  "case-studies.html": "case-studies", "services.html": "services", "skills.html": "skills",
+  "case-studies.html": "case-studies", "services.html": "services", "wordpress-developer-mumbai.html": "services", "laravel-crm-development.html": "services", "skills.html": "skills",
   "experience.html": "experience", "contact.html": "contact", "privacy.html": "privacy"
 };
 
@@ -105,6 +105,17 @@ function validateIdentitySchema(file, data) {
       errors.push("services.html: Service must identify the canonical Person and remote service areas without a local business address");
     }
   }
+  if (["wordpress-developer-mumbai.html", "laravel-crm-development.html"].includes(file)) {
+    const pageId = `${baseUrl}/${file}`;
+    const webpage = graph.find((item) => item["@type"] === "WebPage");
+    const service = graph.find((item) => item["@type"] === "Service");
+    if (webpage?.["@id"] !== `${pageId}#webpage` || webpage?.mainEntity?.["@id"] !== `${pageId}#service`) {
+      errors.push(`${file}: WebPage must reference its own Service`);
+    }
+    if (service?.["@id"] !== `${pageId}#service` || service?.provider?.["@id"] !== personId || service.address) {
+      errors.push(`${file}: Service must reference the canonical Person without an invented address`);
+    }
+  }
   if (file === "contact.html") {
     const contactPage = graph.find((item) => item["@type"] === "ContactPage");
     if (contactPage?.about?.["@id"] !== personId) errors.push("contact.html: ContactPage must reference the canonical Person entity");
@@ -179,7 +190,7 @@ if (notFound.includes("data-barba") || notFound.includes("barba-2.10.3")) errors
 
 const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 if (/rel="preload"[^>]+project-/i.test(home)) errors.push("index.html: below-the-fold project image must not be preloaded");
-["services.html", "case-studies.html", "experience.html", "skills.html", "contact.html"].forEach((target) => {
+["services.html", "wordpress-developer-mumbai.html", "laravel-crm-development.html", "case-studies.html", "experience.html", "skills.html", "contact.html"].forEach((target) => {
   if (!new RegExp(`href="${target.replace(".", "\\.")}"`, "i").test(home)) errors.push(`index.html: missing crawlable link to ${target}`);
 });
 [
@@ -215,6 +226,9 @@ const servicesPage = fs.readFileSync(path.join(root, "services.html"), "utf8");
 const serviceData = require(path.join(root, "data", "services.js"));
 if ((servicesPage.match(/data-service-slug="/g) || []).length !== serviceData.length) errors.push("services.html: every service card must be present in the initial HTML");
 if (!servicesPage.includes('href="case-studies.html#utc-india"') || !servicesPage.includes('href="case-studies.html#atyaf-al-majd"') || !servicesPage.includes('href="case-studies.html#campaign-pages"')) errors.push("services.html: missing contextual case study links");
+for (const target of ["wordpress-developer-mumbai.html", "laravel-crm-development.html"]) {
+  if (!servicesPage.includes(`href="${target}"`)) errors.push(`services.html: missing link to ${target}`);
+}
 if (!fs.readFileSync(path.join(root, "contact.html"), "utf8").includes("data-contact-fallback")) errors.push("contact.html: missing no-script contact fallback");
 
 const scanFiles = ["README.md", "robots.txt", "sitemap.xml", ...htmlFiles,
