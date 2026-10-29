@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { baseUrl, siteName, pages, sitemapPages, pageUrl } = require("./site-config");
+const { baseUrl, siteName, pages, indexablePages, sitemapPages, pageUrl } = require("./site-config");
 
 const root = process.cwd();
 const socialImage = `${baseUrl}/assets/images/og-portfolio.webp`;
@@ -66,7 +66,10 @@ Object.entries(pages).forEach(([file, metadata]) => {
 
   html = upsert(html, /<title>[\s\S]*?<\/title>/i, `<title>${metadata.title}</title>`);
   html = upsert(html, /<meta\s+name="description"[^>]*>/i, `<meta name="description" content="${escapeAttribute(metadata.description)}">`);
-  html = upsert(html, /<meta\s+name="robots"[^>]*>/i, '<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">');
+  const robots = indexablePages.includes(file)
+    ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+    : 'noindex,follow';
+  html = upsert(html, /<meta\s+name="robots"[^>]*>/i, `<meta name="robots" content="${robots}">`);
   html = upsert(html, /<link\s+rel="canonical"[^>]*>/i, `<link rel="canonical" href="${canonical}">`);
   html = upsert(html, /<meta\s+property="og:type"[^>]*>/i, `<meta property="og:type" content="${metadata.ogType}">`);
   html = upsert(html, /<meta\s+property="og:title"[^>]*>/i, `<meta property="og:title" content="${escapeAttribute(metadata.title)}">`);
@@ -90,7 +93,7 @@ Object.entries(pages).forEach(([file, metadata]) => {
 fs.writeFileSync(path.join(root, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${baseUrl}/sitemap.xml\n`);
 
 const sitemapEntries = sitemapPages.map((file) => {
-  const priority = file === "index.html" ? "1.0" : file === "privacy.html" ? "0.3" : ["projects.html", "case-studies.html"].includes(file) ? "0.9" : "0.8";
+  const priority = file === "index.html" ? "1.0" : ["projects.html", "case-studies.html"].includes(file) ? "0.9" : "0.8";
   const changefreq = ["index.html", "projects.html", "case-studies.html", "services.html"].includes(file) ? "monthly" : "yearly";
   return `  <url><loc>${pageUrl(file)}</loc><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
 }).join("\n");

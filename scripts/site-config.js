@@ -49,7 +49,9 @@ const pages = {
   }
 };
 
-const indexablePages = Object.keys(pages);
+// Legal/policy pages remain accessible to users and crawlers, but are not useful
+// search landing pages. Keep them out of the index and XML sitemap.
+const indexablePages = Object.keys(pages).filter((file) => file !== "privacy.html");
 const sitemapPages = indexablePages;
 
 function pageUrl(file) {

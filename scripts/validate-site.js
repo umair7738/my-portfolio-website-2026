@@ -152,6 +152,8 @@ for (const file of htmlFiles) {
     });
     if (/<meta\s+name="keywords"/i.test(html)) errors.push(`${file}: obsolete meta keywords must be absent`);
     if (!/application\/ld\+json/i.test(html)) errors.push(`${file}: missing JSON-LD`);
+    const expectedRobots = sitemapPages.includes(file) ? /content="index,follow,/i : /content="noindex,follow"/i;
+    if (!expectedRobots.test(html)) errors.push(`${file}: robots directive does not match indexability policy`);
   }
 
   if (barbaPages[file]) {
@@ -169,6 +171,9 @@ if (notFound.includes("data-barba") || notFound.includes("barba-2.10.3")) errors
 
 const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 if (/rel="preload"[^>]+project-/i.test(home)) errors.push("index.html: below-the-fold project image must not be preloaded");
+["services.html", "case-studies.html", "experience.html", "skills.html", "contact.html"].forEach((target) => {
+  if (!new RegExp(`href="${target.replace(".", "\\.")}"`, "i").test(home)) errors.push(`index.html: missing crawlable link to ${target}`);
+});
 [
   ['data-counter="17">17<', "project count"], ['data-counter="18">18<', "service count"],
   ['data-counter="2">2<', "database count"], ['data-counter="3">3<', "payment count"]
@@ -221,7 +226,7 @@ required.forEach((target) => { if (!fs.existsSync(path.join(root, target))) erro
 // Check generated branding, including the deferred theme URLs and all srcset candidates.
 htmlFiles.forEach((file) => {
   const html = fs.readFileSync(path.join(root, file), "utf8");
-  if (!html.includes(faviconMarkup())) errors.push(`${file}: missing or stale approved favicon declarations`);
+  if (!html.replace(/\r\n/g, "\n").includes(faviconMarkup())) errors.push(`${file}: missing or stale approved favicon declarations`);
   if ((html.match(/rel="icon"/g) || []).length !== 4 || (html.match(/rel="apple-touch-icon"/g) || []).length !== 1) errors.push(`${file}: duplicate or incomplete favicon declarations`);
   if (/assets\/icons\/favicon\.png/.test(html)) errors.push(`${file}: obsolete favicon reference`);
 });
