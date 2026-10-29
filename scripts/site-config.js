@@ -27,6 +27,16 @@ const pages = {
     description: "Based in Mumbai, Umair Shaikh offers remote freelance web development for Dubai, UAE and India: responsive sites, WordPress, PHP/Laravel, APIs, and performance.",
     ogType: "website"
   },
+  "wordpress-developer-mumbai.html": {
+    title: "WordPress Developer in Mumbai | Umair Shaikh",
+    description: "Mumbai-based WordPress developer for business websites, product catalogues, and content-managed pages. See verified work and discuss your project with Umair Shaikh.",
+    ogType: "website"
+  },
+  "laravel-crm-development.html": {
+    title: "Remote Laravel & CRM Developer for UAE and India | Umair Shaikh",
+    description: "Laravel and CRM development for teams in India and the UAE, delivered remotely from Mumbai. Explore workflows, integrations, relevant experience, and project scope.",
+    ogType: "website"
+  },
   "skills.html": {
     title: "Full Stack Developer Skills | Umair Shaikh",
     description: "Explore Umair Shaikh's verified frontend, PHP framework, WordPress, database, API, payments, GSAP, performance, SEO, and application toolkit.",
@@ -53,9 +63,11 @@ const pages = {
 // search landing pages. Keep them out of the index and XML sitemap.
 const indexablePages = Object.keys(pages).filter((file) => file !== "privacy.html");
 const sitemapPages = indexablePages;
+// Update a date only after a significant change to that page's content or links.
+const sitemapLastmod = Object.fromEntries(sitemapPages.map((file) => [file, "2026-10-29"]));
 
 function pageUrl(file) {
   return file === "index.html" ? `${baseUrl}/` : `${baseUrl}/${file}`;
 }
 
-module.exports = { baseUrl, siteName, pages, indexablePages, sitemapPages, pageUrl };
+module.exports = { baseUrl, siteName, pages, indexablePages, sitemapPages, sitemapLastmod, pageUrl };

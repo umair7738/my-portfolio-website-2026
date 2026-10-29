@@ -5,6 +5,7 @@ const { minify_sync: minifySync } = require("terser");
 const { baseUrl } = require("./site-config");
 const { faviconMarkup, updateBrandComponents } = require("./brand-assets");
 const projectData = require(path.join(process.cwd(), "data", "projects.js"));
+const serviceData = require(path.join(process.cwd(), "data", "services.js"));
 
 function escapeHtml(value) {
   return String(value == null ? "" : value).replace(/[&<>\"']/g, (character) => ({
@@ -24,6 +25,28 @@ function projectFallbackMarkup() {
     return `<li class="project-archive-fallback-item"><h3>${escapeHtml(project.title)}</h3><p>${escapeHtml(project.description)}</p><p class="project-detail-line">${escapeHtml(detail || (project.status.value === "ARCHIVED" ? "Archived project" : "Project record"))}</p><p><strong>Status:</strong> ${escapeHtml(project.status.value === "LIVE" ? "Live" : "Archived")}${technologies ? ` · <strong>Documented delivery technology:</strong> ${escapeHtml(technologies)}` : ""}</p>${destination}</li>`;
   }).join("");
   return `<!-- PROJECT_ARCHIVE_NOSCRIPT_START --><noscript><section class="project-archive-fallback" aria-labelledby="project-archive-fallback-title"><h2 id="project-archive-fallback-title">Project archive without interactive filters</h2><p>This text-first archive keeps all 17 project records available when JavaScript is unavailable.</p><ol class="project-archive-fallback-list">${items}</ol></section></noscript><!-- PROJECT_ARCHIVE_NOSCRIPT_END -->`;
+}
+
+function serviceCardsMarkup() {
+  const source = fs.readFileSync(path.join("components", "service-card.html"), "utf8");
+  const template = source.match(/<template\b[^>]*>([\s\S]*?)<\/template>/i)?.[1]?.trim();
+  if (!template) throw new Error("Service card template is missing.");
+  return serviceData.map((service, index) => {
+    const slug = service.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const items = service.items.map((item, itemIndex) => `<li data-i18n-text="0:service.${slug}.item.${itemIndex}">${escapeHtml(item)}</li>`).join("");
+    const values = {
+      "{{icon}}": escapeHtml(service.icon), "{{number}}": String(index + 1).padStart(2, "0"),
+      "{{title}}": escapeHtml(service.title), "{{description}}": escapeHtml(service.description),
+      "{{items}}": items, "{{slug}}": slug
+    };
+    return Object.entries(values).reduce((html, [token, value]) => html.split(token).join(value), template);
+  }).join("\n");
+}
+
+function inlineComponent(html, name, markup) {
+  const marker = `STATIC_${name.toUpperCase()}`;
+  const pattern = new RegExp(`<div data-component="${name}">(?:<!-- ${marker}_START -->[\\s\\S]*?<!-- ${marker}_END -->)?<\\/div>`);
+  return html.replace(pattern, `<div data-component="${name}"><!-- ${marker}_START -->${markup}<!-- ${marker}_END --></div>`);
 }
 
 function projectSchemaMarkup() {
@@ -83,7 +106,6 @@ function enrichEntitySchema(file, html) {
   });
 }
 
-const servicesFallback = `<noscript data-services-fallback><section class="service-fallback" aria-labelledby="service-fallback-title"><h2 id="service-fallback-title">Services available without interactive loading</h2><p>Umair's documented service fit includes:</p><ul><li>Responsive business websites and landing pages</li><li>WordPress website, theme, and plugin development</li><li>PHP and Laravel application development</li><li>CRM, HRMS, and property-management interfaces</li><li>REST API, webhook, Shipway, and attendance integrations</li><li>Stripe, Razorpay, and PayU payment integrations</li><li>Frontend speed optimization and Core Web Vitals work</li><li>Technical and on-page SEO foundations</li></ul></section></noscript>`;
 const contactFallback = `<noscript data-contact-fallback><p class="contact-fallback">The interactive enquiry form needs JavaScript. You can contact Umair directly at <a href="mailto:umairshaikh7738@gmail.com">umairshaikh7738@gmail.com</a>, <a href="tel:+917738635355">+91 77386 35355</a>, or <a href="https://wa.me/917738635355">WhatsApp</a>.</p></noscript>`;
 
 const conditionalAnalytics = `<!-- Optional analytics: only load after an explicit local opt-in. -->
@@ -181,6 +203,7 @@ fs.writeFileSync(path.join("assets", "css", "portfolio.min.css"), css + "\n");
 
 const jsFiles = [
   path.join("data", "projects.js"),
+  path.join("data", "services.js"),
   ...["utilities.js", "lifecycle.js", "i18n.js", "navigation.js", "loader.js", "projects.js", "contact.js", "gsap.js", "router.js", "app.js"].map((file) => path.join("assets", "js", file))
 ];
 const jsSource = jsFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n").trimEnd();
@@ -195,6 +218,9 @@ fs.writeFileSync(path.join("assets", "js", "portfolio.min.js"), js + "\n");
 
 const htmlFiles = fs.readdirSync(process.cwd()).filter((file) => file.endsWith(".html"));
 updateBrandComponents();
+const navbarMarkup = fs.readFileSync(path.join("components", "navbar.html"), "utf8").trim();
+const footerMarkup = fs.readFileSync(path.join("components", "footer.html"), "utf8").trim();
+const serviceCards = serviceCardsMarkup();
 const brandIcons = faviconMarkup();
 const earlyThemeScript = '<script>document.documentElement.classList.add("js");try{var savedTheme=localStorage.getItem("portfolio-theme");if(savedTheme==="light"||savedTheme==="dark")document.documentElement.dataset.theme=savedTheme;}catch(_error){}</script>';
 const hash = (value) => crypto.createHash("sha256").update(value).digest("hex").slice(0, 12);
@@ -204,7 +230,7 @@ const analyticsPattern = /(?:<!-- Google tag \(gtag\.js\) -->\s*<script async sr
 const projectSchemaPattern = /<script type="application\/ld\+json" data-project-schema>[\s\S]*?<\/script>/;
 const projectFallbackPattern = /<!-- PROJECT_ARCHIVE_NOSCRIPT_START -->[\s\S]*?<!-- PROJECT_ARCHIVE_NOSCRIPT_END -->/;
 const breadcrumbPattern = /<nav class="breadcrumb-trail" aria-label="Breadcrumb"><a href="\/">Home<\/a><span aria-hidden="true">\/<\/span><span aria-current="page">[^<]+<\/span><\/nav>/g;
-const breadcrumbLabels = { "about.html": "About", "projects.html": "Projects", "case-studies.html": "Case studies", "services.html": "Services", "skills.html": "Skills", "experience.html": "Experience", "contact.html": "Contact", "privacy.html": "Privacy policy" };
+const breadcrumbLabels = { "about.html": "About", "projects.html": "Projects", "case-studies.html": "Case studies", "services.html": "Services", "wordpress-developer-mumbai.html": "WordPress in Mumbai", "laravel-crm-development.html": "Laravel and CRM development", "skills.html": "Skills", "experience.html": "Experience", "contact.html": "Contact", "privacy.html": "Privacy policy" };
 const cssPattern = /<link rel="stylesheet" href="assets\/css\/style\.css">\s*<link rel="stylesheet" href="assets\/css\/animations\.css">\s*<link rel="stylesheet" href="assets\/css\/responsive\.css">/g;
 const jsPattern = /<script defer src="assets\/js\/utilities\.js"><\/script>\s*<script defer src="assets\/js\/lifecycle\.js"><\/script>\s*<script defer src="assets\/js\/navigation\.js"><\/script>\s*<script defer src="assets\/js\/loader\.js"><\/script>\s*<script defer src="assets\/js\/projects\.js"><\/script>\s*<script defer src="assets\/js\/contact\.js"><\/script>\s*<script defer src="assets\/js\/gsap\.js"><\/script>\s*<script defer src="assets\/js\/router\.js"><\/script>\s*<script defer src="assets\/js\/app\.js"><\/script>/g;
 const fontResourcePattern = /\s*<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com|assets\/fonts\/(?:manrope-latin-variable|space-grotesk-latin-variable)\.woff2)[^>]*>/g;
@@ -227,7 +253,8 @@ htmlFiles.forEach((file) => {
       try { return enrichEntitySchema(file, opening + payload + closing).match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/)[0]; }
       catch (_error) { return opening + payload + closing; }
     })
-    .replace(/(<div data-component="service-card"><\/div>)(?!<noscript data-services-fallback)/, "$1" + servicesFallback)
+    .replace(/<div class="services-grid" data-services-grid>(?:<!-- STATIC_SERVICES_START -->[\s\S]*?<!-- STATIC_SERVICES_END -->)?<\/div>/,
+      `<div class="services-grid" data-services-grid><!-- STATIC_SERVICES_START -->${serviceCards}<!-- STATIC_SERVICES_END --></div>`)
     .replace(/(<div data-component="contact-form"><\/div>)(?!<noscript data-contact-fallback)/, "$1" + contactFallback)
     .replace(/(<section class="page-hero"[^>]*>(?:(?!<\/section>)[\s\S])*?<div class="container-xxl page-hero-grid"><div>)(?!<nav class="breadcrumb-trail")/, "$1" + breadcrumb)
     .replace(/(<section class="page-hero"[^>]*>(?:(?!<\/section>)[\s\S])*?<div class="container-xxl">)(?!<nav class="breadcrumb-trail")/, "$1" + breadcrumb)
@@ -248,7 +275,10 @@ htmlFiles.forEach((file) => {
     .replace("The website uses Google Analytics 4 to measure site usage and EmailJS from jsDelivr only when the contact form is submitted. Google Analytics may use cookies and process usage and device information; Google's privacy terms and controls apply. EmailJS processes contact-form details needed to deliver your enquiry.", "The website offers optional Google Analytics 4 measurement and loads it only after you choose Allow analytics. EmailJS is loaded from jsDelivr only when the contact form is submitted. Google Analytics and EmailJS may process standard technical information; their privacy terms apply.")
     .replace("Google Analytics 4 is enabled to measure page views and selected interactions. Analytics data may include page paths, titles, interaction details, and standard browser and device information. You can manage or block cookies through your browser settings; Google's privacy terms and controls apply.", "Google Analytics 4 is opt-in. If you allow analytics, the site measures page views and selected interactions such as profile downloads, WhatsApp clicks, quote requests, and successful form submissions. Analytics data may include page paths, titles, interaction details, and standard browser and device information. If you choose Not now, analytics is not loaded; you can also clear the local preference or block cookies through your browser settings. Analytics is not used to identify you directly.");
 
-  if (production !== source) fs.writeFileSync(file, production);
+  const withNavigation = inlineComponent(production, "navbar", navbarMarkup);
+  const withFooter = inlineComponent(withNavigation, "footer", footerMarkup);
+
+  if (withFooter !== source) fs.writeFileSync(file, withFooter);
 });
 
 console.log(`Built ${path.join("assets", "css", "portfolio.min.css")} (${Buffer.byteLength(css)} bytes)`);

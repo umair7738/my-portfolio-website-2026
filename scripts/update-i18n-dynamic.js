@@ -1,13 +1,10 @@
 const fs = require("fs");
-const vm = require("vm");
 const path = require("path");
 
 const catalogPath = path.join("assets", "i18n", "en.json");
 const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
 const projects = require("../data/projects.js");
-const sandbox = { window: { Portfolio: { utils: {} } } };
-vm.runInNewContext(fs.readFileSync(path.join("assets", "js", "projects.js"), "utf8"), sandbox);
-const services = sandbox.window.Portfolio.serviceData;
+const services = require("../data/services.js");
 const slugify = (value) => String(value).toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 const ui = {
