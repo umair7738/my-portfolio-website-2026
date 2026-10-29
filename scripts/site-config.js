@@ -53,9 +53,11 @@ const pages = {
 // search landing pages. Keep them out of the index and XML sitemap.
 const indexablePages = Object.keys(pages).filter((file) => file !== "privacy.html");
 const sitemapPages = indexablePages;
+// Update a date only after a significant change to that page's content or links.
+const sitemapLastmod = Object.fromEntries(sitemapPages.map((file) => [file, "2026-10-29"]));
 
 function pageUrl(file) {
   return file === "index.html" ? `${baseUrl}/` : `${baseUrl}/${file}`;
 }
 
-module.exports = { baseUrl, siteName, pages, indexablePages, sitemapPages, pageUrl };
+module.exports = { baseUrl, siteName, pages, indexablePages, sitemapPages, sitemapLastmod, pageUrl };

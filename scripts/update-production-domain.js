@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { baseUrl, siteName, pages, indexablePages, sitemapPages, pageUrl } = require("./site-config");
+const { baseUrl, siteName, pages, indexablePages, sitemapPages, sitemapLastmod, pageUrl } = require("./site-config");
 
 const root = process.cwd();
 const socialImage = `${baseUrl}/assets/images/og-portfolio.webp`;
@@ -93,9 +93,7 @@ Object.entries(pages).forEach(([file, metadata]) => {
 fs.writeFileSync(path.join(root, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${baseUrl}/sitemap.xml\n`);
 
 const sitemapEntries = sitemapPages.map((file) => {
-  const priority = file === "index.html" ? "1.0" : ["projects.html", "case-studies.html"].includes(file) ? "0.9" : "0.8";
-  const changefreq = ["index.html", "projects.html", "case-studies.html", "services.html"].includes(file) ? "monthly" : "yearly";
-  return `  <url><loc>${pageUrl(file)}</loc><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
+  return `  <url><loc>${pageUrl(file)}</loc><lastmod>${sitemapLastmod[file]}</lastmod></url>`;
 }).join("\n");
 fs.writeFileSync(path.join(root, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n`);
 
