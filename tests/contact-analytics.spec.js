@@ -1,17 +1,19 @@
 const { test, expect } = require("@playwright/test");
 
-async function openContactForm(page, consent) {
-  await page.addInitScript((analyticsConsent) => {
+async function openContactForm(page, consent, failEmailJs = false) {
+  await page.addInitScript(({ analyticsConsent, shouldFail }) => {
     window.localStorage.setItem("portfolio-analytics-consent", analyticsConsent);
     window.__emailJsSendCount = 0;
     window.emailjs = {
       init() {},
       async sendForm() {
         window.__emailJsSendCount += 1;
+        if (shouldFail) throw new Error("Synthetic local EmailJS failure");
       }
     };
-  }, consent);
+  }, { analyticsConsent: consent, shouldFail: failEmailJs });
   await page.route("https://www.googletagmanager.com/**", (route) => route.abort());
+  await page.route("https://www.clarity.ms/**", (route) => route.abort());
   await page.goto("/contact.html", { waitUntil: "domcontentloaded" });
   await expect(page.locator("#contactForm")).toBeVisible();
   await page.evaluate(() => {
@@ -64,4 +66,22 @@ test("does not emit analytics when consent is denied", async ({ page }) => {
   expect(result.sendCount).toBe(1);
   expect(result.hasGtag).toBe(false);
   expect(result.analyticsEvents).toHaveLength(0);
+});
+
+test("does not emit generate_lead when EmailJS submission fails", async ({ page }) => {
+  await openContactForm(page, "granted", true);
+  await page.locator("#name").fill("Test Visitor");
+  await page.locator("#email").fill("visitor@example.com");
+  await page.locator("#projectType").selectOption({ label: "Business website" });
+  await page.locator("#message").fill("This is a local test enquiry with enough detail.");
+  await page.locator("#consent").check();
+  await page.getByRole("button", { name: "Send enquiry" }).click();
+  await expect(page.locator(".form-status")).toHaveText("The enquiry could not be sent. Please email me directly instead.");
+
+  const result = await page.evaluate(() => ({
+    sendCount: window.__emailJsSendCount,
+    leadEvents: window.__analyticsEvents.filter((entry) => entry[0] === "event" && entry[1] === "generate_lead")
+  }));
+  expect(result.sendCount).toBe(1);
+  expect(result.leadEvents).toHaveLength(0);
 });

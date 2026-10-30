@@ -67,11 +67,25 @@
   }
 
   Portfolio.Analytics = Portfolio.Analytics || {};
+  function loadClarity() {
+    if (document.querySelector("script[data-portfolio-clarity]")) return;
+    window.clarity = window.clarity || function () {
+      (window.clarity.q = window.clarity.q || []).push(arguments);
+    };
+    const script = document.createElement("script");
+    script.async = true;
+    script.dataset.portfolioClarity = "true";
+    script.src = "https://www.clarity.ms/tag/z4fsuayhuv";
+    document.head.append(script);
+  }
   Portfolio.Analytics.trackPageView = function () {
     if (typeof window.gtag !== "function") return;
+    const pagePath = window.location.pathname;
+    if (this.lastPageViewPath === pagePath) return;
+    this.lastPageViewPath = pagePath;
 
     window.gtag("event", "page_view", {
-      page_path: window.location.pathname,
+      page_path: pagePath,
       page_title: document.title
     });
   };
@@ -102,6 +116,7 @@
       ad_user_data: "denied",
       ad_personalization: "denied"
     });
+    loadClarity();
     this.trackPageView();
   };
   Portfolio.Analytics.initConsent = function () {
@@ -109,6 +124,7 @@
     if (!banner) return;
     let consent = null;
     try { consent = window.localStorage.getItem("portfolio-analytics-consent"); } catch (_error) {}
+    if (consent === "granted") loadClarity();
     if (!consent) banner.hidden = false;
     const accept = banner.querySelector("[data-analytics-consent-action='accept']");
     const decline = banner.querySelector("[data-analytics-consent-action='decline']");

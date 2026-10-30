@@ -226,6 +226,7 @@ const earlyThemeScript = '<script>document.documentElement.classList.add("js");t
 const hash = (value) => crypto.createHash("sha256").update(value).digest("hex").slice(0, 12);
 const cssVersion = hash(css);
 const jsVersion = hash(js);
+const clarityPattern = /[ \t]*<script type="text\/javascript">\s*\(function\(c,l,a,r,i,t,y\)\{[\s\S]*?\}\)\(window, document, "clarity", "script", "z4fsuayhuv"\);\s*<\/script>[ \t]*\r?\n/g;
 const analyticsPattern = /(?:<!-- Google tag \(gtag\.js\) -->\s*<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-6J1PG2GSNQ"><\/script>|<!-- Optional analytics: only load after an explicit local opt-in\. -->)\s*<script>[\s\S]*?<\/script>/g;
 const projectSchemaPattern = /<script type="application\/ld\+json" data-project-schema>[\s\S]*?<\/script>/;
 const projectFallbackPattern = /<!-- PROJECT_ARCHIVE_NOSCRIPT_START -->[\s\S]*?<!-- PROJECT_ARCHIVE_NOSCRIPT_END -->/;
@@ -243,6 +244,8 @@ htmlFiles.forEach((file) => {
   const production = source
     .replace(/<script>document\.documentElement\.classList\.add\("js"\);(?:try\{var savedTheme=[\s\S]*?catch\(_error\)\{\})?<\/script>/, earlyThemeScript)
     .replace(/<!-- BRAND_ICONS_START -->[\s\S]*?<!-- BRAND_ICONS_END -->|<link rel="icon" href="assets\/icons\/favicon\.png" type="image\/png">/, brandIcons)
+    .replace(clarityPattern, "")
+    .replace(/\r?\n[ \t]*\r?\n(?=  <meta charset)/, "\n")
     .replace(fontResourcePattern, "")
     .replace(bootstrapPattern, fontPreloads + deferredBootstrap)
     .replace(analyticsPattern, conditionalAnalytics)
@@ -273,6 +276,7 @@ htmlFiles.forEach((file) => {
     .replace("Last updated: 20 August 2026.", "Last updated: 22 August 2026.")
     .replace("The website uses Google Fonts and loads EmailJS from jsDelivr only when the contact form is submitted. Those providers may receive standard technical request information such as IP address, browser type, and requested file; EmailJS also processes the form details needed to deliver your enquiry. Their own privacy terms apply.", "The website self-hosts its interface fonts and loads EmailJS from jsDelivr only when the contact form is submitted. EmailJS may receive standard technical request information and processes the form details needed to deliver your enquiry. Its own privacy terms apply.")
     .replace("The website uses Google Analytics 4 to measure site usage and EmailJS from jsDelivr only when the contact form is submitted. Google Analytics may use cookies and process usage and device information; Google's privacy terms and controls apply. EmailJS processes contact-form details needed to deliver your enquiry.", "The website offers optional Google Analytics 4 measurement and loads it only after you choose Allow analytics. EmailJS is loaded from jsDelivr only when the contact form is submitted. Google Analytics and EmailJS may process standard technical information; their privacy terms apply.")
+    .replace('<p data-i18n-text="0:privacy.text.0016">The website offers optional Google Analytics 4 measurement and loads it only after you choose Allow analytics. Google Analytics may process standard technical information; its privacy terms apply.</p>', '<p><span data-i18n-text="0:privacy.text.0016">The website offers optional Google Analytics 4 measurement and Microsoft Clarity, which helps us understand how visitors interact with the site. Both load only after you choose Allow analytics. These services may process standard technical and site-interaction information; their privacy terms apply.</span> <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener" data-i18n-text="0:privacy.text.0027">Microsoft Privacy Statement</a>.</p>')
     .replace("Google Analytics 4 is enabled to measure page views and selected interactions. Analytics data may include page paths, titles, interaction details, and standard browser and device information. You can manage or block cookies through your browser settings; Google's privacy terms and controls apply.", "Google Analytics 4 is opt-in. If you allow analytics, the site measures page views and selected interactions such as profile downloads, WhatsApp clicks, quote requests, and successful form submissions. Analytics data may include page paths, titles, interaction details, and standard browser and device information. If you choose Not now, analytics is not loaded; you can also clear the local preference or block cookies through your browser settings. Analytics is not used to identify you directly.");
 
   const withNavigation = inlineComponent(production, "navbar", navbarMarkup);
