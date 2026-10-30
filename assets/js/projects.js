@@ -62,10 +62,11 @@
     const featured = Number(project.featuredRank) > 0;
     const primary = primaryLink(project);
     const externalAttributes = primary && primary.external ? ' target="_blank" rel="noopener"' : "";
+    const analyticsAttributes = ' data-analytics-event="project_view" data-analytics-project="' + escape(project.slug) + '" data-analytics-location="project_card"';
     const visualOpen = primary
-      ? '<a class="project-visual" href="' + escape(primary.href) + '" aria-label="' + escape(primary.label) + '" data-i18n-attrs="aria-label:project.' + escape(project.slug) + '.primaryAria"' + externalAttributes + '>'
+      ? '<a class="project-visual" href="' + escape(primary.href) + '" aria-label="' + escape(primary.label) + '" data-i18n-attrs="aria-label:project.' + escape(project.slug) + '.primaryAria"' + analyticsAttributes + externalAttributes + '>'
       : '<div class="project-visual" aria-label="' + escape(project.title + " archived project visual") + '" data-i18n-attrs="aria-label:project.' + escape(project.slug) + '.archiveAria">';
-    const titleOpen = primary ? '<a href="' + escape(primary.href) + '"' + externalAttributes + '>' : "";
+    const titleOpen = primary ? '<a href="' + escape(primary.href) + '"' + analyticsAttributes + externalAttributes + '>' : "";
     const statusLabel = project.status.value === "LIVE" ? "Live" : project.status.value === "ARCHIVED" ? "Archived" : "Unavailable";
     const deliveryTechnologies = (project.deliveryTechnologies || []).map(function (technology) { return "<li>" + escape(technology.name) + "</li>"; }).join("");
     const technologyList = deliveryTechnologies
@@ -74,9 +75,9 @@
     const detailItems = [project.typeLabel, project.role, project.year].filter(Boolean);
     const detailLine = detailItems.length ? '<p class="project-detail-line" data-i18n-text="0:project.' + escape(project.slug) + '.detailLine">' + detailItems.map(escape).join(" · ") + "</p>" : "";
     const links = [];
-    if (project.status.value === "LIVE" && project.url) links.push('<a href="' + escape(project.url) + '" target="_blank" rel="noopener" data-i18n-text="0:ui.project.liveSite">Live site <i data-lucide="external-link" aria-hidden="true"></i></a>');
+    if (project.status.value === "LIVE" && project.url) links.push('<a href="' + escape(project.url) + '" target="_blank" rel="noopener"' + analyticsAttributes + ' data-i18n-text="0:ui.project.liveSite">Live site <i data-lucide="external-link" aria-hidden="true"></i></a>');
     else if (project.status.value === "UNAVAILABLE") links.push('<span class="project-link-muted" data-i18n-text="0:ui.project.unavailable">Currently unavailable</span>');
-    if (project.caseStudy) links.push('<a href="' + escape(project.caseStudy.href) + '" data-i18n-text="0:ui.project.caseStudy">Case study <i data-lucide="arrow-right" aria-hidden="true"></i></a>');
+    if (project.caseStudy) links.push('<a href="' + escape(project.caseStudy.href) + '"' + analyticsAttributes + ' data-i18n-text="0:ui.project.caseStudy">Case study <i data-lucide="arrow-right" aria-hidden="true"></i></a>');
     const disclosure = project.media.kind === "ARCHIVE_TREATMENT" ? "Archive visual · live snapshot unavailable" : "Current site snapshot · " + project.media.capturedOn;
     const values = {
       "{{slug}}": escape(project.slug), "{{category}}": escape(project.category), "{{status}}": escape(project.status.value),

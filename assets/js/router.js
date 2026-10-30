@@ -67,6 +67,20 @@
   }
 
   Portfolio.Analytics = Portfolio.Analytics || {};
+  const eventParameters = ["audience", "contact_method", "failure_stage", "link_location", "project_slug", "service_slug"];
+  const knownEvents = new Set([
+    "contact_form_start", "contact_form_submit_attempt", "contact_form_submit_failed",
+    "contact_navigation", "email_click", "generate_lead", "linkedin_click",
+    "profile_download", "project_view", "quote_request", "recruiter_contact_click",
+    "service_cta_click", "whatsapp_click"
+  ]);
+  function hasAnalyticsConsent() {
+    try { return window.localStorage.getItem("portfolio-analytics-consent") === "granted"; }
+    catch (_error) { return false; }
+  }
+  function safeParameter(value) {
+    return typeof value === "string" && /^[a-z0-9_-]{1,80}$/i.test(value) ? value : null;
+  }
   function loadClarity() {
     if (document.querySelector("script[data-portfolio-clarity]")) return;
     window.clarity = window.clarity || function () {
@@ -79,7 +93,7 @@
     document.head.append(script);
   }
   Portfolio.Analytics.trackPageView = function () {
-    if (typeof window.gtag !== "function") return;
+    if (!hasAnalyticsConsent() || typeof window.gtag !== "function") return;
     const pagePath = window.location.pathname;
     if (this.lastPageViewPath === pagePath) return;
     this.lastPageViewPath = pagePath;
@@ -90,11 +104,14 @@
     });
   };
   Portfolio.Analytics.trackEvent = function (eventName, parameters) {
-    if (typeof window.gtag !== "function") return;
+    if (!hasAnalyticsConsent() || typeof window.gtag !== "function" || !knownEvents.has(eventName)) return;
 
-    window.gtag("event", eventName, Object.assign({
-      page_path: window.location.pathname
-    }, parameters || {}));
+    const safeParameters = { page_path: window.location.pathname };
+    eventParameters.forEach(function (name) {
+      const value = safeParameter(parameters && parameters[name]);
+      if (value) safeParameters[name] = value;
+    });
+    window.gtag("event", eventName, safeParameters);
   };
   Portfolio.Analytics.enable = function () {
     if (typeof window.gtag !== "function") {
@@ -145,7 +162,37 @@
 
     document.addEventListener("click", function (event) {
       const target = event.target instanceof Element ? event.target.closest("[data-analytics-event]") : null;
-      if (target) Portfolio.Analytics.trackEvent(target.dataset.analyticsEvent);
+      if (target) {
+        const parameters = {
+          audience: target.dataset.analyticsAudience,
+          contact_method: target.dataset.analyticsContactMethod,
+          link_location: target.dataset.analyticsLocation,
+          project_slug: target.dataset.analyticsProject,
+          service_slug: target.dataset.analyticsService
+        };
+        if (target.dataset.analyticsEvent === "quote_request") {
+          parameters.audience = parameters.audience || "freelance";
+          parameters.link_location = parameters.link_location || "service_page";
+          try { parameters.service_slug = parameters.service_slug || new URL(target.href, window.location.href).searchParams.get("service"); } catch (_error) {}
+        }
+        Portfolio.Analytics.trackEvent(target.dataset.analyticsEvent, parameters);
+        return;
+      }
+      const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+      if (!link) return;
+      let url;
+      try { url = new URL(link.href, window.location.href); } catch (_error) { return; }
+      if (url.protocol === "mailto:") {
+        Portfolio.Analytics.trackEvent("email_click", { contact_method: "email", link_location: "external_link" });
+        return;
+      }
+      if (/^(?:www\.)?linkedin\.com$/i.test(url.hostname)) {
+        Portfolio.Analytics.trackEvent("linkedin_click", { audience: "recruiter", link_location: "external_link" });
+        return;
+      }
+      if (url.origin === window.location.origin && /\/contact(?:\.html)?$/.test(url.pathname)) {
+        Portfolio.Analytics.trackEvent("contact_navigation", { link_location: "internal_navigation" });
+      }
     });
   };
 

@@ -28,6 +28,10 @@
         Portfolio.Lifecycle.page.listen(field, "blur", function () { Portfolio.Contact.validateField(field); });
         Portfolio.Lifecycle.page.listen(field, "input", function () { if (field.classList.contains("is-invalid")) Portfolio.Contact.validateField(field); });
         Portfolio.Lifecycle.page.listen(field, "focus", function () {
+          if (!form.dataset.analyticsStarted) {
+            form.dataset.analyticsStarted = "true";
+            if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("contact_form_start");
+          }
           const group = field.closest("[class*='col-']");
           if (group) group.classList.add("field-active");
         });
@@ -39,10 +43,12 @@
 
       Portfolio.Lifecycle.page.listen(form, "submit", async function (event) {
         event.preventDefault();
+        if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("contact_form_submit_attempt");
         const fields = Array.from(form.querySelectorAll("input[required], textarea[required], select[required]"));
         const valid = fields.map(Portfolio.Contact.validateField).every(Boolean);
         const status = form.querySelector(".form-status");
         if (!valid) {
+          if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("contact_form_submit_failed", { failure_stage: "validation" });
           status.className = "form-status error";
           status.textContent = Portfolio.I18n.t("ui.form.invalid", "Please review the highlighted fields.");
           const firstInvalid = form.querySelector(".is-invalid, input:invalid");
@@ -57,6 +63,7 @@
         const configured = config.publicKey && config.serviceId && config.templateId &&
           !/^YOUR_EMAILJS_/.test(config.publicKey) && !/^YOUR_EMAILJS_/.test(config.serviceId) && !/^YOUR_EMAILJS_/.test(config.templateId);
         if (!configured) {
+          if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("contact_form_submit_failed", { failure_stage: "configuration" });
           status.className = "form-status error";
           status.textContent = Portfolio.I18n.t("ui.form.unconfigured", "Email delivery is not configured yet. Please contact me directly by email.");
           return;
@@ -69,11 +76,15 @@
           const emailjs = await loadEmailJs();
           emailjs.init({ publicKey: config.publicKey });
           await emailjs.sendForm(config.serviceId, config.templateId, form);
-          if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("generate_lead");
+          const selectedService = form.querySelector("#projectType option:checked");
+          if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("generate_lead", {
+            service_slug: selectedService && selectedService.dataset.serviceSlug
+          });
           status.className = "form-status success";
           status.textContent = Portfolio.I18n.t("ui.form.success", "Thanks — your enquiry has been sent. I’ll get back to you soon.");
           form.reset();
         } catch (_error) {
+          if (Portfolio.Analytics) Portfolio.Analytics.trackEvent("contact_form_submit_failed", { failure_stage: "delivery" });
           status.className = "form-status error";
           status.textContent = Portfolio.I18n.t("ui.form.failure", "The enquiry could not be sent. Please email me directly instead.");
         } finally {

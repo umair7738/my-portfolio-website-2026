@@ -46,12 +46,21 @@ test("emits generate_lead once per successful EmailJS submission for every servi
 
   const result = await page.evaluate(() => ({
     sendCount: window.__emailJsSendCount,
+    startEvents: window.__analyticsEvents.filter((entry) => entry[0] === "event" && entry[1] === "contact_form_start"),
+    submitAttempts: window.__analyticsEvents.filter((entry) => entry[0] === "event" && entry[1] === "contact_form_submit_attempt"),
     leadEvents: window.__analyticsEvents.filter((entry) => entry[0] === "event" && entry[1] === "generate_lead"),
     legacyEvents: window.__analyticsEvents.filter((entry) => entry[0] === "event" && entry[1] === "contact_form_submit")
   }));
   expect(result.sendCount).toBe(services.length);
+  expect(result.startEvents).toHaveLength(1);
+  expect(result.submitAttempts).toHaveLength(services.length);
   expect(result.leadEvents).toHaveLength(services.length);
   expect(result.legacyEvents).toHaveLength(0);
+  result.leadEvents.forEach((entry) => {
+    expect(Object.keys(entry[2]).sort()).toEqual(["page_path", "service_slug"]);
+    expect(JSON.stringify(entry[2])).not.toContain("visitor@example.com");
+    expect(JSON.stringify(entry[2])).not.toContain("Test Visitor");
+  });
 });
 
 test("does not emit analytics when consent is denied", async ({ page }) => {
@@ -80,8 +89,12 @@ test("does not emit generate_lead when EmailJS submission fails", async ({ page 
 
   const result = await page.evaluate(() => ({
     sendCount: window.__emailJsSendCount,
-    leadEvents: window.__analyticsEvents.filter((entry) => entry[0] === "event" && entry[1] === "generate_lead")
+    submitAttempts: window.__analyticsEvents.filter((entry) => entry[0] === "event" && entry[1] === "contact_form_submit_attempt"),
+    leadEvents: window.__analyticsEvents.filter((entry) => entry[0] === "event" && entry[1] === "generate_lead"),
+    failedEvents: window.__analyticsEvents.filter((entry) => entry[0] === "event" && entry[1] === "contact_form_submit_failed")
   }));
   expect(result.sendCount).toBe(1);
+  expect(result.submitAttempts).toHaveLength(1);
   expect(result.leadEvents).toHaveLength(0);
+  expect(result.failedEvents).toEqual([["event", "contact_form_submit_failed", { page_path: "/contact.html", failure_stage: "delivery" }]]);
 });

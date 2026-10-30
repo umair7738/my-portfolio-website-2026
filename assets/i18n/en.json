@@ -407,7 +407,7 @@
   "privacy.text.0017": "5. External links",
   "privacy.text.0018": "Project, LinkedIn, GitHub, CodePen, WhatsApp, email, and phone links open third-party services. This policy does not control how those services handle information.",
   "privacy.text.0019": "6. Cookies and analytics",
-  "privacy.text.0020": "Google Analytics 4 is opt-in. If you allow analytics, the site measures page views and selected interactions such as profile downloads, WhatsApp clicks, quote requests, and successful form submissions. Analytics data may include page paths, titles, interaction details, and standard browser and device information. If you choose Not now, analytics is not loaded; you can also clear the local preference or block cookies through your browser settings. Analytics is not used to identify you directly.",
+  "privacy.text.0020": "Google Analytics 4 is opt-in. If you allow analytics, the site measures page views and selected interactions such as profile downloads, project views, service and quote requests, WhatsApp, email and LinkedIn clicks, and form outcomes. Event data is limited to page paths and non-identifying interaction labels; it never includes names, email addresses, phone numbers, or message content. If you choose Not now, analytics is not loaded. To withdraw consent, clear this site's local data and reload; analytics and Clarity will then remain unloaded.",
   "privacy.text.0021": "7. Data retention",
   "privacy.text.0022": "This website does not keep a database of enquiries. Email providers may process or retain submitted details according to their own policies and settings.",
   "privacy.text.0023": "8. Your choices",

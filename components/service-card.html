@@ -5,6 +5,6 @@
     <h3 data-i18n-text="0:service.{{slug}}.title">{{title}}</h3>
     <p data-i18n-text="0:service.{{slug}}.description">{{description}}</p>
     <ul>{{items}}</ul>
-    <a href="contact.html?service={{slug}}" class="text-link" data-i18n-text="0:ui.service.discuss">Discuss this service <i data-lucide="arrow-right" aria-hidden="true"></i></a>
+    <a href="contact.html?service={{slug}}" class="text-link" data-analytics-event="service_cta_click" data-analytics-service="{{slug}}" data-analytics-location="service_card" data-i18n-text="0:ui.service.discuss">Discuss this service <i data-lucide="arrow-right" aria-hidden="true"></i></a>
   </article>
 </template>
