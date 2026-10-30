@@ -699,6 +699,13 @@ html:not(.js) .theme-toggle, html:not(.js) .menu-toggle, html:not(.js) .language
 .analytics-consent p { max-width: 620px; margin: 0; font-size: .8rem; line-height: 1.5; }
 .analytics-consent-actions { display: flex; flex-shrink: 0; gap: 10px; }
 .analytics-consent-actions .btn { min-height: 44px; padding: .65rem 18px; }
+.analytics-preferences { position: fixed; right: 16px; bottom: 24px; left: 16px; z-index: 1200; display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; width: min(760px,calc(100vw - 32px)); margin: 0 auto; padding: 20px 24px; border: 1px solid rgba(255,255,255,.18); border-radius: 1rem; background: rgba(16,21,34,.98); color: rgba(255,255,255,.78); box-shadow: 0 18px 60px rgba(0,0,0,.38); }
+.analytics-preferences[hidden] { display: none !important; }
+.analytics-preferences strong { display: block; margin-bottom: .2rem; color: #fff; font-size: .94rem; line-height: 1.35; }
+.analytics-preferences p { max-width: 460px; margin: 0; font-size: .8rem; line-height: 1.5; }
+.analytics-preferences-status { min-height: 1.3em; margin-top: .4rem !important; color: #fff; }
+.analytics-preferences .analytics-consent-actions { flex-wrap: wrap; justify-content: flex-end; }
+.analytics-preferences .analytics-consent-actions .btn { flex: 1 1 140px; }
 
 /* Utility pages */
 .legal-content { max-width: 840px; }

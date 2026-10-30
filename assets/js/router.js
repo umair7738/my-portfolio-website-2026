@@ -67,6 +67,7 @@
   }
 
   Portfolio.Analytics = Portfolio.Analytics || {};
+  const consentStorageKey = "portfolio-analytics-consent";
   const eventParameters = ["audience", "contact_method", "failure_stage", "link_location", "project_slug", "service_slug"];
   const knownEvents = new Set([
     "contact_form_start", "contact_form_submit_attempt", "contact_form_submit_failed",
@@ -75,7 +76,7 @@
     "service_cta_click", "whatsapp_click"
   ]);
   function hasAnalyticsConsent() {
-    try { return window.localStorage.getItem("portfolio-analytics-consent") === "granted"; }
+    try { return window.localStorage.getItem(consentStorageKey) === "granted"; }
     catch (_error) { return false; }
   }
   function safeParameter(value) {
@@ -91,6 +92,16 @@
     script.dataset.portfolioClarity = "true";
     script.src = "https://www.clarity.ms/tag/z4fsuayhuv";
     document.head.append(script);
+  }
+  function updateClarityConsent(granted) {
+    if (!window.clarity && !document.querySelector("script[data-portfolio-clarity]")) return;
+    window.clarity = window.clarity || function () {
+      (window.clarity.q = window.clarity.q || []).push(arguments);
+    };
+    window.clarity("consentv2", {
+      ad_Storage: "denied",
+      analytics_Storage: granted ? "granted" : "denied"
+    });
   }
   Portfolio.Analytics.trackPageView = function () {
     if (!hasAnalyticsConsent() || typeof window.gtag !== "function") return;
@@ -134,26 +145,81 @@
       ad_personalization: "denied"
     });
     loadClarity();
+    updateClarityConsent(true);
     this.trackPageView();
+  };
+  Portfolio.Analytics.disable = function () {
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied"
+      });
+    }
+    updateClarityConsent(false);
+  };
+  Portfolio.Analytics.setConsent = function (consent) {
+    const granted = consent === "granted";
+    try { window.localStorage.setItem(consentStorageKey, granted ? "granted" : "denied"); } catch (_error) {}
+    if (granted) this.enable();
+    else this.disable();
+    this.updatePreferenceUI();
+  };
+  Portfolio.Analytics.updatePreferenceUI = function () {
+    const status = document.querySelector("[data-analytics-preferences-status]");
+    if (!status) return;
+    const key = hasAnalyticsConsent() ? "components.footer.text.0037" : "components.footer.text.0038";
+    const fallback = hasAnalyticsConsent() ? "Analytics are currently allowed." : "Analytics are currently turned off.";
+    status.textContent = Portfolio.I18n ? Portfolio.I18n.t(key, fallback) : fallback;
   };
   Portfolio.Analytics.initConsent = function () {
     const banner = document.querySelector("[data-analytics-consent]");
     if (!banner) return;
     let consent = null;
-    try { consent = window.localStorage.getItem("portfolio-analytics-consent"); } catch (_error) {}
-    if (consent === "granted") loadClarity();
+    try { consent = window.localStorage.getItem(consentStorageKey); } catch (_error) {}
+    if (consent === "granted") {
+      loadClarity();
+      updateClarityConsent(true);
+    }
     if (!consent) banner.hidden = false;
     const accept = banner.querySelector("[data-analytics-consent-action='accept']");
     const decline = banner.querySelector("[data-analytics-consent-action='decline']");
     if (accept) Portfolio.Lifecycle.global.listen(accept, "click", function () {
-      try { window.localStorage.setItem("portfolio-analytics-consent", "granted"); } catch (_error) {}
       banner.hidden = true;
-      Portfolio.Analytics.enable();
+      Portfolio.Analytics.setConsent("granted");
     });
     if (decline) Portfolio.Lifecycle.global.listen(decline, "click", function () {
-      try { window.localStorage.setItem("portfolio-analytics-consent", "denied"); } catch (_error) {}
       banner.hidden = true;
+      Portfolio.Analytics.setConsent("denied");
     });
+    const panel = document.querySelector("[data-analytics-preferences-panel]");
+    const manage = document.querySelector("[data-analytics-preferences]");
+    const setPanelOpen = function (open) {
+      if (!panel || !manage) return;
+      panel.hidden = !open;
+      manage.setAttribute("aria-expanded", String(open));
+      Portfolio.Analytics.updatePreferenceUI();
+      if (open) {
+        const firstAction = panel.querySelector("[data-analytics-preferences-action='deny']");
+        if (firstAction) firstAction.focus();
+      } else {
+        manage.focus();
+      }
+    };
+    if (manage) Portfolio.Lifecycle.global.listen(manage, "click", function () { setPanelOpen(panel && panel.hidden); });
+    if (panel) {
+      const grant = panel.querySelector("[data-analytics-preferences-action='grant']");
+      const deny = panel.querySelector("[data-analytics-preferences-action='deny']");
+      const close = panel.querySelector("[data-analytics-preferences-action='close']");
+      if (grant) Portfolio.Lifecycle.global.listen(grant, "click", function () { Portfolio.Analytics.setConsent("granted"); setPanelOpen(false); });
+      if (deny) Portfolio.Lifecycle.global.listen(deny, "click", function () { Portfolio.Analytics.setConsent("denied"); setPanelOpen(false); });
+      if (close) Portfolio.Lifecycle.global.listen(close, "click", function () { setPanelOpen(false); });
+      Portfolio.Lifecycle.global.listen(panel, "keydown", function (event) {
+        if (event.key === "Escape") setPanelOpen(false);
+      });
+    }
+    this.updatePreferenceUI();
   };
   Portfolio.Analytics.initGlobal = function () {
     if (this.started) return;

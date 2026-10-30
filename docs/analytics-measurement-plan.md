@@ -42,7 +42,7 @@ Scope: local Batch 2 implementation. This document does not represent a live GA4
 
 ## Consent and withdrawal behavior
 
-Before opt-in there is no GA4 or Clarity request. On opt-in, GA4 is configured once with automatic page views disabled, Clarity is injected once, and the current page view is sent once. A denied state leaves both unloaded. To withdraw an existing opt-in, clear the site's local data and reload; the next load has no consent, no GA4/Clarity injection, and event calls become no-ops. This site currently exposes no settings-panel control, so the privacy policy gives the same browser-data instruction.
+Before opt-in there is no GA4 or Clarity request. On opt-in, GA4 is configured once with automatic page views disabled, Clarity is injected once, and the current page view is sent once. A denied state leaves both unloaded. The footer's Manage analytics preferences control can revoke or re-enable consent in the current session: revocation sends GA4 Consent Mode and Clarity Consent V2 denial updates, and custom event/page-view calls become no-ops. Already fetched scripts and data previously transmitted are not claimed to be removed.
 
 ## Search and dashboard specification
 
