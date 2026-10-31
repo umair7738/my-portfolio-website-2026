@@ -19,7 +19,7 @@ const pages = {
   },
   "case-studies.html": {
     title: "Web Development Case Studies | Umair Shaikh",
-    description: "Read transparent case-study notes on Umair Shaikh's WordPress, custom frontend, landing page, and campaign work, with verified scope and honest outcomes.",
+    description: "Explore verified web development case studies: UTC India WordPress catalogue, Atyaf Al Majd frontend and Octa Networks landing pages by Umair Shaikh.",
     ogType: "article"
   },
   "services.html": {
@@ -72,13 +72,13 @@ const sitemapLastmod = {
   "index.html": "2026-10-31",
   "about.html": "2026-11-01",
   "projects.html": "2026-11-01",
-  "case-studies.html": "2026-10-29",
+  "case-studies.html": "2026-11-01",
   "services.html": "2026-11-01",
   "wordpress-developer-mumbai.html": "2026-10-29",
   "laravel-crm-development.html": "2026-11-01",
   "skills.html": "2026-11-01",
   "experience.html": "2026-11-01",
-  "contact.html": "2026-10-31"
+  "contact.html": "2026-11-01"
 };
 
 function pageUrl(file) {
