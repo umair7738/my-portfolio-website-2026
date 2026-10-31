@@ -1,6 +1,6 @@
 # Umair Shaikh
 
-> Umair Shaikh is a full stack web developer based in Mumbai, India. He builds responsive websites and web applications across PHP, Laravel, WordPress, JavaScript, REST APIs, databases, integrations, and animation-rich frontend experiences.
+> Umair Shaikh is a full stack web developer currently in Dubai, UAE, with professional experience in Mumbai, India. He builds responsive websites and web applications across PHP, Laravel, WordPress, JavaScript, REST APIs, databases, integrations, and animation-rich frontend experiences.
 
 ## Primary pages
 
@@ -8,7 +8,7 @@
 - [About](https://umair-builds.in/about.html): working approach, strengths, and career snapshot.
 - [Projects](https://umair-builds.in/projects.html): 17 project records with status, scope, and documented technology boundaries.
 - [Case studies](https://umair-builds.in/case-studies.html): transparent notes for UTC India, Atyaf Al Majd, Octa Networks pages, and archived work.
-- [Services](https://umair-builds.in/services.html): remote web-development services available from Mumbai for India, UAE, and international collaboration.
+- [Services](https://umair-builds.in/services.html): remote web-development services for clients in India, UAE, and worldwide.
 - [Skills](https://umair-builds.in/skills.html): practical frontend, PHP framework, CMS, database, API, payment, performance, and SEO toolkit.
 - [Experience](https://umair-builds.in/experience.html): professional timeline and education.
 - [Contact](https://umair-builds.in/contact.html): direct email, phone, WhatsApp, LinkedIn, and enquiry form.
@@ -16,10 +16,10 @@
 
 ## Evidence boundaries
 
-- Current role and skills reflect hands-on delivery. Named project records preserve supported detail from earlier project work.
+- Professional experience and skills reflect hands-on delivery. Named project records preserve supported detail from earlier project work.
 - Public-site technology signals in the project archive are dated observations, separately labeled from delivery technologies.
 - Missing metrics, testimonials, certifications, client relationships, and project outcomes are not implied.
-- Umair is based in Mumbai, India. The site does not claim a Dubai office, UAE registration, or UAE client history.
+- Umair is currently in Dubai, UAE, with professional experience in Mumbai, India. The site does not claim a Dubai office, UAE business registration, or UAE client history.
 
 ## Professional profiles
 
