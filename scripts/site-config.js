@@ -38,8 +38,8 @@ const pages = {
     ogType: "website"
   },
   "skills.html": {
-    title: "Full Stack Developer Skills | Umair Shaikh",
-    description: "Explore Laravel, WordPress/WooCommerce, Shopify, payment and shipping APIs, hosting, frontend framework exposure and cloud learning.",
+    title: "Full Stack Web Developer Skills | Umair Shaikh",
+    description: "Umair Shaikh’s full stack web developer skills: Laravel, WordPress plugins, WooCommerce, MySQL, payment webhooks, hosting and JavaScript. Explore real implementation examples.",
     ogType: "website"
   },
   "experience.html": {
