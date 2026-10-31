@@ -14,7 +14,7 @@ const pages = {
   },
   "projects.html": {
     title: "Web Development Projects | Umair Shaikh",
-    description: "Explore 17 real-world web projects by Umair Shaikh across education, commerce, creative, corporate, industrial, and campaign work.",
+    description: "Explore 17 documented web projects by Umair Shaikh, including WordPress websites, responsive frontends and business landing pages, with live and archived records.",
     ogType: "website"
   },
   "case-studies.html": {
@@ -70,8 +70,8 @@ const sitemapPages = indexablePages;
 // do not bump lastmod. Uncommitted SEO-pass content is treated as current.
 const sitemapLastmod = {
   "index.html": "2026-10-31",
-  "about.html": "2026-10-31",
-  "projects.html": "2026-10-29",
+  "about.html": "2026-11-01",
+  "projects.html": "2026-11-01",
   "case-studies.html": "2026-10-29",
   "services.html": "2026-11-01",
   "wordpress-developer-mumbai.html": "2026-10-29",
