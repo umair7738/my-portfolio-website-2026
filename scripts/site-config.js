@@ -29,12 +29,12 @@ const pages = {
   },
   "wordpress-developer-mumbai.html": {
     title: "WordPress Developer in Mumbai | Umair Shaikh",
-    description: "Mumbai-based WordPress developer for business websites, product catalogues, and content-managed pages. See verified work and discuss your project with Umair Shaikh.",
+    description: "WordPress developer serving Mumbai businesses remotely. Explore WordPress websites, product catalogues, and content-managed pages by Umair Shaikh, currently in Dubai.",
     ogType: "website"
   },
   "laravel-crm-development.html": {
     title: "Remote Laravel & CRM Developer for UAE and India | Umair Shaikh",
-    description: "Laravel and CRM development for teams in India and the UAE, delivered remotely from Mumbai. Explore workflows, integrations, relevant experience, and project scope.",
+    description: "Laravel and CRM development for teams in India and the UAE, delivered remotely from Dubai. Explore workflows, integrations, relevant experience, and project scope.",
     ogType: "website"
   },
   "skills.html": {
