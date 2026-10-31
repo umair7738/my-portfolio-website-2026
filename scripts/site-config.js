@@ -24,7 +24,7 @@ const pages = {
   },
   "services.html": {
     title: "Full Stack Web Development Services | PHP, Laravel, WordPress | Umair Shaikh",
-    description: "Full stack web development services by Umair Shaikh: business websites, WordPress, Laravel/PHP, APIs, payments, performance & SEO. Available for remote work worldwide, including Dubai, UAE.",
+    description: "Web development services by Umair Shaikh: WordPress, WooCommerce, PHP/Laravel CRM, payment gateways and API integrations. Remote UAE and India.",
     ogType: "website"
   },
   "wordpress-developer-mumbai.html": {
@@ -73,11 +73,11 @@ const sitemapLastmod = {
   "about.html": "2026-10-31",
   "projects.html": "2026-10-29",
   "case-studies.html": "2026-10-29",
-  "services.html": "2026-10-31",
+  "services.html": "2026-11-01",
   "wordpress-developer-mumbai.html": "2026-10-29",
   "laravel-crm-development.html": "2026-11-01",
   "skills.html": "2026-11-01",
-  "experience.html": "2026-10-31",
+  "experience.html": "2026-11-01",
   "contact.html": "2026-10-31"
 };
 
