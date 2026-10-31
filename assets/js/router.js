@@ -82,27 +82,6 @@
   function safeParameter(value) {
     return typeof value === "string" && /^[a-z0-9_-]{1,80}$/i.test(value) ? value : null;
   }
-  function loadClarity() {
-    if (document.querySelector("script[data-portfolio-clarity]")) return;
-    window.clarity = window.clarity || function () {
-      (window.clarity.q = window.clarity.q || []).push(arguments);
-    };
-    const script = document.createElement("script");
-    script.async = true;
-    script.dataset.portfolioClarity = "true";
-    script.src = "https://www.clarity.ms/tag/z4fsuayhuv";
-    document.head.append(script);
-  }
-  function updateClarityConsent(granted) {
-    if (!window.clarity && !document.querySelector("script[data-portfolio-clarity]")) return;
-    window.clarity = window.clarity || function () {
-      (window.clarity.q = window.clarity.q || []).push(arguments);
-    };
-    window.clarity("consentv2", {
-      ad_Storage: "denied",
-      analytics_Storage: granted ? "granted" : "denied"
-    });
-  }
   Portfolio.Analytics.trackPageView = function () {
     if (!hasAnalyticsConsent() || typeof window.gtag !== "function") return;
     const pagePath = window.location.pathname;
@@ -144,8 +123,6 @@
       ad_user_data: "denied",
       ad_personalization: "denied"
     });
-    loadClarity();
-    updateClarityConsent(true);
     this.trackPageView();
   };
   Portfolio.Analytics.disable = function () {
@@ -157,7 +134,6 @@
         ad_personalization: "denied"
       });
     }
-    updateClarityConsent(false);
   };
   Portfolio.Analytics.setConsent = function (consent) {
     const granted = consent === "granted";
@@ -178,10 +154,6 @@
     if (!banner) return;
     let consent = null;
     try { consent = window.localStorage.getItem(consentStorageKey); } catch (_error) {}
-    if (consent === "granted") {
-      loadClarity();
-      updateClarityConsent(true);
-    }
     if (!consent) banner.hidden = false;
     const accept = banner.querySelector("[data-analytics-consent-action='accept']");
     const decline = banner.querySelector("[data-analytics-consent-action='decline']");

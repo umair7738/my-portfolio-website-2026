@@ -5,7 +5,7 @@ Scope: local Batch 2 implementation. This document does not represent a live GA4
 
 ## Measurement rules
 
-- GA4 and Microsoft Clarity load only when the visitor has granted `portfolio-analytics-consent`.
+- GA4 loads only when the visitor has granted `portfolio-analytics-consent`.
 - Every custom event includes `page_path`; optional values are restricted to `audience`, `contact_method`, `failure_stage`, `link_location`, `project_slug`, and `service_slug`.
 - Values must be short, alphanumeric labels. Names, email addresses, phone numbers, company names, and message text are never passed to GA4.
 - `generate_lead` is reserved for a completed EmailJS submission. Clicks and submit attempts are interactions, not confirmed leads.
@@ -42,7 +42,7 @@ Scope: local Batch 2 implementation. This document does not represent a live GA4
 
 ## Consent and withdrawal behavior
 
-Before opt-in there is no GA4 or Clarity request. On opt-in, GA4 is configured once with automatic page views disabled, Clarity is injected once, and the current page view is sent once. A denied state leaves both unloaded. The footer's Manage analytics preferences control can revoke or re-enable consent in the current session: revocation sends GA4 Consent Mode and Clarity Consent V2 denial updates, and custom event/page-view calls become no-ops. Already fetched scripts and data previously transmitted are not claimed to be removed.
+Before opt-in there is no GA4 request. On opt-in, GA4 is configured once with automatic page views disabled, and the current page view is sent once. A denied state leaves it unloaded. The footer's Manage analytics preferences control can revoke or re-enable consent in the current session: revocation sends GA4 Consent Mode denial updates, and custom event/page-view calls become no-ops. Already fetched scripts and data previously transmitted are not claimed to be removed.
 
 ## Search and dashboard specification
 

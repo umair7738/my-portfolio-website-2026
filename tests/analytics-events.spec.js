@@ -3,7 +3,6 @@ const { test, expect } = require("@playwright/test");
 async function openWithConsent(page, path) {
   await page.addInitScript(() => localStorage.setItem("portfolio-analytics-consent", "granted"));
   await page.route("https://www.googletagmanager.com/**", (route) => route.abort());
-  await page.route("https://www.clarity.ms/**", (route) => route.abort());
   await page.goto(path, { waitUntil: "domcontentloaded" });
   await page.evaluate(() => {
     window.__analyticsEvents = [];

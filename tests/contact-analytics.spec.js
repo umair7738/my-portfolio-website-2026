@@ -13,7 +13,6 @@ async function openContactForm(page, consent, failEmailJs = false) {
     };
   }, { analyticsConsent: consent, shouldFail: failEmailJs });
   await page.route("https://www.googletagmanager.com/**", (route) => route.abort());
-  await page.route("https://www.clarity.ms/**", (route) => route.abort());
   await page.goto("/contact.html", { waitUntil: "domcontentloaded" });
   await expect(page.locator("#contactForm")).toBeVisible();
   await page.evaluate(() => {
