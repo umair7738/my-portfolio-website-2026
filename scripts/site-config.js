@@ -39,7 +39,7 @@ const pages = {
   },
   "skills.html": {
     title: "Full Stack Developer Skills | Umair Shaikh",
-    description: "Explore Umair Shaikh's verified frontend, PHP framework, WordPress, database, API, payments, GSAP, performance, SEO, and application toolkit.",
+    description: "Explore Laravel, WordPress/WooCommerce, Shopify, payment and shipping APIs, hosting, frontend framework exposure and cloud learning.",
     ogType: "website"
   },
   "experience.html": {
@@ -76,7 +76,7 @@ const sitemapLastmod = {
   "services.html": "2026-10-31",
   "wordpress-developer-mumbai.html": "2026-10-29",
   "laravel-crm-development.html": "2026-11-01",
-  "skills.html": "2026-10-30",
+  "skills.html": "2026-11-01",
   "experience.html": "2026-10-31",
   "contact.html": "2026-10-31"
 };
