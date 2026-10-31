@@ -17,10 +17,10 @@ function upsert(html, pattern, tag) {
 // Remove duplicate social metadata left by earlier generated HTML. Keep the
 // first tag, which update-domain has just normalized to the current config.
 function dedupeSocialMeta(html) {
-  return html.replace(/<head\\b[^>]*>[\\s\\S]*?<\\/head>/i, (head) => {
+  return html.replace(/<head\b[^>]*>[\s\S]*?<\/head>/i, (head) => {
     const seen = new Set();
-    return head.replace(/<meta\\b[^>]*>/gi, (tag) => {
-      const attribute = tag.match(/\\b(?:name|property)\\s*=\\s*(["'])([^"']+)\\1/i);
+    return head.replace(/<meta\b[^>]*>/gi, (tag) => {
+      const attribute = tag.match(/\b(?:name|property)\s*=\s*(["'])([^"']+)\1/i);
       if (!attribute) return tag;
       const key = attribute[2].toLowerCase();
       if (!key.startsWith("og:") && !key.startsWith("twitter:")) return tag;
