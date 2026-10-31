@@ -75,7 +75,7 @@ const sitemapLastmod = {
   "case-studies.html": "2026-10-29",
   "services.html": "2026-10-31",
   "wordpress-developer-mumbai.html": "2026-10-29",
-  "laravel-crm-development.html": "2026-10-30",
+  "laravel-crm-development.html": "2026-11-01",
   "skills.html": "2026-10-30",
   "experience.html": "2026-10-31",
   "contact.html": "2026-10-31"
