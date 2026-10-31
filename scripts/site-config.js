@@ -3,13 +3,13 @@ const siteName = "Umair Builds";
 
 const pages = {
   "index.html": {
-    title: "Umair Shaikh | Full Stack Web Developer in Mumbai",
-    description: "Portfolio of Umair Shaikh, a full stack web developer in Mumbai building responsive websites, CMS applications, Laravel systems, API integrations, and animation-rich frontend experiences.",
+    title: "Umair Shaikh | Full Stack Web Developer | PHP, Laravel, WordPress",
+    description: "Umair Shaikh is a full stack web developer building responsive websites, Laravel/PHP applications, WordPress sites, APIs, and integrations. Available for remote collaboration worldwide.",
     ogType: "website"
   },
   "about.html": {
-    title: "About Umair Shaikh | Full Stack Web Developer in Mumbai",
-    description: "Learn about Umair Shaikh's full stack web development background, frontend craft, CMS and application experience, integrations, and performance-focused approach.",
+    title: "About Umair Shaikh | Full Stack Web Developer | PHP, Laravel, WordPress",
+    description: "About Umair Shaikh — full stack web developer with experience at Nexgeno Technology Pvt. Ltd. (Jan 2023 – Aug 2026). PHP, Laravel, WordPress, APIs, integrations, and performance-focused development. Currently available in Dubai, UAE for remote work.",
     ogType: "profile"
   },
   "projects.html": {
@@ -23,8 +23,8 @@ const pages = {
     ogType: "article"
   },
   "services.html": {
-    title: "Remote Freelance Web Developer for Dubai & UAE | Umair Shaikh",
-    description: "Based in Mumbai, Umair Shaikh offers remote freelance web development for Dubai, UAE and India: responsive sites, WordPress, PHP/Laravel, APIs, and performance.",
+    title: "Full Stack Web Development Services | PHP, Laravel, WordPress | Umair Shaikh",
+    description: "Full stack web development services by Umair Shaikh: business websites, WordPress, Laravel/PHP, APIs, payments, performance & SEO. Available for remote work worldwide, including Dubai, UAE.",
     ogType: "website"
   },
   "wordpress-developer-mumbai.html": {
@@ -43,13 +43,13 @@ const pages = {
     ogType: "website"
   },
   "experience.html": {
-    title: "Full Stack Web Development Experience | Umair Shaikh",
-    description: "Review Umair Shaikh's full stack experience across Laravel, WordPress, operational systems, APIs, payments, performance, SEO, and deployment.",
+    title: "Full Stack Web Developer Experience | Umair Shaikh | Nexgeno Technology",
+    description: "Umair Shaikh's full stack web development experience at Nexgeno Technology Pvt. Ltd. (Jan 2023 – Aug 2026). PHP, Laravel, WordPress, APIs, payments, RBAC, performance, and SEO. Currently available in Dubai, UAE.",
     ogType: "website"
   },
   "contact.html": {
-    title: "Contact Umair Shaikh | Full Stack Web Developer",
-    description: "Contact Mumbai-based full stack web developer Umair Shaikh about frontend roles, responsive websites, WordPress, Laravel systems, APIs, and web projects.",
+    title: "Contact Umair Shaikh | Full Stack Web Developer | Hire for Remote Roles & Projects",
+    description: "Contact Umair Shaikh about full-stack/frontend roles, Laravel/PHP, WordPress, APIs, and web projects. Available for remote work in Dubai, UAE and worldwide.",
     ogType: "website"
   },
   "privacy.html": {
@@ -64,7 +64,22 @@ const pages = {
 const indexablePages = Object.keys(pages).filter((file) => file !== "privacy.html");
 const sitemapPages = indexablePages;
 // Update a date only after a significant change to that page's content or links.
-const sitemapLastmod = Object.fromEntries(sitemapPages.map((file) => [file, "2026-10-29"]));
+// Dates reflect each page's verified most-recent substantive change (body content,
+// structured data, or page title/description), excluding footer-only consent text,
+// asset-hash bumps, and accessibility-attribute changes. Metadata-only rebuilds
+// do not bump lastmod. Uncommitted SEO-pass content is treated as current.
+const sitemapLastmod = {
+  "index.html": "2026-10-31",
+  "about.html": "2026-10-31",
+  "projects.html": "2026-10-29",
+  "case-studies.html": "2026-10-29",
+  "services.html": "2026-10-31",
+  "wordpress-developer-mumbai.html": "2026-10-29",
+  "laravel-crm-development.html": "2026-10-30",
+  "skills.html": "2026-10-30",
+  "experience.html": "2026-10-31",
+  "contact.html": "2026-10-31"
+};
 
 function pageUrl(file) {
   return file === "index.html" ? `${baseUrl}/` : `${baseUrl}/${file}`;
